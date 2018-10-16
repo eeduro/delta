@@ -1,0 +1,195 @@
+{
+	"device0": {
+		"library": "libbbblueeeros.so",
+		"devHandle": "dummy",
+		"subdevice0": {
+			"type": "DigOut",
+			"channel0": {
+			        "signalId": "onBoardGreen"
+			},
+			"channel1": {
+				"signalId": "ledBlue"
+			},
+			"channel49": {
+				"signalId": "ledRed"
+			},
+			"channel116": {
+				"signalId": "onBoardRed"
+			},
+			"channel98": {
+				"signalId": "emag"
+			}
+		},
+		"subdevice1": {
+			"type": "DigIn",
+			"channel0": {
+				"signalId": "buttonMode"
+			},
+			"channel1": {
+			        "signalId": "buttonPause"
+			},
+			"channel97": {
+				"signalId": "buttonBlue"
+			},
+			"channel57": {
+				"signalId": "buttonRed"
+			},
+			"channel113": {
+				"signalId": "buttonGreen"
+			}
+		},
+		"subdevice2": {
+			"type": "AnalogOut",
+			"channel1": {
+				"signalId": "motor1",
+				"scale": [ { "id" : "dac",
+							"minIn": 	-1.0, 	"maxIn": 	1.0,
+							"minOut": 	-8.3, 	"maxOut": 	8.3 }
+
+					 ],
+				"range": [ { "id" : "dac",
+						      "minIn": 		-0.75,	"maxIn": 	0.75,
+							"minOut": 	-6.0, 	"maxOut": 	6.0 }
+					 ],
+				"unit": "V"
+			},
+			"channel2": {
+				"signalId": "motor2",
+				"scale": [ { "id" : "dac",
+							"minIn": 	-1.0, 	"maxIn": 	1.0,
+							"minOut": 	-8.3, 	"maxOut": 	8.3 }
+					 ],
+				"range": [ { "id" : "dac",
+						      "minIn": 		-0.75,	"maxIn": 	0.75,
+							"minOut": 	-6.0, 	"maxOut": 	6.0 }
+					 ],
+				"unit": "V"
+			},
+			"channel3": {
+				"signalId": "motor3",
+				"scale": [ { "id" : "dac",
+							"minIn": 	-1.0, 	"maxIn": 	1.0,
+							"minOut": 	-8.3, 	"maxOut": 	8.3 }
+					 ],
+				"range": [ { "id" : "dac",
+						      "minIn": 		-0.75,	"maxIn": 	0.75,
+							"minOut": 	-6.0, 	"maxOut": 	6.0 }
+					 ],
+				"unit": "V"
+			},
+			"channel4": {
+				"signalId": "motor4",
+				"scale": [ { "id" : "dac",
+							"minIn": 	-1.0, 	"maxIn": 	1.0,
+							"minOut": 	-6.0, 	"maxOut": 	6.0 }
+							
+					 ],
+				"range": [ { "id" : "dac",
+						      "minIn": 		-1,	"maxIn": 	1,
+							"minOut": 	-6.0, 	"maxOut": 	6.0 }
+					 ],
+				"unit": "V"
+			}
+		},
+		"subdevice3": {
+			"type": "Fqd",
+			"channel1": {
+				"signalId": "enc1",
+				"scale": [ { "id" : "gear",
+							"minIn": 	0, "maxIn": 6.283185307,
+							"minOut":	0, "maxOut": 477.522083346 },
+					   { "id" : "enc",
+							"minIn": 	0, "maxIn": 477.522083346,
+							"minOut":	0, "maxOut": 311296},
+					   { "id" : "fqd",
+							"minIn":	0, "maxIn": 311296,
+							"minOut":	0, "maxOut": 1245184}
+					 ],
+				"range": [ { "id" : "gear",
+							"minIn": 	0, "maxIn": 6.283185307,
+							"minOut":	0, "maxOut": 477.522083346 },
+					   { "id" : "enc",
+							"minIn": 	0, "maxIn": 477.522083346,
+							"minOut":	0, "maxOut": 311296},
+					   { "id" : "fqd",
+							"minIn":	0, "maxIn": 311296,
+							"minOut":	0, "maxOut": 1245184}
+					 ],
+				"unit": "rad"
+			},
+			"channel2": {
+				"signalId": "enc2",
+				"scale": [ { "id" : "gear",
+							"minIn": 	0, "maxIn": 6.283185307,
+							"minOut":	0, "maxOut": 477.522083346 },
+					   { "id" : "enc",
+							"minIn": 	0, "maxIn": 477.522083346,
+							"minOut":	0, "maxOut": 311296},
+					   { "id" : "fqd",
+							"minIn":	0, "maxIn": 311296,
+							"minOut":	0, "maxOut": 1245184}
+					 ],
+				"range": [ { "id" : "gear",
+							"minIn": 	0, "maxIn": 6.283185307,
+							"minOut":	0, "maxOut": 477.522083346 },
+					   { "id" : "enc",
+							"minIn": 	0, "maxIn": 477.522083346,
+							"minOut":	0, "maxOut": 311296},
+					   { "id" : "fqd",
+							"minIn":	0, "maxIn": 311296,
+							"minOut":	0, "maxOut": 1245184}
+					 ],
+				"unit": "rad"
+			},
+			"channel3": {
+				"signalId": "enc3",
+				"scale": [ { "id" : "gear",
+							"minIn": 	0, "maxIn": 6.283185307,
+							"minOut":	0, "maxOut": 477.522083346 },
+					   { "id" : "enc",
+							"minIn": 	0, "maxIn": 477.522083346,
+							"minOut":	0, "maxOut": 311296},
+					   { "id" : "fqd",
+							"minIn":	0, "maxIn": 311296,
+							"minOut":	0, "maxOut": 1245184}
+					 ],
+				"range": [ { "id" : "gear",
+							"minIn": 	0, "maxIn": 6.283185307,
+							"minOut":	0, "maxOut": 477.522083346 },
+					   { "id" : "enc",
+							"minIn": 	0, "maxIn": 477.522083346,
+							"minOut":	0, "maxOut": 311296},
+					   { "id" : "fqd",
+							"minIn":	0, "maxIn": 311296,
+							"minOut":	0, "maxOut": 1245184}
+					 ],
+				"unit": "rad"
+			},
+			"channel4": {
+				"signalId": "enc4",
+				"scale": [ { "id" : "gear",
+							"minIn": 	0, "maxIn": 5.8,
+							"minOut":	0, "maxOut": 670.206432766 },
+					   { "id" : "enc",
+							"minIn": 	0, "maxIn": 753.982236862,
+							"minOut":	0, "maxOut": 30720},
+					   { "id" : "fqd",
+							"minIn":	0, "maxIn": 30720,
+							"minOut":	0, "maxOut": 122880}
+					 ],
+				"range":  [ { "id" : "gear",
+							"minIn": 	0, "maxIn": 6.283185307,
+							"minOut":	0, "maxOut": 753.982236862 },
+					   { "id" : "enc",
+							"minIn": 	0, "maxIn": 753.982236862,
+							"minOut":	0, "maxOut": 30720},
+					   { "id" : "fqd",
+							"minIn":	0, "maxIn": 30720,
+							"minOut":	0, "maxOut": 122880}
+					 ],
+				"unit": "rad"
+			}
+		}
+	}
+}
+
