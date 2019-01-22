@@ -7,27 +7,27 @@
 #include "Jacobian.hpp"
 
 namespace eeduro {
-  namespace delta {
+	namespace delta {
 
 		class Jacobi : public eeros::control::Block {
-		public:
-			Jacobi(Jacobian& j);
+			public:
+				Jacobi(Jacobian& j);
 			
-			virtual void run();
+				virtual void run();
+				
+				virtual eeros::control::Input<AxisVector>& getForceInput();
+				virtual eeros::control::Input<AxisVector>& getTcpPosInput();
+				virtual eeros::control::Input<AxisVector>& getJointPosInput();
+				virtual eeros::control::Output<AxisVector>& getOut();
 			
-			virtual eeros::control::Input<AxisVector>& getForceInput();
-			virtual eeros::control::Input<AxisVector>& getTcpPosInput();
-			virtual eeros::control::Input<AxisVector>& getJointPosInput();
-			virtual eeros::control::Output<AxisVector>& getOut();
+			protected:
+				eeros::control::Input<AxisVector> forceIn;
+				eeros::control::Input<AxisVector> tcpPosIn;
+				eeros::control::Input<AxisVector> jointPosIn;
+				eeros::control::Output<AxisVector> torqueOut;
 			
-		protected:
-			eeros::control::Input<AxisVector> forceIn;
-			eeros::control::Input<AxisVector> tcpPosIn;
-			eeros::control::Input<AxisVector> jointPosIn;
-			eeros::control::Output<AxisVector> torqueOut;
-			
-		private:
-			Jacobian& jacobi;
+			private:
+				Jacobian& jacobi;
 		};
-  }
+	}
 }

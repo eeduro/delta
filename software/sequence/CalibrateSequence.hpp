@@ -13,32 +13,32 @@
 namespace eeduro {
 	namespace delta {
 		class CalibrateSequence : public eeros::sequencer::Sequence{
-		public:
-			CalibrateSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, Calibration& calibration);
-			
-			virtual int action();
+			public:
+				CalibrateSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, Calibration& calibration);
+				
+				virtual int action();
 
-			bool getDone();
-			
-		protected:
-			void waitUntilReady();
-			void waitForButton(std::vector<int> buttons);
-			void logAndWaitForButton(std::vector<int> buttons);
-			void waitForGreenButton();
-			void waitForRedButton();
-			void waitForBlueButton();
-			void waitForBlueOrRedButton();
-			
-			bool done = false;
-			
-		private:
-			Calibration& calibration;
-			eeduro::delta::DeltaControlSystem& controlSys;
-			eeduro::delta::DeltaSafetyProperties& safetyProp;
-			eeros::safety::SafetySystem& safetySys;
-			
-			eeros::hal::Input<bool>* buttonBlue;			
-			eeros::hal::Output<bool>* ledBlue;
+				bool getDone();
+				
+			protected:
+				void waitUntilReady();
+				void waitForButton(std::vector<int> buttons);
+				void logAndWaitForButton(std::vector<int> buttons);
+				void waitForGreenButton();
+				void waitForRedButton();
+				void waitForBlueButton();
+				void waitForBlueOrRedButton();
+				
+				bool done = false;
+				
+			private:
+				Calibration& calibration;
+				eeduro::delta::DeltaControlSystem& controlSys;
+				eeduro::delta::DeltaSafetyProperties& safetyProp;
+				eeros::safety::SafetySystem& safetySys;
+				
+				eeros::hal::Input<bool>* buttonBlue;			
+				eeros::hal::Output<bool>* ledBlue;
 
 		};
 	}

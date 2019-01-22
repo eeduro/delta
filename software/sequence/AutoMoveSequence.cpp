@@ -22,26 +22,23 @@ AutoMoveSequence::AutoMoveSequence(std::string name, eeros::sequencer::Sequencer
 	shuffSeq("Shuffle Sequence",sequencer, this, controlSys, safetySys, calibration, properties)
 	
 	{
-	    mouseMove.setBehavior(eeros::sequencer::SequenceProp::abort);
-	    addMonitor(&mouseMove);
+		mouseMove.setBehavior(eeros::sequencer::SequenceProp::abort);
+		addMonitor(&mouseMove);
 	}
 	
 
 
 int AutoMoveSequence::action() {
- 
- 
- while(safetySys.getCurrentLevel() < properties.slSystemReady);
+	while(safetySys.getCurrentLevel() < properties.slSystemReady);
 	log.warn() << "starting auto move sequence";
- 
+
 	log.info() << "starting sort sequence";
 	sortSeq.start();
 	sortSeq.wait();
-	    
+		
 	log.info() << "starting shuffle sequence";
 	shuffSeq.start();
 	shuffSeq.wait();
-
 }
 
 

@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(myApp)
 
-find_package(EEROS REQUIRED)
+find_package(EEROS 0.6.0.0 REQUIRED)
 include_directories(${EEROS_INCLUDE_DIR};${EEROS_LIBUCL_INCLUDE_DIR})
 link_directories(${EEROS_LIB_DIR};${EEROS_LIBUCL_LINK_DIR})
 
@@ -11,8 +11,9 @@ link_directories("~/workspace/VTDelta/BeagleBoneBlue/robotics_cape_installer/lib
 
 #add_executable(myApp smc4Motor/motorController.cpp smc4Motor/MotorControlSystem.cpp smc4Motor/MotorSafetyProperties.cpp )
 #add_executable(myApp smc/SimpleMotorController.cpp smc/MyControlSystem.cpp smc/MySafetyProperties.cpp )
-#add_executable(myApp delta.cpp safety/DeltaSafetyProperties.cpp control/DeltaControlSystem.cpp control/PathPlanner.cpp control/DirectKinematic.cpp control/Inertia.cpp control/Jacobi.cpp control/Jacobian.cpp control/Kinematic.cpp control/MotorModel.cpp sequence/CalibrateSequence.cpp sequence/MoveBlockSequence.cpp sequence/SortSequence.cpp sequence/ShuffleSequence.cpp sequence/MouseSequence.cpp sequence/AutoMoveSequence.cpp Calibration.cpp)
+add_executable(myApp delta.cpp safety/DeltaSafetyProperties.cpp control/DeltaControlSystem.cpp control/PathPlanner.cpp control/DirectKinematic.cpp control/Inertia.cpp control/Jacobi.cpp control/Jacobian.cpp control/Kinematic.cpp control/MotorModel.cpp sequence/CalibrateSequence.cpp sequence/MoveBlockSequence.cpp sequence/SortSequence.cpp sequence/ShuffleSequence.cpp sequence/MouseSequence.cpp sequence/AutoMoveSequence.cpp Calibration.cpp sequence/HomingSequence.cpp)
 #add_executable(myApp mouseTest/MouseTest.cpp)
-add_executable(myApp test/buttonTest.cpp)
+#add_executable(myApp test/buttonTest.cpp)
+#add_executable(myApp main.cpp)
 
 target_link_libraries(myApp eeros ${CMAKE_DL_LIBS} ucl roboticscape)

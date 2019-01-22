@@ -21,6 +21,7 @@
 #include "sequence/MouseSequence.hpp"
 #include "sequence/AutoMoveSequence.hpp"
 #include "sequence/ExceptionSequence.hpp"
+#include "sequence/HomingSequence.hpp"
 
 #include "conditions/MoveMouseCondition.hpp"
 
@@ -54,10 +55,10 @@ int main(int argc, char **argv) {
 	hal.readConfigFromFile(&argc, argv);
 	
 	// Create the control system
-	DeltaControlSystem controlSys(dt);
+	DeltaControlSystem controlSys{};
 	
 	// Create and initialize a safety system
-	DeltaSafetyProperties properties(controlSys, dt);
+	DeltaSafetyProperties properties(controlSys);
 	SafetySystem safetySys(properties, dt);
 	controlSys.timedomain.registerSafetyEvent(safetySys, properties.doEmergency);
 	
@@ -73,11 +74,14 @@ int main(int argc, char **argv) {
   	AutoMoveSequence autoMoveSequence("AutoMove Sequence", sequencer, controlSys, safetySys, properties, calibration);
  	MouseSequence mouseSequence("Mouse Sequence", sequencer, controlSys, safetySys, properties, calibration);
   	CalibrateSequence calibSequence("Calibration Sequence", sequencer, controlSys, safetySys, calibration);
+	HomingSequence homingSequence("Homing Sequence", sequencer, controlSys, safetySys, properties);
+	
 
 	
  	sequencer.addSequence(autoMoveSequence);
  	sequencer.addSequence(mouseSequence);
   	sequencer.addSequence(calibSequence);
+	sequencer.addSequence(homingSequence);
 	
 	auto &executor = Executor::instance();
 	executor.setMainTask(safetySys);

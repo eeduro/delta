@@ -15,20 +15,20 @@
 namespace eeduro {
 	namespace delta {
 		class MouseSequence : public eeros::sequencer::Sequence {
-		public:
-			MouseSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
-			
-			int action();
+			public:
+				MouseSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
+				
+				int action();
 
-		private:
-			int count;
-			DeltaControlSystem& controlSys;
-			eeros::safety::SafetySystem& safetySys;
-			bool buttonPressed = false;
-			AxisVector mouseNew;
-			AxisVector mouseOld;
-			MouseTimeOutExceptionSequence mousetimeoutSeq;
-			Emag emag;
+			private:
+				int count;
+				DeltaControlSystem& controlSys;
+				eeros::safety::SafetySystem& safetySys;
+				bool buttonPressed = false;
+				AxisVector mouseNew;
+				AxisVector mouseOld;
+				MouseTimeOutExceptionSequence mousetimeoutSeq;
+				Emag emag;
 		};
 	}
 }

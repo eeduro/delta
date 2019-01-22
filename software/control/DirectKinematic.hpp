@@ -5,18 +5,17 @@
 #include "Kinematic.hpp"
 
 namespace eeduro {
-  namespace delta {
+	namespace delta {
 
 		class DirectKinematic : public eeros::control::Block1i1o<AxisVector> {
-		public:
-			DirectKinematic(Kinematic& kin);
-			
-			virtual void run();
-			
-		private:
-			Kinematic& kinematic;
+			public:
+				DirectKinematic(Kinematic& kin);
+	
+				virtual void run();
+	      
+			private:
+				Kinematic& kinematic;
 		};
-
-  }
+	}
 }
 

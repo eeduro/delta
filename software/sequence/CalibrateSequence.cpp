@@ -13,17 +13,17 @@ CalibrateSequence::CalibrateSequence(std::string name, eeros::sequencer::Sequenc
 	safetySys(safetySys),
 	safetyProp(safetyProp),
 	calibration(calibration)
-{
-  HAL& hal = HAL::instance();
-  buttonBlue = hal.getLogicInput("buttonBlue");
-  ledBlue = hal.getLogicOutput("ledBlue");
+	{
+		HAL& hal = HAL::instance();
+		buttonBlue = hal.getLogicInput("buttonBlue");
+		ledBlue = hal.getLogicOutput("ledBlue");
 	
-}
+	}
 
 
 bool CalibrateSequence::getDone()
 {
-  return done;
+	return done;
 }
 
 
@@ -44,17 +44,17 @@ void CalibrateSequence::waitForButton(std::vector<int> buttons) {
 
 
 	while(true){
-	  switch(buttons[0]){
-	    case 0:		//blue button
-		ledBlue->set(true);
+		switch(buttons[0]){
+			case 0:		//blue button
+				ledBlue->set(true);
 		
-		if(buttonBlue->get()){
-		  ledBlue->set(false);
-		  return;
-		}
-	      break;
+				if(buttonBlue->get()){
+					ledBlue->set(false);
+					return;
+				}
+			break;
 	    
-	  }
+		}
 	}
 }
 
@@ -68,25 +68,25 @@ void CalibrateSequence::logAndWaitForButton(std::vector<int> buttons) {
 
 
 	while(true){
-	  log.info() << controlSys.directKin.getOut().getSignal().getValue();
-	  switch(buttons[0]){
-	    case 0:		//blue button
-		ledBlue->set(true);
-		
-		if(buttonBlue->get()){
-		  ledBlue->set(false);
-		  return;
-		}
-	      break;
+		//log.info() << controlSys.directKin.getOut().getSignal().getValue();
+		switch(buttons[0]){
+			case 0:		//blue button
+				ledBlue->set(true);
+				if(buttonBlue->get()){
+					log.info() << "blue button pressed";
+					ledBlue->set(false);
+					return;
+				}
+				break;
 	    
-	  }
+		}
 	}
 }
 
-void CalibrateSequence::waitForGreenButton()	 { waitForButton({2}); }
-void CalibrateSequence::waitForRedButton()		 { waitForButton({1}); }
-void CalibrateSequence::waitForBlueButton()		 { waitForButton({0}); }
-void CalibrateSequence::waitForBlueOrRedButton() { waitForButton({ 0, 1 }); }
+void CalibrateSequence::waitForGreenButton()		{ waitForButton({2}); }
+void CalibrateSequence::waitForRedButton()		{ waitForButton({1}); }
+void CalibrateSequence::waitForBlueButton()		{ waitForButton({0}); }
+void CalibrateSequence::waitForBlueOrRedButton()	{ waitForButton({ 0, 1 }); }
 
 int CalibrateSequence::action() {
 	log.info() << "Start calibration";
@@ -95,9 +95,10 @@ int CalibrateSequence::action() {
 	
 	controlSys.start();
 	usleep(500000);
+	controlSys.setVoltageForInitializing({0,0,0,0});
 	
 	/*test for controlsys*/
-	logAndWaitForButton({0});
+	//logAndWaitForButton({0});
 	
 
 	for (int i = 0; i < 4; i++) {

@@ -14,10 +14,7 @@ ShuffleSequence::ShuffleSequence(std::string name, eeros::sequencer::Sequencer& 
 	detect("detect", sequencer, this, controlSys, calibration),
 	moveBlock("moveBlock", sequencer,controlSys, this, safetySys, calibration),
 	controlSys(controlSys),
-	safetySys(safetySys)
-	{
-	  /*empty*/
-	}
+	safetySys(safetySys){}
 	
 
 int ShuffleSequence::action() {
@@ -64,9 +61,6 @@ int ShuffleSequence::action() {
 
 
 void ShuffleSequence::shuffleBlocks(std::array<int,4> blocks) {
-
-	
-  
 	for(int i = 0; i < blocks.size(); i++){
 	  if(blocks[i] != i) return;	// blocks are not sorted -> start sort sequence
 	}
@@ -79,15 +73,15 @@ void ShuffleSequence::shuffleBlocks(std::array<int,4> blocks) {
 	int lastMoved;
 	
 	for(int i = 0; i < (rand()%4+2); i++){
-	  blockFrom = rand()%4;
+		blockFrom = rand()%4;
 	  
-	  if(blockFrom == empty_position || blockFrom == lastMoved) {
-	    blockFrom++;
-	    blockFrom%=4;
-	  }
-	  moveBlock(blockFrom, empty_position);
-	  lastMoved = empty_position;
-	  empty_position = blockFrom;
+		if(blockFrom == empty_position || blockFrom == lastMoved) {
+			blockFrom++;
+			blockFrom%=4;
+		}
+		moveBlock(blockFrom, empty_position);
+		lastMoved = empty_position;
+		empty_position = blockFrom;
 	}
 	
 	log.info() << "finished shuffling";

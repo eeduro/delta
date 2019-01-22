@@ -5,26 +5,22 @@
 #include <eeros/sequencer/BaseSequence.hpp>
 
 #include "../../control/DeltaControlSystem.hpp"
-#include "../../Calibration.hpp"
 
-#include <unistd.h>
 
 namespace eeduro{
-  namespace delta{
-		  class Emag : public eeros::sequencer::Step {
-		    public:
-		      Emag(std::string name, eeros::sequencer::Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys) : Step(name, seq, caller), controlSys(controlSys){
-			this->value = false;
-		      }
-		      int operator() (bool value) {this->value = value; return Step::start();}
-		      int action(){
-			controlSys.emagVal.setValue(value);
-		      };
+	namespace delta{
+		class Emag : public eeros::sequencer::Step {
+			public:
+				Emag(std::string name, eeros::sequencer::Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys) : Step(name, seq, caller), controlSys(controlSys){
+					this->value = false;
+				}
+				int operator() (bool value) {this->value = value; return Step::start();}
+				int action(){
+					controlSys.emagVal.setValue(value);
+				};
 
-		      
-		      DeltaControlSystem &controlSys;
-		      bool value;
+				DeltaControlSystem &controlSys;
+				bool value;
 		  };
-
-  }
+	}
 }

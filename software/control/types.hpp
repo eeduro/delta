@@ -4,8 +4,8 @@
 #include "constants.hpp"
 
 namespace eeduro {
-  namespace delta {
+	namespace delta {
 		using AxisVector = eeros::math::Matrix<nofAxis, 1>;
 		using AxisSquareMatrix = eeros::math::Matrix<nofAxis, nofAxis>;
-  }
+	}
 }

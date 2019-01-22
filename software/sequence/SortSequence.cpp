@@ -11,10 +11,7 @@ SortSequence::SortSequence(std::string name, eeros::sequencer::Sequencer& sequen
 	detect("detect", sequencer, this, controlSys, calibration),
 	moveBlock("moveBlock", sequencer,controlSys, this, safetySys, calibration),
 	controlSys(controlSys),
-	safetySys(safetySys)
-	{
-	      /*empty*/
-	}
+	safetySys(safetySys){}
 
 int SortSequence::action() {
 	std::array<int,4> blocks;

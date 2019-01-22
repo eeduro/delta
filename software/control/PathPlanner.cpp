@@ -47,7 +47,6 @@ void PathPlanner::run() {
 	double t = System::getTime();
 	x = trajectoryGen.get(dt);
 	
-	
 	posOut.getSignal().setValue(x[0]);
 	posOut.getSignal().setTimestamp(t);
 	velOut.getSignal().setValue(x[1]);

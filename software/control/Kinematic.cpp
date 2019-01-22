@@ -124,8 +124,8 @@ bool Kinematic::inverse(const Vector3 tcp, Vector3& q) {
 	tempTCP(2) = tcp(2) + offset(2);
 
 	Vector3 tcp_1 = rotz1*tempTCP;
-	Vector3 tcp_2 = rotz3*tempTCP;                  							   // invers rotz_2
-	Vector3 tcp_3 = rotz2*tempTCP;										   // invers rotz_3
+	Vector3 tcp_2 = rotz3*tempTCP;		// invers rotz_2
+	Vector3 tcp_3 = rotz2*tempTCP;		// invers rotz_3
 	double x1 = r;
 	double LA_sqr = length_A*length_A;
 
