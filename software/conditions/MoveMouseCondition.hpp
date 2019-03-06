@@ -18,10 +18,10 @@ namespace eeduro{
 					|| controlSys.mouse.getButtonOut().getSignal().getValue()[1]
 					|| controlSys.mouse.getButtonOut().getSignal().getValue()[2])
 					{
-					retVal = true;
+						retVal = true;
 					}
 					if(mouseNew!= mouseOld){
-					retVal = true; 
+						retVal = true; 
 					}
 
 					mouseOld = mouseNew;

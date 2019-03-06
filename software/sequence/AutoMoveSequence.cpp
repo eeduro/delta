@@ -1,7 +1,7 @@
 #include "AutoMoveSequence.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
 #include <eeros/sequencer/Sequencer.hpp>
-#include "../sequence/CalibrateSequence.hpp"
+#include "../sequence/ConfigureBlockSequence.hpp"
 #include <unistd.h>
 
 using namespace eeduro::delta;
@@ -29,16 +29,12 @@ AutoMoveSequence::AutoMoveSequence(std::string name, eeros::sequencer::Sequencer
 
 
 int AutoMoveSequence::action() {
-	while(safetySys.getCurrentLevel() < properties.slSystemReady);
-	log.warn() << "starting auto move sequence";
-
-	log.info() << "starting sort sequence";
-	sortSeq.start();
-	sortSeq.wait();
+	while(Sequencer::running){
+		sortSeq.start();
+		shuffSeq.start();
 		
-	log.info() << "starting shuffle sequence";
-	shuffSeq.start();
-	shuffSeq.wait();
+		log.warn() << "sequencer running: " << Sequencer::running;
+	}
 }
 
 

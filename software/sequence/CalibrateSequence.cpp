@@ -68,7 +68,7 @@ void CalibrateSequence::logAndWaitForButton(std::vector<int> buttons) {
 
 
 	while(true){
-		//log.info() << controlSys.directKin.getOut().getSignal().getValue();
+		log.info() << controlSys.directKin.getOut().getSignal().getValue()[2];
 		switch(buttons[0]){
 			case 0:		//blue button
 				ledBlue->set(true);
@@ -98,13 +98,14 @@ int CalibrateSequence::action() {
 	controlSys.setVoltageForInitializing({0,0,0,0});
 	
 	/*test for controlsys*/
-	//logAndWaitForButton({0});
+	
 	
 
 	for (int i = 0; i < 4; i++) {
 		for (int j = 0; j < 4; j++) {
 			log.trace() << block[i] << " move TCP to position " << j << " and press the blue button";
-			waitForBlueButton();
+			//waitForBlueButton();
+			logAndWaitForButton({0});
 			
 			auto p = controlSys.directKin.getOut().getSignal().getValue();
 			log.info() << "p: " << p;

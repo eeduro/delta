@@ -6,8 +6,8 @@
 
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
-#include "step/move.hpp"
-#include "step/detect.hpp"
+#include "step/Move.hpp"
+#include "step/Detect.hpp"
 #include "MoveBlockSequence.hpp"
 #include "../conditions/MoveMouseCondition.hpp"
 #include "ExceptionSequence.hpp"

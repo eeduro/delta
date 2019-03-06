@@ -15,13 +15,14 @@
 #include "control/DeltaControlSystem.hpp"
 #include "safety/DeltaSafetyProperties.hpp"
 
-#include "sequence/CalibrateSequence.hpp"
+#include "sequence/ConfigureBlockSequence.hpp"
 #include "sequence/ShuffleSequence.hpp"
 #include "sequence/SortSequence.hpp"
 #include "sequence/MouseSequence.hpp"
 #include "sequence/AutoMoveSequence.hpp"
 #include "sequence/ExceptionSequence.hpp"
 #include "sequence/HomingSequence.hpp"
+#include "sequence/ParkSequence.hpp"
 
 #include "conditions/MoveMouseCondition.hpp"
 
@@ -58,12 +59,12 @@ int main(int argc, char **argv) {
 	DeltaControlSystem controlSys{};
 	
 	// Create and initialize a safety system
-	DeltaSafetyProperties properties(controlSys);
-	SafetySystem safetySys(properties, dt);
+	DeltaSafetyProperties properties{controlSys};
+	SafetySystem safetySys{properties, dt};
 	controlSys.timedomain.registerSafetyEvent(safetySys, properties.doEmergency);
 	
 	
-	Calibration calibration;
+	Calibration calibration{};
 	calibration.loadDefaults();
 	if (!calibration.load()) {
 		log.warn() << "could not load calibration";
@@ -71,10 +72,11 @@ int main(int argc, char **argv) {
 	
 	auto& sequencer = Sequencer::instance();
 
-  	AutoMoveSequence autoMoveSequence("AutoMove Sequence", sequencer, controlSys, safetySys, properties, calibration);
- 	MouseSequence mouseSequence("Mouse Sequence", sequencer, controlSys, safetySys, properties, calibration);
-  	CalibrateSequence calibSequence("Calibration Sequence", sequencer, controlSys, safetySys, calibration);
-	HomingSequence homingSequence("Homing Sequence", sequencer, controlSys, safetySys, properties);
+  	AutoMoveSequence autoMoveSequence{"AutoMove Sequence", sequencer, controlSys, safetySys, properties, calibration};
+ 	MouseSequence mouseSequence{"Mouse Sequence", sequencer, controlSys, safetySys, properties, calibration};
+  	ConfigureBlockSequence calibSequence{"Configure block Sequence", sequencer, controlSys, safetySys, calibration};
+	HomingSequence homingSequence{"Homing Sequence", sequencer, controlSys, safetySys, properties, calibration};
+	ParkSequence parkSequence{"Park Sequence", sequencer, controlSys, safetySys, properties, calibration};
 	
 
 	
@@ -82,18 +84,12 @@ int main(int argc, char **argv) {
  	sequencer.addSequence(mouseSequence);
   	sequencer.addSequence(calibSequence);
 	sequencer.addSequence(homingSequence);
+	sequencer.addSequence(parkSequence);
 	
 	auto &executor = Executor::instance();
 	executor.setMainTask(safetySys);
 	
 	executor.run();
-	
-	sequencer.wait();
-	
-	safetySys.triggerEvent(properties.doParking);
-	safetySys.exitHandler();
-
-	controlSys.stop();
 	
 	log.info() << "Example finished...";
 	return 0;

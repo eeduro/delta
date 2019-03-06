@@ -4,8 +4,8 @@
 #include <eeros/safety/SafetySystem.hpp>
 
 #include "../control/DeltaControlSystem.hpp"
-#include "step/move.hpp"
-#include "step/detect.hpp"
+#include "step/Move.hpp"
+#include "step/Detect.hpp"
 #include "MoveBlockSequence.hpp"
 #include "ExceptionSequence.hpp"
 #include "../conditions/MoveMouseCondition.hpp"

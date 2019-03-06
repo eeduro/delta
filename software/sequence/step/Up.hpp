@@ -7,7 +7,7 @@
 #include "../../control/DeltaControlSystem.hpp"
 #include "../../Calibration.hpp"
 
-#include "delay.hpp"
+#include "Wait.hpp"
 
 namespace eeduro{
 	namespace delta{
@@ -17,7 +17,7 @@ namespace eeduro{
 					Step(name, seq, caller),
 					controlSys(controlSys), 
 					calibration(calibration),
-					delay("delay", seq, this){}
+					wait("wait", seq, this){}
 					
 				int operator() () {return Step::start();}
 				int action(){
@@ -32,15 +32,13 @@ namespace eeduro{
 			private:
 				void waitUntilPointReached(){
 					while (!controlSys.pathPlanner.posReached()) {
-						delay(0.1);
-						/*usleep(100000);
-						std::this_thread::yield();*/
+						wait(0.1);
 					} 
 				};
 		      
 			DeltaControlSystem & controlSys;
 			Calibration calibration;
-			Delay delay;
+			Wait wait;
 		  };
 	}
 }

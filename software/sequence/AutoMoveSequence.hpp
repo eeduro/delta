@@ -7,7 +7,7 @@
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
 #include "../conditions/MoveMouseCondition.hpp"
-#include "CalibrateSequence.hpp"
+#include "ConfigureBlockSequence.hpp"
 #include "SortSequence.hpp"
 #include "ShuffleSequence.hpp"
 #include "ExceptionSequence.hpp"

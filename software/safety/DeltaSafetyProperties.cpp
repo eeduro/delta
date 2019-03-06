@@ -23,12 +23,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 	* Events
 	* ###
 	*/
-	doOff("Do off"),
-	doSwInit("Do software init"),
-	swInitDone("Software initialized"),
 	doEmergency("Do emergency"),
-	doEmergencyReset("Do emergency reset"),
-	emergencyResetDone("Emergency reset done"),
 	doControlStart("Do control start"),
 	doControlStop("Do control stop"),
 	controlStoppingDone("Control stop done"),
@@ -45,7 +40,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 	doAutoMoving("Do auto moving"),
 	doMouseControl("Do mouse control"),
 	stopMoving("Stop moving"),
-	doCalibrating("Do calibrating"),
+	doConfigureBlocks("Do configure blocks"),
 	
 	/*
 	* ###
@@ -53,16 +48,12 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 	* ###
 	*/
 	slOff("Off"),
-	slSwInitializing("Software initializing"),
-	slSwInitialized("Software initialized"),
 	slEmergency("Emergency"),
-	slResetingEmergency("Reseting emergency"),
 	slControlStopping("Stop control"),
 	slControlStarting("Start control"),
 	slSystemOn("System on"),
 	slPoweringDown("Powering down"),
 	slPoweringUp("Powering up"),
-	slPowerOn("Power on"),
 	slHoming("Homing"),
 	slAxesHomed("Axes homed"),
 	slParking("Parking"),
@@ -70,7 +61,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 	slSystemReady("System ready"),
 	slAutoMoving("Auto moving"),
 	slMouseControl("Mouse control"),
-	slCalibrating("Calibrating")
+	slConfigureBlocks("Configuring blocks")
 	{
 	  
 		HAL& hal = HAL::instance();
@@ -103,55 +94,45 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		*/
 		addLevel(slOff);
 		addLevel(slEmergency);
-		addLevel(slSwInitializing);
-		addLevel(slSwInitialized);
-		addLevel(slResetingEmergency);
 		addLevel(slControlStopping);
 		addLevel(slControlStarting);
 		addLevel(slSystemOn);
 		addLevel(slPoweringDown);
 		addLevel(slPoweringUp);
-		addLevel(slPowerOn);
 		addLevel(slHoming);
 		addLevel(slAxesHomed);
+		addLevel(slSystemReady);
 		addLevel(slParked);
 		addLevel(slParking);
-		addLevel(slSystemReady);
+		addLevel(slConfigureBlocks);
 		addLevel(slAutoMoving);
 		addLevel(slMouseControl);
-		addLevel(slCalibrating);
+		
 	
 		/*
 		* ###
 		* Add events to the levels
 		* ###
 		*/
-		slOff.addEvent(doSwInit, slSwInitializing, safety::kPublicEvent);
-		slSwInitializing.addEvent(swInitDone, slSwInitialized, safety::kPrivateEvent);
-		slSwInitialized.addEvent(doControlStart, slControlStarting, safety::kPublicEvent);
-		slEmergency.addEvent(doEmergencyReset, slResetingEmergency, safety::kPublicEvent);
-		slEmergency.addEvent(doSwInit, slSwInitializing, safety::kPublicEvent);
-		slEmergency.addEvent(doCalibrating, slCalibrating, eeros::safety::kPublicEvent);
+
+		slEmergency.addEvent(doControlStart, slControlStarting, safety::kPublicEvent);
+		slEmergency.addEvent(doConfigureBlocks, slConfigureBlocks, eeros::safety::kPublicEvent);
+		slEmergency.addEvent(doParking, slParking, eeros::safety::kPublicEvent);
 		
-		slResetingEmergency.addEvent(emergencyResetDone, slSystemOn, safety::kPrivateEvent);
-		slResetingEmergency.addEvent(doEmergency, slEmergency, safety::kPrivateEvent);
-		slControlStopping.addEvent(controlStoppingDone, slOff, safety::kPublicEvent);
-		slControlStarting.addEvent(controlStartingDone, slSystemOn, safety::kPrivateEvent);
+		slControlStopping.addEvent(controlStoppingDone, slPoweringDown, safety::kPublicEvent);
+		slControlStarting.addEvent(controlStartingDone, slSystemOn, safety::kPublicEvent);
 		slSystemOn.addEvent(doControlStop, slControlStopping, safety::kPublicEvent);
 		slSystemOn.addEvent(doPoweringUp,slPoweringUp,safety::kPublicEvent);
 
-		slPoweringDown.addEvent(poweringDownDone,slSystemOn,safety::kPrivateEvent);
-		slPoweringUp.addEvent(poweringUpDone,slPowerOn,safety::kPrivateEvent);
-		slPowerOn.addEvent(doPoweringDown,slPoweringDown,safety::kPublicEvent);
-		slPowerOn.addEvent(doHoming,slHoming,safety::kPublicEvent);
+		slPoweringDown.addEvent(poweringDownDone,slOff,safety::kPrivateEvent);
+		slPoweringUp.addEvent(doHoming,slHoming,safety::kPrivateEvent);
 
 		slHoming.addEvent(homingDone,slAxesHomed,safety::kPublicEvent);
 		slAxesHomed.addEvent(doSystemReady,slSystemReady,safety::kPrivateEvent);
-		slParking.addEvent(parkingDone,slParked,safety::kPrivateEvent);
-		slParked.addEvent(doSystemReady,slSystemReady,safety::kPublicEvent);
+		slParking.addEvent(parkingDone,slParked,safety::kPublicEvent);
+		slParked.addEvent(doControlStop,slControlStopping,safety::kPublicEvent);
 
 		slSystemReady.addEvent(doAutoMoving,slAutoMoving,safety::kPublicEvent);
-		slSystemReady.addEvent(doMouseControl,slMouseControl,safety::kPublicEvent);
 		slAutoMoving.addEvent(doMouseControl, slMouseControl, eeros::safety::kPublicEvent);
 		slMouseControl.addEvent(doAutoMoving, slAutoMoving, safety::kPublicEvent);
 		slSystemReady.addEvent(doParking,slParking,kPublicEvent);
@@ -159,7 +140,8 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		slAutoMoving.addEvent(stopMoving,slSystemReady,safety::kPublicEvent);
 		slMouseControl.addEvent(stopMoving,slSystemReady,safety::kPublicEvent);
 
-		slCalibrating.addEvent(doSwInit, slSwInitializing, eeros::safety::kPublicEvent);
+		slConfigureBlocks.addEvent(doSystemReady, slSystemReady, eeros::safety::kPublicEvent);
+		slConfigureBlocks.addEvent(stopMoving, slSystemReady, eeros::safety::kPublicEvent);
 
 		addEventToLevelAndAbove(slSystemOn,doEmergency,slEmergency,safety::kPublicEvent);
 
@@ -169,16 +151,12 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* ###
 		*/
 		slOff.setInputActions({ignore(emergencyStop),ignore(approval)});
-		slSwInitializing.setInputActions({ignore(emergencyStop),ignore(approval)});
-		slSwInitialized.setInputActions({ignore(emergencyStop),ignore(approval)});
-		slEmergency.setInputActions({ignore(emergencyStop),check(approval, false, doSwInit)});
-		slResetingEmergency.setInputActions({check(emergencyStop,true,doEmergency),ignore(approval)});
+		slEmergency.setInputActions({ignore(emergencyStop),check(approval, false, doControlStart)});
 		slControlStopping.setInputActions({ignore(emergencyStop),ignore(approval)});
 		slControlStarting.setInputActions({ignore(emergencyStop),ignore(approval)});
 		slSystemOn.setInputActions({ignore(emergencyStop),check(approval,false,doPoweringUp)});
 		slPoweringDown.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
 		slPoweringUp.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
-		slPowerOn.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
 		slHoming.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
 		slAxesHomed.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
 		slParking.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
@@ -186,7 +164,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		slSystemReady.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
 		slAutoMoving.setInputActions({check(emergencyStop,false,doEmergency),check(approval, false, doMouseControl)});
 		slMouseControl.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
-		slCalibrating.setInputActions({check(emergencyStop, false, doSwInit), check(approval, false, doSystemReady)});
+		slConfigureBlocks.setInputActions({ignore(emergencyStop), check(approval, false, doSystemReady)});
 
 		/*
 		* ###
@@ -194,16 +172,12 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* ###
 		*/
 		slOff.setOutputActions({set(led,false), set(errorLed, false)});
-		slSwInitializing.setOutputActions({set(led,false), set(errorLed, false)});
-		slSwInitialized.setOutputActions({set(led,true), set(errorLed, false)});
 		slEmergency.setOutputActions({set(led,false), set(errorLed, true)});
-		slResetingEmergency.setOutputActions({set(led,true), set(errorLed, true)});
 		slControlStopping.setOutputActions({set(led,false), set(errorLed, false)});
 		slControlStarting.setOutputActions({set(led,true), set(errorLed, false)});
 		slSystemOn.setOutputActions({set(led,false), set(errorLed, false)});
 		slPoweringDown.setOutputActions({set(led,false), set(errorLed, false)});
 		slPoweringUp.setOutputActions({set(led,true), set(errorLed, false)});
-		slPowerOn.setOutputActions({set(led,true), set(errorLed, false)});
 		slHoming.setOutputActions({set(led,true), set(errorLed, false)});
 		slAxesHomed.setOutputActions({set(led,true), set(errorLed, false)});
 		slParking.setOutputActions({set(led,false), set(errorLed, false)});
@@ -211,7 +185,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		slSystemReady.setOutputActions({set(led,true), set(errorLed, false)});
 		slAutoMoving.setOutputActions({set(led,true), set(errorLed, false)});
 		slMouseControl.setOutputActions({set(led,true), set(errorLed, false)});
-		slCalibrating.setOutputActions({set(led,true), set(errorLed,true)});
+		slConfigureBlocks.setOutputActions({set(led,true), set(errorLed,true)});
 
 		/*
 		* ###
@@ -222,40 +196,38 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 			Executor::stop();
 		});
 
-		slSwInitializing.setLevelAction([&](SafetyContext*privateContext){
-			privateContext->triggerEvent(swInitDone);
-		});
-
-		slSwInitialized.setLevelAction([&](SafetyContext*privateContext){
-			privateContext->triggerEvent(doControlStart);
-		});
 
 		slEmergency.setLevelAction([&](SafetyContext*privateContext){
-			auto& sequencer = sequencer::Sequencer::instance();
+			if(slEmergency.getNofActivations() == 1){  
+				auto& sequencer = sequencer::Sequencer::instance();
 
-			if(sequencer.running){
-				sequencer.abort(); 
+				if(sequencer.running){
+					sequencer.abort(); 
+					std::cout << "SEQUENCER: " << sequencer.running << std::endl;
+				}
+				
+				controlSys.voltageSetPoint.setValue({0.0,0.0,0.0,0.0});
+				controlSys.voltageSwitch.switchToInput(1);
+				controlSys.inputSwitch.switchToInput(1);
 			}
 			
-			controlSys.voltageSetPoint.setValue({0.0,0.0,0.0,0.0});
-			controlSys.voltageSwitch.switchToInput(1);
-			controlSys.inputSwitch.switchToInput(1);
-
 			if(emergencyStop->get() && (slEmergency.getNofActivations() > 1000)){
 				controlSys.setVoltageForInitializing({0.0,0.0,0.0,0.0});
 				
-				sequencer.getSequenceByName("Calibration Sequence")->start();
+				auto& sequencer = sequencer::Sequencer::instance();
+				sequencer.getSequenceByName("Configure block Sequence")->start();
 
-				privateContext->triggerEvent(doCalibrating);
+				privateContext->triggerEvent(doConfigureBlocks);
+			}
+			
+			if(slEmergency.getNofActivations() == 5000){
+				controlSys.enableAxis();
+				privateContext->triggerEvent(doParking);
 			}
 
 		});
-
-		slResetingEmergency.setLevelAction([&](SafetyContext*privateContext){
-			exit(2);
-		});
 	  
-		slCalibrating.setLevelAction([&](SafetyContext*privateContext){
+		slConfigureBlocks.setLevelAction([&](SafetyContext*privateContext){
 			controlSys.emagVal.setValue(controlSys.mouse.getButtonOut().getSignal().getValue()[0]);
 		});
 
@@ -263,6 +235,11 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 			controlSys.start();
 			controlSys.torqueLimitation.setLimit({-q012gearTorqueLimit,-q012gearTorqueLimit,-q012gearTorqueLimit,-q3gearTorqueLimit},{q012gearTorqueLimit,q012gearTorqueLimit,q012gearTorqueLimit,q3gearTorqueLimit});
 			privateContext->triggerEvent(controlStartingDone);
+		});
+		
+		slControlStopping.setLevelAction([&](SafetyContext*privateContext){
+			controlSys.stop();
+			privateContext->triggerEvent(controlStoppingDone);
 		});
 
 		slPoweringDown.setLevelAction([&](SafetyContext*privateContext){
@@ -276,57 +253,53 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 	  
 		slPoweringUp.setLevelAction([&](SafetyContext*privateContext){
 			controlSys.enableAxis();
-			privateContext->triggerEvent(poweringUpDone);
-		});
-
-		slPowerOn.setLevelAction([&](SafetyContext*privateContext){
-			controlSys.homed=false;
-			controlSys.setVoltageForInitializing({q012InitVoltage,q012InitVoltage,q012InitVoltage,q3InitVoltage});
-		
-			static auto& sequencer = eeros::sequencer::Sequencer::instance();
-		
-			if(sequencer.getSequenceByName("Homing Sequence")->getRunningState() != eeros::sequencer::SequenceState::running){
-				//controlSys.setPathPlannerInput();
-				sequencer.getSequenceByName("Homing Sequence")->start();
-				privateContext->triggerEvent(doHoming);
-			}	
-			
-			
-
+			privateContext->triggerEvent(doHoming);
 		});
     
 		slHoming.setLevelAction([&](SafetyContext*privateContext){
-			
+			if(slHoming.getNofActivations()==1){
+				static auto& sequencer = eeros::sequencer::Sequencer::instance();
+				sequencer.getSequenceByName("Homing Sequence")->start();
+			}
 		});
 
 		slAxesHomed.setLevelAction([&](SafetyContext*privateContext){
 			privateContext->triggerEvent(doSystemReady);
+		});
+		
+		slParking.setLevelAction([&](SafetyContext*privateContext){
+			if(slParking.getNofActivations()==1){
+				static auto& sequencer = eeros::sequencer::Sequencer::instance();
+				sequencer.getSequenceByName("Park Sequence")->start();
+			}
+		});
+		
+		slParked.setLevelAction([&](SafetyContext*privateContext){
+			privateContext->triggerEvent(doControlStop);
 		});
     
 		slSystemReady.setLevelAction([&](SafetyContext*privateContext){ 
 			controlSys.inputSwitch.switchToInput(0);
 			controlSys.voltageSwitch.switchToInput(0);
 			controlSys.setPathPlannerInput();
-			controlSys.pathPlanner.gotoPoint({0.0,0.0,-0.015,0.0});
+			//controlSys.pathPlanner.gotoPoint({0.0,0.0,-0.015,0.0});
 
 			privateContext->triggerEvent(doAutoMoving);
 		
 		});
     
 		slAutoMoving.setLevelAction([&](SafetyContext*privateContext){
-			static auto& sequencer = eeros::sequencer::Sequencer::instance();
-		
-			if(sequencer.getSequenceByName("AutoMove Sequence")->getRunningState() != eeros::sequencer::SequenceState::running){
+			if(slAutoMoving.getNofActivations()==1){
+				static auto& sequencer = eeros::sequencer::Sequencer::instance();
 				controlSys.setPathPlannerInput();
 				sequencer.getSequenceByName("AutoMove Sequence")->start();
 			}
 		});
     
 		slMouseControl.setLevelAction([&](SafetyContext*privateContext){
+			//if(slMouseControl.getNofActivations()==1){
 			static auto& sequencer = eeros::sequencer::Sequencer::instance();
-		
 			if(sequencer.getSequenceByName("Mouse Sequence")->getRunningState() != eeros::sequencer::SequenceState::running){
-				controlSys.setMouseInput();
 				sequencer.getSequenceByName("Mouse Sequence")->start();
 			}
 		});
@@ -338,12 +311,12 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* Define entry level
 		* ###
 		*/
-		setEntryLevel(slSwInitializing);
+		setEntryLevel(slControlStarting);
 	
 		exitFunction = ([&](SafetyContext* privateContext){
 			controlSys.voltageSetPoint.setValue({0.0,0.0,0.0,0.0});
 			controlSys.voltageSwitch.switchToInput(1);
-			privateContext->triggerEvent(doOff);
+			privateContext->triggerEvent(stopMoving);
 		});
 	
 	}

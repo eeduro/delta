@@ -5,9 +5,10 @@
 
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
+#include "../Calibration.hpp"
 
-#include "step/raise.hpp"
-#include "step/home.hpp"
+#include "step/Raise.hpp"
+#include "step/Home.hpp"
 
 #include <vector>
 
@@ -15,7 +16,7 @@ namespace eeduro{
 	namespace delta{
 		class HomingSequence : public eeros::sequencer::Sequence{
 			public:
-				HomingSequence(std::string name, sequencer::Sequencer& seq, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties& properties);
+				HomingSequence(std::string name, sequencer::Sequencer& seq, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration );
 				int action();
 								
 			private:

@@ -14,17 +14,17 @@ ParkSequence::ParkSequence(std::string name, Sequencer& seq, DeltaControlSystem&
 	up("park up", seq, this, controlSys, calibration),
 	release("park release", seq, this, controlSys),
 	down("park down", seq, this, controlSys, calibration),
-	delay("park delay", seq, this){
+	wait("park wait", seq, this){
 	}
 
 int ParkSequence::action()
 {	
 	controlSys.start();
-	delay(0.5);
+	wait(0.5);
 
 	controlSys.setVoltageForInitializing({-2,-2,-2,0});
 
-	delay(2.5);
+	wait(2.5);
 	
 	controlSys.disableAxis();
 	

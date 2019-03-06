@@ -101,7 +101,7 @@ int ConfigureBlockSequence::action() {
 	
 	
 	/*test for z measurement*/
-	logAndWaitForButton({0});
+	/*logAndWaitForButton({0});
 	
 	log.trace() << "move TCP to the top left corner and press the blue button";
 	waitForBlueButton();
@@ -140,7 +140,7 @@ int ConfigureBlockSequence::action() {
 	logAndWaitForButton({0});
 	
 	log.trace() << "z measurement done, press blue button to continue";
-	waitForBlueButton();
+	waitForBlueButton();*/
 	
 	/*test for controlsys*/
 	

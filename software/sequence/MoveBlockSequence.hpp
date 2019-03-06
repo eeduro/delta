@@ -4,12 +4,12 @@
 #include <eeros/safety/SafetySystem.hpp>
 
 #include "../control/DeltaControlSystem.hpp"
-#include "step/move.hpp"
-#include "step/up.hpp"
-#include "step/down.hpp"
-#include "step/grab.hpp"
-#include "step/release.hpp"
-#include "step/emag.hpp"
+#include "step/Move.hpp"
+#include "step/Up.hpp"
+#include "step/Down.hpp"
+#include "step/Grab.hpp"
+#include "step/Release.hpp"
+#include "step/Emag.hpp"
 
 #include <array>
 

@@ -6,11 +6,11 @@
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
 
-#include "step/move.hpp"
-#include "step/up.hpp"
-#include "step/down.hpp"
-#include "step/release.hpp"
-#include "step/delay.hpp"
+#include "step/Move.hpp"
+#include "step/Up.hpp"
+#include "step/Down.hpp"
+#include "step/Release.hpp"
+#include "step/Wait.hpp"
 
 #include <vector>
 
@@ -30,7 +30,7 @@ namespace eeduro{
 				Up up;
 				Move move;
 				Down down;
-				Delay delay;
+				Wait wait;
 				
 			
 		};

@@ -21,6 +21,7 @@ namespace eeduro {
 				sequencer(sequencer){}
 				
 				int action(){
+					controlSys.setMouseInput();
 					safetySys.triggerEvent(properties.doMouseControl);			    
 				}
 

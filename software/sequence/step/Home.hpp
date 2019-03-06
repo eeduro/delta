@@ -6,7 +6,7 @@
 
 #include "../../control/DeltaControlSystem.hpp"
 
-#include "delay.hpp"
+#include "Wait.hpp"
 #include "../../Calibration.hpp"
 
 namespace eeduro{
@@ -19,14 +19,13 @@ namespace eeduro{
 					mot1Homed(false), mot2Homed(false), mot3Homed(false), mot4Homed(false),
 					mot1(0.0), mot2(0.0), mot3(0.0), mot4(0.0),
 					calibration(calibration),
-					delay("delay", seq, this){
+					wait("wait", seq, this){
 					
 				}
 				
-				int operator() () {return Step::start();}
-				
-				int action(){							
-					while(!mot1Homed || !mot2Homed || !mot3Homed){
+				int action(){
+					
+					/*while(!mot1Homed || !mot2Homed || !mot3Homed){
  						mot1 = controlSys.enc1.getOut().getSignal().getValue();
 						mot2 = controlSys.enc2.getOut().getSignal().getValue();
 						mot3 = controlSys.enc3.getOut().getSignal().getValue();
@@ -66,6 +65,7 @@ namespace eeduro{
 							controlSys.enc2.callInputFeature<>("resetFqd");
 							controlSys.enc3.callInputFeature<>("resetFqd");
 							controlSys.enc4.callInputFeature<>("resetFqd");
+							controlSys.pathPlanner.setInitPos({0,0,0,0});
 							controlSys.mouse.reset(0,0,0,0);
 							controlSys.voltageSwitch.switchToInput(0);
 							controlSys.homed = true;
@@ -77,26 +77,48 @@ namespace eeduro{
 					
 					controlSys.disableAxis();
 					controlSys.voltageSetPoint.setValue({0.5,0.5,0.5,-7});
-					delay(2);
+					wait(2);
 					controlSys.voltageSetPoint.setValue({0.5,0.5,0.5,7});
-					delay(0.2);
+					wait(0.2);
 					controlSys.enc4.callInputFeature<>("resetFqd");
-					delay(1);
+					wait(1);
 					
-					log.info() << "enc4 homed";
+					controlSys.pathPlanner.gotoPoint({0,0,-0.015,0});
 					
-					controlSys.enableAxis();
-					delay(0.5);
+					log.info() << "enc4 homed";*/
+					
+					
 					controlSys.pathPlanner.setInitPos({0,0,0,0});
-					controlSys.pathPlanner.gotoPoint({0,0,calibration.transportation_height, 0});
-					//controlSys.pathPlanner.gotoPoint({0,0,-0.03,0});
-					//log.info() << "go to point 0,0,-2";
+					controlSys.enableAxis();
+					wait(0.5);
+					
+					//controlSys.pathPlanner.gotoPoint({0,0,calibration.transportation_height, 0});
+					controlSys.pathPlanner.gotoPoint({0,0,-0.05,0});
+					log.info() << "go to point 0,0,-2";
 					//controlSys.pathPlanner.setInitPos({0,0,-0.02,0});
-					//while(!controlSys.pathPlanner.posReached()){delay(0.1);}
+					while(!controlSys.pathPlanner.posReached()){wait(0.1);}
+					controlSys.stop();
 					//log.warn() << "reached point: " << controlSys.directKin.getOut().getSignal();
-					//controlSys.enc1.callInputFeature<>("resetFqd");
-					//controlSys.enc2.callInputFeature<>("resetFqd");
-					//controlSys.enc3.callInputFeature<>("resetFqd");
+					controlSys.enc1.callInputFeature<>("resetFqd");
+					controlSys.enc2.callInputFeature<>("resetFqd");
+					controlSys.enc3.callInputFeature<>("resetFqd");
+					
+					controlSys.pathPlanner.setInitPos({0,0,0,0});
+					controlSys.start();
+					
+					controlSys.disableAxis();
+					controlSys.voltageSetPoint.setValue({0.5,0.5,0.5,-7});
+					wait(2);
+					controlSys.voltageSetPoint.setValue({0.5,0.5,0.5,7});
+					wait(0.2);
+					controlSys.enc4.callInputFeature<>("resetFqd");
+					wait(1);
+					
+					controlSys.pathPlanner.gotoPoint({0,0,-0.015,0});
+					
+					
+					
+					
 					//log.warn() << "encoder reset: "<< controlSys.directKin.getOut().getSignal();
 					//delay(0.5);*/
 					//controlSys.pathPlanner.setInitPos({0,0,0,0});
@@ -138,7 +160,7 @@ namespace eeduro{
 				double mot2;
 				double mot3;
 				double mot4;
-				Delay delay;
+				Wait wait;
 				Calibration& calibration;
 		};
 	}
