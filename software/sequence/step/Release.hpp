@@ -6,22 +6,22 @@
 
 #include "../../control/DeltaControlSystem.hpp"
 #include "../../Calibration.hpp"
-#include "Emag.hpp"
+
+using namespace eeros::sequencer;
 
 namespace eeduro{
 	namespace delta{
-		class Release : public eeros::sequencer::Step {
+		class Release : public Step {
 			public:
-				Release(std::string name,eeros::sequencer::Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys) : 
-					Step(name, seq, caller), controlSys(controlSys), emag("Set Elektromagnet", seq, caller, controlSys){
+				Release(std::string name, Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys) : 
+					Step(name, seq, caller), controlSys(controlSys){
 				}
-				int operator() () {return Step::start();}
+				int operator() () {return start();}
 				int action(){
-					emag(false);
+					controlSys.emagVal.setValue(false);
 				};
 		      
 				DeltaControlSystem &controlSys;
-				Emag emag;
 		  };
 	}
 }

@@ -2,13 +2,26 @@
 
 #include <eeros/safety/SafetyProperties.hpp>
 #include <eeros/hal/HAL.hpp>
+#include <eeros/safety/InputAction.hpp>
+#include <eeros/safety/OutputAction.hpp>
+#include <eeros/core/Executor.hpp>
+#include <eeros/sequencer/Sequencer.hpp>
+#include <eeros/sequencer/Sequence.hpp>
+
 #include "../control/DeltaControlSystem.hpp"
 
+#include <vector>
+#include <initializer_list>
+
+using namespace eeros;
+using namespace eeros::hal;
+using namespace eeros::safety;
+using namespace eeros::sequencer;
 
 namespace eeduro {
 	namespace delta {
 
-		class DeltaSafetyProperties : public eeros::safety::SafetyProperties {
+		class DeltaSafetyProperties : public SafetyProperties {
 	
 			public:
 				DeltaSafetyProperties(DeltaControlSystem& controlSys);
@@ -19,45 +32,45 @@ namespace eeduro {
 				* Name all levels
 				* ###
 				*/
-				eeros::control::SafetyLevel slOff;
-				eeros::control::SafetyLevel slEmergency;
-				eeros::control::SafetyLevel slControlStopping;
-				eeros::control::SafetyLevel slControlStarting;
-				eeros::control::SafetyLevel slSystemOn;
-				eeros::control::SafetyLevel slPoweringDown;
-				eeros::control::SafetyLevel slPoweringUp;
-				eeros::control::SafetyLevel slHoming;
-				eeros::control::SafetyLevel slAxesHomed;
-				eeros::control::SafetyLevel slSystemReady;
-				eeros::control::SafetyLevel slParking;
-				eeros::control::SafetyLevel slParked;
-				eeros::control::SafetyLevel slConfigureBlocks;
-				eeros::control::SafetyLevel slAutoMoving;
-				eeros::control::SafetyLevel slMouseControl;
+				SafetyLevel slOff;
+				SafetyLevel slEmergency;
+				SafetyLevel slControlStopping;
+				SafetyLevel slControlStarting;
+				SafetyLevel slSystemOn;
+				SafetyLevel slPoweringDown;
+				SafetyLevel slPoweringUp;
+				SafetyLevel slHoming;
+				SafetyLevel slAxesHomed;
+				SafetyLevel slSystemReady;
+				SafetyLevel slParking;
+				SafetyLevel slParked;
+				SafetyLevel slConfigureBlocks;
+				SafetyLevel slAutoMoving;
+				SafetyLevel slMouseControl;
 		
 				/*
 				* ###
 				* Define all possible events
 				* ###
 				*/
-				eeros::control::SafetyEvent doEmergency;
-				eeros::control::SafetyEvent doControlStart;
-				eeros::control::SafetyEvent doControlStop;
-				eeros::control::SafetyEvent controlStoppingDone;
-				eeros::control::SafetyEvent controlStartingDone;
-				eeros::control::SafetyEvent doPoweringUp;
-				eeros::control::SafetyEvent poweringUpDone;
-				eeros::control::SafetyEvent doPoweringDown;
-				eeros::control::SafetyEvent poweringDownDone;
-				eeros::control::SafetyEvent doHoming;
-				eeros::control::SafetyEvent homingDone;
-				eeros::control::SafetyEvent doParking;
-				eeros::control::SafetyEvent parkingDone;
-				eeros::control::SafetyEvent doSystemReady;
-				eeros::control::SafetyEvent doAutoMoving;
-				eeros::control::SafetyEvent doMouseControl;
-				eeros::control::SafetyEvent stopMoving;
-				eeros::control::SafetyEvent doConfigureBlocks;
+				SafetyEvent doEmergency;
+				SafetyEvent doControlStart;
+				SafetyEvent doControlStop;
+				SafetyEvent controlStoppingDone;
+				SafetyEvent controlStartingDone;
+				SafetyEvent doPoweringUp;
+				SafetyEvent poweringUpDone;
+				SafetyEvent doPoweringDown;
+				SafetyEvent poweringDownDone;
+				SafetyEvent doHoming;
+				SafetyEvent homingDone;
+				SafetyEvent doParking;
+				SafetyEvent parkingDone;
+				SafetyEvent doSystemReady;
+				SafetyEvent doAutoMoving;
+				SafetyEvent doMouseControl;
+				SafetyEvent stopMoving;
+				SafetyEvent doConfigureBlocks;
 	
 
 	
@@ -67,16 +80,16 @@ namespace eeduro {
 				* critical outputs
 				* ###
 				*/
-				eeros::hal::Output<bool>* led;
-				eeros::hal::Output<bool>* errorLed;
+				hal::Output<bool>* led;
+				hal::Output<bool>* errorLed;
 				
 				/* 
 				* ###
 				* critical inputs
 				* ###
 				*/
-				eeros::hal::Input<bool>* emergencyStop;
-				eeros::hal::Input<bool>* approval;
+				hal::Input<bool>* emergencyStop;
+				hal::Input<bool>* approval;
 					
 				DeltaControlSystem& controlSys;
 		};

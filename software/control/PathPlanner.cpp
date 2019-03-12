@@ -1,25 +1,26 @@
 #include "PathPlanner.hpp"
 #include <eeros/core/System.hpp>
+#include <iostream>
 
 using namespace eeduro::delta;
-using namespace eeros;
 
 PathPlanner::PathPlanner(AxisVector velMax, AxisVector accMax, double dt) : trajectoryGen(velMax, accMax, -accMax, dt) { }
 
-eeros::control::Output<AxisVector>& PathPlanner::getPosOut() {
+Output<AxisVector>& PathPlanner::getPosOut() {
 	return posOut;
 }
 
-eeros::control::Output<AxisVector>& PathPlanner::getVelOut() {
+Output<AxisVector>& PathPlanner::getVelOut() {
 	return velOut;
 }
 
-eeros::control::Output<AxisVector>& PathPlanner::getAccOut() {
+Output<AxisVector>& PathPlanner::getAccOut() {
 	return accOut;
 }
 
 void PathPlanner::gotoPoint(AxisVector p) {
-	eeros::control::TrajectoryGenerator<AxisVector, 3>* t = static_cast<eeros::control::TrajectoryGenerator<AxisVector, 3>*>(&trajectoryGen);
+
+	TrajectoryGenerator<AxisVector, 3>* t = static_cast<TrajectoryGenerator<AxisVector, 3>*>(&trajectoryGen);
 	t->push(p);
 	lastPoint = p;
 }

@@ -3,10 +3,12 @@
 #include <eeros/sequencer/Condition.hpp>
 #include "../control/DeltaControlSystem.hpp"
 
+
+using namespace eeros::sequencer;
 namespace eeduro{
 	namespace delta{
     
-		class MoveMouseCondition : public eeros::sequencer::Condition{
+		class MoveMouseCondition : public Condition{
 			public:
 				MoveMouseCondition(DeltaControlSystem& controlSys) : 
 					controlSys(controlSys){ /*empty*/ }

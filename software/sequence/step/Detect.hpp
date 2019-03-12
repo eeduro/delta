@@ -11,11 +11,13 @@
 
 #include <unistd.h>
 
+using namespace eeros::sequencer;
+
 namespace eeduro{
 	namespace delta{
-		class Detect : public eeros::sequencer::Step {
+		class Detect : public Step {
 			public:
-				Detect(std::string name,eeros::sequencer::Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration) : 
+				Detect(std::string name, Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration) : 
 					Step(name, seq, caller),
 					controlSys(controlSys),
 					calibration(calibration),
@@ -26,7 +28,7 @@ namespace eeduro{
 					return blockNumber;
 				}
 		      
-				int operator() (int pos) {this->position = pos; return Step::start();}
+				int operator() (int pos) {this->position = pos; return start();}
 			
 				int action(){
 					double down = calibration.position[position].level12 + 0.002;

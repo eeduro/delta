@@ -14,20 +14,22 @@
 
 #include <array>
 
+using namespace eeros::sequencer;
+using namespace eeros::safety;
+
 namespace eeduro {
 	namespace delta {
-		class SortSequence : public eeros::sequencer::Sequence {
+		class SortSequence : public Sequence {
 			public:
-				SortSequence(std::string name, eeros::sequencer::Sequencer& sequencer,eeros::sequencer::BaseSequence* caller, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, Calibration& calibration, DeltaSafetyProperties &properties);
+				SortSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, Calibration& calibration, DeltaSafetyProperties &properties);
 				
 				int action();
 				
 			private:
-				virtual void sortBlocks(std::array<int,4> blocks);
 				virtual int find(const std::array<int,4> &blocks, int block);
 				
 				DeltaControlSystem& controlSys;
-				eeros::safety::SafetySystem& safetySys;
+				SafetySystem& safetySys;
 				Move move;
 				Detect detect;
 				MoveBlockSequence moveBlock;

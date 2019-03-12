@@ -12,16 +12,19 @@
 
 #include <vector>
 
+using namespace eeros::sequencer;
+using namespace eeros::safety;
+
 namespace eeduro{
 	namespace delta{
-		class HomingSequence : public eeros::sequencer::Sequence{
+		class HomingSequence : public Sequence{
 			public:
-				HomingSequence(std::string name, sequencer::Sequencer& seq, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration );
+				HomingSequence(std::string name, Sequencer& seq, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration );
 				int action();
 								
 			private:
 				DeltaControlSystem& controlSys;
-				eeros::safety::SafetySystem& safetySys;
+				SafetySystem& safetySys;
 				DeltaSafetyProperties& properties;
 				
 				Raise raise;

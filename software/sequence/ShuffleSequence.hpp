@@ -12,20 +12,22 @@
 
 #include <array>
 
+using namespace eeros::sequencer;
+using namespace eeros::safety;
+
 namespace eeduro {
 	namespace delta {
-		class ShuffleSequence : public eeros::sequencer::Sequence {
+		class ShuffleSequence : public Sequence {
 			public:
-				ShuffleSequence(std::string name, eeros::sequencer::Sequencer& sequencer,eeros::sequencer::BaseSequence* caller, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, Calibration& calibration, DeltaSafetyProperties &properties);
+				ShuffleSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, Calibration& calibration, DeltaSafetyProperties &properties);
 				
 				int action();
 				
 			private:
-				virtual void shuffleBlocks(std::array<int,4> blocks);
 				virtual int find(const std::array<int,4> &blocks, int block);
 				
 				DeltaControlSystem& controlSys;
-				eeros::safety::SafetySystem& safetySys;
+				SafetySystem& safetySys;
 				Move move;
 				Detect detect;
 				MoveBlockSequence moveBlock;

@@ -1,7 +1,5 @@
 #include "Inertia.hpp"
 #include "constants.hpp"
-using namespace eeros::math;
-using namespace eeros::control;
 
 using namespace eeduro::delta;
 

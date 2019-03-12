@@ -13,11 +13,14 @@
 
 #include <array>
 
+using namespace eeros::sequencer;
+using namespace eeros::safety;
+
 namespace eeduro {
 	namespace delta {
-		class MoveBlockSequence : public eeros::sequencer::Sequence {
+		class MoveBlockSequence : public Sequence {
 			public:
-				MoveBlockSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys,BaseSequence* caller, eeros::safety::SafetySystem& safetySys, Calibration& calibration);
+				MoveBlockSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys,BaseSequence* caller, SafetySystem& safetySys, Calibration& calibration);
 				
 				int operator() (int from, int to);
 				
@@ -25,7 +28,7 @@ namespace eeduro {
 				
 			private:		
 				DeltaControlSystem& controlSys;
-				eeros::safety::SafetySystem& safetySys;
+				SafetySystem& safetySys;
 				Move move;
 				Up up;
 				Down down;

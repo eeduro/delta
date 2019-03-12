@@ -3,8 +3,7 @@
 #include <unistd.h>
 
 using namespace eeduro::delta;
-using namespace eeros::sequencer;
-using namespace eeros::safety;
+
 
 
 ConfigureBlockSequence::ConfigureBlockSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, Calibration& calibration) :
@@ -101,8 +100,8 @@ int ConfigureBlockSequence::action() {
 	
 	
 	/*test for z measurement*/
-	/*logAndWaitForButton({0});
-	
+	logAndWaitForButton({0});
+	/*
 	log.trace() << "move TCP to the top left corner and press the blue button";
 	waitForBlueButton();
 	log.trace() << "press the blue button, then slowly move the TCP to the top right corner, and press the blue button again";

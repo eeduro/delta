@@ -5,10 +5,9 @@
 #include <ctime>
 
 using namespace eeduro::delta;
-using namespace eeros::sequencer;
-using namespace eeros::safety;
 
-ShuffleSequence::ShuffleSequence(std::string name, eeros::sequencer::Sequencer& sequencer,eeros::sequencer::BaseSequence* caller, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, Calibration& calibration, DeltaSafetyProperties &properties) :
+
+ShuffleSequence::ShuffleSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, Calibration& calibration, DeltaSafetyProperties &properties) :
 	Sequence(name, sequencer, caller, true),
 	move("move", sequencer, this, controlSys, calibration),
 	detect("detect", sequencer, this, controlSys, calibration),
@@ -56,11 +55,6 @@ int ShuffleSequence::action() {
 	}
 	if (!all_ok) return -1;
 	
-	shuffleBlocks(blocks);
-}
-
-
-void ShuffleSequence::shuffleBlocks(std::array<int,4> blocks) {
 	for(int i = 0; i < blocks.size(); i++){
 	  if(blocks[i] != i) return;	// blocks are not sorted -> start sort sequence
 	}
@@ -85,6 +79,7 @@ void ShuffleSequence::shuffleBlocks(std::array<int,4> blocks) {
 	}
 	
 	log.info() << "finished shuffling";
+
 }
 
 int ShuffleSequence::find(const std::array<int,4> &blocks, int block) {

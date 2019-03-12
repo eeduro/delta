@@ -2,8 +2,6 @@
 #include <eeros/core/Executor.hpp>
 #include <eeros/logger/Logger.hpp>
 
-using namespace eeros::control;
-using namespace eeduro::delta;
 
 DeltaControlSystem::DeltaControlSystem() : 
 	mouse("/dev/input/event1"),
@@ -268,7 +266,7 @@ DeltaControlSystem::DeltaControlSystem() :
 		* add timedomain to the executor
 		* ###
 		*/
-	eeros::Executor::instance().add(timedomain);
+	Executor::instance().add(timedomain);
 }
 
 void DeltaControlSystem::start() {

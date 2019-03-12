@@ -14,11 +14,14 @@
 
 #include <array>
 
+using namespace eeros::sequencer;
+using namespace eeros::safety;
+
 namespace eeduro {
 	namespace delta {
-		class AutoMoveSequence : public eeros::sequencer::Sequence {
+		class AutoMoveSequence : public Sequence {
 			public:
-				AutoMoveSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties properties, Calibration& calibration);
+				AutoMoveSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties properties, Calibration& calibration);
 				
 				int action();
 
@@ -26,16 +29,16 @@ namespace eeduro {
 			private:
 				
 				DeltaControlSystem& controlSys;
-				eeros::safety::SafetySystem& safetySys;
+				SafetySystem& safetySys;
 				DeltaSafetyProperties& properties;
 				
 				Calibration& calibration;
 
-				eeros::sequencer::Sequencer& sequencer;
+				Sequencer& sequencer;
 				
 				MouseExceptionSequence mexSeq;
 				MoveMouseCondition mmc;
-				eeros::sequencer::Monitor mouseMove;
+				Monitor mouseMove;
 				
 				SortSequence sortSeq;
 				ShuffleSequence shuffSeq;

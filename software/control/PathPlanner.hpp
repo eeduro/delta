@@ -7,18 +7,19 @@
 #include "types.hpp"
 
 using namespace eeros;
+using namespace eeros::control;
 
 namespace eeduro {
 	namespace delta {
 		
-		class PathPlanner: public eeros::control::Block {
+		class PathPlanner: public Block {
 			
 			public:
 				PathPlanner(AxisVector velMax, AxisVector accMax, double dt);
 				
-				virtual eeros::control::Output<AxisVector>& getPosOut();
-				virtual eeros::control::Output<AxisVector>& getVelOut();
-				virtual eeros::control::Output<AxisVector>& getAccOut();
+				virtual control::Output<AxisVector>& getPosOut();
+				virtual control::Output<AxisVector>& getVelOut();
+				virtual control::Output<AxisVector>& getAccOut();
 				
 				virtual void gotoPoint(AxisVector p);
 				virtual bool posReached();
@@ -28,13 +29,13 @@ namespace eeduro {
 				virtual void run();
 				
 			protected:
-				eeros::control::Output<AxisVector> posOut;
-				eeros::control::Output<AxisVector> velOut;
-				eeros::control::Output<AxisVector> accOut;
+				control::Output<AxisVector> posOut;
+				control::Output<AxisVector> velOut;
+				control::Output<AxisVector> accOut;
 				std::mutex mtx;
 				double tOld;
 				
-				eeros::control::ConstantAccTrajectoryGenerator<AxisVector> trajectoryGen;
+				ConstantAccTrajectoryGenerator<AxisVector> trajectoryGen;
 				AxisVector lastPoint;
 		};
 	}

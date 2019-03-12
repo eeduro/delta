@@ -2,10 +2,9 @@
 #include "Kinematic.hpp"
 #include <cmath>
 
-using namespace eeros::math;
 using namespace eeduro::delta;
 
-Jacobian::Jacobian(eeros::math::Vector3 offset) : offset(offset) { }
+Jacobian::Jacobian(Vector3 offset) : offset(offset) { }
 
 Jacobian::~Jacobian() { }
 

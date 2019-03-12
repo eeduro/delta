@@ -10,11 +10,15 @@
 
 #include <vector>
 
+using namespace eeros::sequencer;
+using namespace eeros::safety;
+using namespace eeros::hal;
+
 namespace eeduro {
 	namespace delta {
-		class ConfigureBlockSequence : public eeros::sequencer::Sequence{
+		class ConfigureBlockSequence : public Sequence{
 			public:
-				ConfigureBlockSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, Calibration& calibration);
+				ConfigureBlockSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, SafetySystem& safetySys, Calibration& calibration);
 				
 				virtual int action();
 
@@ -33,9 +37,9 @@ namespace eeduro {
 				
 			private:
 				Calibration& calibration;
-				eeduro::delta::DeltaControlSystem& controlSys;
-				eeduro::delta::DeltaSafetyProperties& safetyProp;
-				eeros::safety::SafetySystem& safetySys;
+				DeltaControlSystem& controlSys;
+				DeltaSafetyProperties& safetyProp;
+				SafetySystem& safetySys;
 				
 				eeros::hal::Input<bool>* buttonBlue;			
 				eeros::hal::Output<bool>* ledBlue;

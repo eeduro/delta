@@ -2,10 +2,9 @@
 #include "../safety/DeltaSafetyProperties.hpp"
 
 using namespace eeduro::delta;
-using namespace eeros::sequencer;
-using namespace eeros::safety;
 
-SortSequence::SortSequence(std::string name, eeros::sequencer::Sequencer& sequencer, eeros::sequencer::BaseSequence* caller, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, Calibration& calibration, DeltaSafetyProperties &properties):
+
+SortSequence::SortSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, Calibration& calibration, DeltaSafetyProperties &properties):
 	Sequence(name, sequencer, caller, true),
 	move("move", sequencer, this, controlSys, calibration),
 	detect("detect", sequencer, this, controlSys, calibration),
@@ -53,11 +52,6 @@ int SortSequence::action() {
 	}
 	if (!all_ok) return -1;
 	
-	sortBlocks(blocks);
-}
-
-
-void SortSequence::sortBlocks(std::array<int,4> blocks) {
 	while (true) {
 		// find wrong block
 		int wrong_block = (-1);
@@ -109,6 +103,9 @@ void SortSequence::sortBlocks(std::array<int,4> blocks) {
 	}
 	log.info() << "finished sorting";
 }
+
+
+
 
 int SortSequence::find(const std::array<int,4> &blocks, int block) {
 	for (int i = 0; i < blocks.size(); i++) {

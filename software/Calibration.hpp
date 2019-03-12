@@ -2,9 +2,11 @@
 
 #include <eeros/config/FileConfig.hpp>
 
+using namespace eeros::config;
+
 namespace eeduro {
 	namespace delta {
-		class Calibration : public eeros::config::FileConfig {
+		class Calibration : public FileConfig {
 			public:
 				Calibration();
 				Calibration(const char *path);

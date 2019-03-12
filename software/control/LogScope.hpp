@@ -6,12 +6,15 @@
 
 #include <string>
 
+using namespace eeros::control;
+using namespace eeros::logger;
+
 namespace eeduro {
 
 	template <typename T = double>
-	class LogScope : public eeros::control::Block1i<T> {
+	class LogScope : public Block1i<T> {
 		public:
-			LogScope(std::string prefix, eeros::logger::LogWriter* w = nullptr) {
+			LogScope(std::string prefix, LogWriter* w = nullptr) {
 				if(w != nullptr) log.set(w);
 			}
 			
@@ -20,7 +23,7 @@ namespace eeduro {
 			}
 			
 		private:
-			eeros::logger::Logger<eeros::logger::LogWriter> log;
+			Logger<LogWriter> log;
 			std::string prefix;
 	};
 };

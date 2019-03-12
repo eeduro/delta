@@ -5,8 +5,6 @@
 #include <unistd.h>
 
 using namespace eeduro::delta;
-using namespace eeros::sequencer;
-using namespace eeros::safety;
 
 AutoMoveSequence::AutoMoveSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties properties, Calibration& calibration):
 	Sequence(name, sequencer),
@@ -29,11 +27,11 @@ AutoMoveSequence::AutoMoveSequence(std::string name, eeros::sequencer::Sequencer
 
 
 int AutoMoveSequence::action() {
-	while(Sequencer::running){
+	while(Sequencer::running && safetySys.getCurrentLevel() == properties.slAutoMoving){
 		sortSeq.start();
 		shuffSeq.start();
 		
-		log.warn() << "sequencer running: " << Sequencer::running;
+		//log.warn() << "sequencer running: " << Sequencer::running;
 	}
 }
 

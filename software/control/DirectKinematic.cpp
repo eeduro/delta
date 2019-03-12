@@ -1,10 +1,6 @@
 #include "DirectKinematic.hpp"
 #include <eeros/math/Matrix.hpp>
 
-using namespace eeros::math;
-using namespace eeros;
-using namespace eeduro::delta;
-
 DirectKinematic::DirectKinematic(Kinematic& kin) : 
 	kinematic(kin) { }
 

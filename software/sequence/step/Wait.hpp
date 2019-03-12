@@ -6,11 +6,13 @@
 
 #include "../../control/DeltaControlSystem.hpp"
 
+using namespace eeros::sequencer;
+
 namespace eeduro{
 	namespace delta{
-		class Wait : public eeros::sequencer::Step{
+		class Wait : public Step{
 			public:
-				Wait(std::string name, eeros::sequencer::Sequencer& sequencer, BaseSequence* caller) : Step(name, sequencer, caller){}
+				Wait(std::string name, Sequencer& sequencer, BaseSequence* caller) : Step(name, sequencer, caller){}
 				int operator() (double time) {seconds = time; return start();}
 				
 				int action(){

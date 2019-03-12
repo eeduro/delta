@@ -5,23 +5,22 @@
 #include <eeros/sequencer/BaseSequence.hpp>
 
 #include "../../control/DeltaControlSystem.hpp"
-#include "Emag.hpp"
 
+using namespace eeros::sequencer;
 
 namespace eeduro{
 	namespace delta{
-		class Grab : public eeros::sequencer::Step {
+		class Grab : public Step {
 			public:
-				Grab(std::string name,eeros::sequencer::Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys) : 
-					Step(name, seq, caller), controlSys(controlSys), emag("Set Elektromagnet", seq, caller, controlSys){
+				Grab(std::string name, Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys) : 
+					Step(name, seq, caller), controlSys(controlSys){
 				}
-				int operator() () {return Step::start();}
+				int operator() () {return start();}
 				int action(){
-					emag(true);
+					controlSys.emagVal.setValue(true);
 				};
 		      
-				DeltaControlSystem &controlSys;
-				Emag emag; 
+				DeltaControlSystem &controlSys; 
 		  };
 	}
 }

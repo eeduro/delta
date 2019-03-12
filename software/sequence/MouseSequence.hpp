@@ -12,11 +12,14 @@
 
 #include <array>
 
+using namespace eeros::sequencer;
+using namespace eeros::safety;
+
 namespace eeduro {
 	namespace delta {
-		class MouseSequence : public eeros::sequencer::Sequence {
+		class MouseSequence : public Sequence {
 			public:
-				MouseSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
+				MouseSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
 				
 				int action();
 				bool mouseMoved();
@@ -25,7 +28,7 @@ namespace eeduro {
 				int count;
 				DeltaControlSystem& controlSys;
 				DeltaSafetyProperties& properties;
-				eeros::safety::SafetySystem& safetySys;
+				SafetySystem& safetySys;
 				bool buttonPressed = false;
 				AxisVector mouseNew;
 				AxisVector mouseOld;

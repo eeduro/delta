@@ -5,9 +5,8 @@
 #include <unistd.h>
 
 using namespace eeduro::delta;
-using namespace eeros::sequencer;
-using namespace eeros::safety;
-MouseSequence::MouseSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration) :
+
+MouseSequence::MouseSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration) :
 	Sequence(name, sequencer),
 	controlSys(controlSys),
 	safetySys(safetySys),
@@ -16,7 +15,7 @@ MouseSequence::MouseSequence(std::string name, eeros::sequencer::Sequencer& sequ
 	mousetimeoutSeq("Mouse TimeOut Exception Sequence", sequencer, this, controlSys, safetySys, properties){
 		setTimeoutTime(2.0);
 		setTimeoutExceptionSequence(mousetimeoutSeq);				
-		setTimeoutBehavior(eeros::sequencer::SequenceProp::abort);
+		setTimeoutBehavior(SequenceProp::abort);
 		controlSys.mouse.setInitPos(controlSys.pathPlanner.getLastPoint());
 		mouseNew = controlSys.mouse.getOut().getSignal().getValue();
 		mouseOld = mouseNew;

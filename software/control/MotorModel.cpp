@@ -1,6 +1,5 @@
 #include "MotorModel.hpp"
 
-using namespace eeros::control;
 using namespace eeduro::delta;
 
 MotorModel::MotorModel(const AxisVector kM, const AxisVector RA) : kM(kM), RA(RA) { }

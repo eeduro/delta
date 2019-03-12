@@ -9,11 +9,14 @@
 
 #include <vector>
 
+using namespace eeros::sequencer;
+using namespace eeros::safety;
+
 namespace eeduro {
 	namespace delta {
-		class MouseExceptionSequence : public eeros::sequencer::Sequence{
+		class MouseExceptionSequence : public Sequence{
 			public:
-				MouseExceptionSequence(std::string name, eeros::sequencer::Sequencer& sequencer,eeros::sequencer::BaseSequence* caller, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties& properties, DeltaControlSystem& controlSys):
+				MouseExceptionSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, SafetySystem& safetySys, DeltaSafetyProperties& properties, DeltaControlSystem& controlSys):
 				Sequence(name, sequencer, caller, true),
 				controlSys(controlSys),
 				safetySys(safetySys),
@@ -28,17 +31,17 @@ namespace eeduro {
 				
 			private:
 
-				eeros::safety::SafetySystem& safetySys;
+				SafetySystem& safetySys;
 				DeltaSafetyProperties& properties;
 				DeltaControlSystem& controlSys;
-				eeros::sequencer::Sequencer& sequencer;
+				Sequencer& sequencer;
 
 
 		};
 			
-		class MouseTimeOutExceptionSequence : public eeros::sequencer::Sequence{
+		class MouseTimeOutExceptionSequence : public Sequence{
 			public:
-				MouseTimeOutExceptionSequence(std::string name, sequencer::Sequencer& sequencer, eeros::sequencer::BaseSequence* caller,DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties& properties):
+				MouseTimeOutExceptionSequence(std::string name, Sequencer& sequencer, BaseSequence* caller,DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties):
 				Sequence(name, sequencer, caller, true),
 				safetySys(safetySys),
 				properties(properties),
@@ -50,10 +53,10 @@ namespace eeduro {
 				}
 				
 			private:
-				eeros::safety::SafetySystem& safetySys;
+				SafetySystem& safetySys;
 				DeltaSafetyProperties& properties;
 				DeltaControlSystem& controlSys;
-				eeros::sequencer::Sequencer& sequencer;
+				Sequencer& sequencer;
 		};
 	}
 }

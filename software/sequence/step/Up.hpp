@@ -7,19 +7,18 @@
 #include "../../control/DeltaControlSystem.hpp"
 #include "../../Calibration.hpp"
 
-#include "Wait.hpp"
+using namespace eeros::sequencer;
 
 namespace eeduro{
 	namespace delta{
-		class Up : public eeros::sequencer::Step {
+		class Up : public Step {
 			public:
-				Up(std::string name,eeros::sequencer::Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration) : 
+				Up(std::string name, Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration) : 
 					Step(name, seq, caller),
 					controlSys(controlSys), 
-					calibration(calibration),
-					wait("wait", seq, this){}
+					calibration(calibration){}
 					
-				int operator() () {return Step::start();}
+				int operator() () {return start();}
 				int action(){
 					eeros::math::Vector<4> torqueLimit{ q012gearTorqueLimit, q012gearTorqueLimit, q012gearTorqueLimit, q3gearTorqueLimit };
 					controlSys.torqueLimitation.setLimit(-torqueLimit, torqueLimit);
@@ -27,18 +26,15 @@ namespace eeduro{
 					
 					p[2] = calibration.transportation_height;
 					controlSys.pathPlanner.gotoPoint(p);
-					waitUntilPointReached();
 				};
+				
+				bool checkExitCondition(){
+					controlSys.pathPlanner.posReached();
+				}
 			private:
-				void waitUntilPointReached(){
-					while (!controlSys.pathPlanner.posReached()) {
-						wait(0.1);
-					} 
-				};
 		      
-			DeltaControlSystem & controlSys;
-			Calibration calibration;
-			Wait wait;
+				DeltaControlSystem & controlSys;
+				Calibration calibration;
 		  };
 	}
 }

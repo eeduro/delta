@@ -1,18 +1,5 @@
 #include "DeltaSafetyProperties.hpp"
 
-#include <eeros/hal/HAL.hpp>
-#include <eeros/safety/InputAction.hpp>
-#include <eeros/safety/OutputAction.hpp>
-#include <eeros/core/Executor.hpp>
-#include <eeros/sequencer/Sequencer.hpp>
-#include <eeros/sequencer/Sequence.hpp>
-
-#include <vector>
-#include <initializer_list>
-
-using namespace eeros;
-using namespace eeros::hal;
-using namespace eeros::safety;
 using namespace eeduro::delta;
 
 DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) : 
@@ -115,35 +102,35 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* ###
 		*/
 
-		slEmergency.addEvent(doControlStart, slControlStarting, safety::kPublicEvent);
-		slEmergency.addEvent(doConfigureBlocks, slConfigureBlocks, eeros::safety::kPublicEvent);
-		slEmergency.addEvent(doParking, slParking, eeros::safety::kPublicEvent);
+		slEmergency.addEvent(doControlStart, slControlStarting, kPublicEvent);
+		slEmergency.addEvent(doConfigureBlocks, slConfigureBlocks, kPublicEvent);
+		slEmergency.addEvent(doParking, slParking, kPublicEvent);
 		
-		slControlStopping.addEvent(controlStoppingDone, slPoweringDown, safety::kPublicEvent);
-		slControlStarting.addEvent(controlStartingDone, slSystemOn, safety::kPublicEvent);
-		slSystemOn.addEvent(doControlStop, slControlStopping, safety::kPublicEvent);
-		slSystemOn.addEvent(doPoweringUp,slPoweringUp,safety::kPublicEvent);
+		slControlStopping.addEvent(controlStoppingDone, slPoweringDown, kPublicEvent);
+		slControlStarting.addEvent(controlStartingDone, slSystemOn, kPublicEvent);
+		slSystemOn.addEvent(doControlStop, slControlStopping, kPublicEvent);
+		slSystemOn.addEvent(doPoweringUp, slPoweringUp, kPublicEvent);
 
-		slPoweringDown.addEvent(poweringDownDone,slOff,safety::kPrivateEvent);
-		slPoweringUp.addEvent(doHoming,slHoming,safety::kPrivateEvent);
+		slPoweringDown.addEvent(poweringDownDone, slOff, kPrivateEvent);
+		slPoweringUp.addEvent(doHoming, slHoming, kPrivateEvent);
 
-		slHoming.addEvent(homingDone,slAxesHomed,safety::kPublicEvent);
-		slAxesHomed.addEvent(doSystemReady,slSystemReady,safety::kPrivateEvent);
-		slParking.addEvent(parkingDone,slParked,safety::kPublicEvent);
-		slParked.addEvent(doControlStop,slControlStopping,safety::kPublicEvent);
+		slHoming.addEvent(homingDone, slAxesHomed, kPublicEvent);
+		slAxesHomed.addEvent(doSystemReady, slSystemReady, kPrivateEvent);
+		slParking.addEvent(parkingDone, slParked, kPublicEvent);
+		slParked.addEvent(doControlStop, slControlStopping, kPublicEvent);
 
-		slSystemReady.addEvent(doAutoMoving,slAutoMoving,safety::kPublicEvent);
-		slAutoMoving.addEvent(doMouseControl, slMouseControl, eeros::safety::kPublicEvent);
-		slMouseControl.addEvent(doAutoMoving, slAutoMoving, safety::kPublicEvent);
-		slSystemReady.addEvent(doParking,slParking,kPublicEvent);
+		slSystemReady.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
+		slAutoMoving.addEvent(doMouseControl, slMouseControl, kPublicEvent);
+		slMouseControl.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
+		slSystemReady.addEvent(doParking, slParking, kPublicEvent);
 
-		slAutoMoving.addEvent(stopMoving,slSystemReady,safety::kPublicEvent);
-		slMouseControl.addEvent(stopMoving,slSystemReady,safety::kPublicEvent);
+		slAutoMoving.addEvent(stopMoving, slSystemReady, kPublicEvent);
+		slMouseControl.addEvent(stopMoving, slSystemReady, kPublicEvent);
 
-		slConfigureBlocks.addEvent(doSystemReady, slSystemReady, eeros::safety::kPublicEvent);
-		slConfigureBlocks.addEvent(stopMoving, slSystemReady, eeros::safety::kPublicEvent);
+		slConfigureBlocks.addEvent(doSystemReady, slSystemReady, kPublicEvent);
+		slConfigureBlocks.addEvent(stopMoving, slSystemReady, kPublicEvent);
 
-		addEventToLevelAndAbove(slSystemOn,doEmergency,slEmergency,safety::kPublicEvent);
+		addEventToLevelAndAbove(slSystemOn, doEmergency, slEmergency, kPublicEvent);
 
 		/*
 		* ###
@@ -203,7 +190,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 
 				if(sequencer.running){
 					sequencer.abort(); 
-					std::cout << "SEQUENCER: " << sequencer.running << std::endl;
+					//std::cout << "SEQUENCER: " << sequencer.running << std::endl;
 				}
 				
 				controlSys.voltageSetPoint.setValue({0.0,0.0,0.0,0.0});
@@ -258,7 +245,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
     
 		slHoming.setLevelAction([&](SafetyContext*privateContext){
 			if(slHoming.getNofActivations()==1){
-				static auto& sequencer = eeros::sequencer::Sequencer::instance();
+				static auto& sequencer = Sequencer::instance();
 				sequencer.getSequenceByName("Homing Sequence")->start();
 			}
 		});
@@ -269,7 +256,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		
 		slParking.setLevelAction([&](SafetyContext*privateContext){
 			if(slParking.getNofActivations()==1){
-				static auto& sequencer = eeros::sequencer::Sequencer::instance();
+				static auto& sequencer = Sequencer::instance();
 				sequencer.getSequenceByName("Park Sequence")->start();
 			}
 		});
@@ -290,7 +277,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
     
 		slAutoMoving.setLevelAction([&](SafetyContext*privateContext){
 			if(slAutoMoving.getNofActivations()==1){
-				static auto& sequencer = eeros::sequencer::Sequencer::instance();
+				static auto& sequencer = Sequencer::instance();
 				controlSys.setPathPlannerInput();
 				sequencer.getSequenceByName("AutoMove Sequence")->start();
 			}
@@ -298,8 +285,8 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
     
 		slMouseControl.setLevelAction([&](SafetyContext*privateContext){
 			//if(slMouseControl.getNofActivations()==1){
-			static auto& sequencer = eeros::sequencer::Sequencer::instance();
-			if(sequencer.getSequenceByName("Mouse Sequence")->getRunningState() != eeros::sequencer::SequenceState::running){
+			static auto& sequencer = Sequencer::instance();
+			if(sequencer.getSequenceByName("Mouse Sequence")->getRunningState() != SequenceState::running){
 				sequencer.getSequenceByName("Mouse Sequence")->start();
 			}
 		});

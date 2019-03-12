@@ -1,7 +1,7 @@
 #include "Kinematic.hpp"
 #include <cmath>
+#include <iostream>
 
-using namespace eeros::math;
 using namespace eeduro::delta;
 
 const double Kinematic::q_min = -1.75;
@@ -10,7 +10,7 @@ const double Kinematic::q_max = 0.85;
 const double Kinematic::tcp_min = -0.02;
 const double Kinematic::tcp_max = 0.02;
 const double Kinematic::tcpz_min = -0.14;
-const double Kinematic::tcpz_max = -0.05;
+const double Kinematic::tcpz_max = -0.05;	//-
 
 const double Kinematic::length_A(0.05);
 const double Kinematic::length_B(0.1);
@@ -38,6 +38,7 @@ Kinematic::Kinematic() {
 	
 	if (forward(q, tcp)) {
 		offset = tcp;
+		std::cout << "offset: " <<  offset[2] << std::endl;
 	}
 }
 
@@ -211,6 +212,6 @@ bool Kinematic::inverse(const Vector3 tcp, Vector3& q) {
 	}
 }
 
-const eeros::math::Vector3& Kinematic::get_offset() {
+const Vector3& Kinematic::get_offset() {
 	return offset;
 }

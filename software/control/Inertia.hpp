@@ -6,27 +6,32 @@
 #include "types.hpp"
 #include "Jacobian.hpp"
 
+using namespace eeros::math;
+using namespace eeros::control;
+
+using namespace eeros;
+
 namespace eeduro {
 	namespace delta {
 
-		class Inertia : public eeros::control::Block {
+		class Inertia : public Block {
 			public:
 				Inertia(Jacobian &jacobi);
 				
 				virtual void run();
 				
-				virtual eeros::control::Input<AxisVector>& getAccelerationInput();
-				virtual eeros::control::Input<AxisVector>& getTcpPosInput();
-				virtual eeros::control::Input<AxisVector>& getJointPosInput();
-				virtual eeros::control::Output<AxisVector>& getOut();
+				virtual control::Input<AxisVector>& getAccelerationInput();
+				virtual control::Input<AxisVector>& getTcpPosInput();
+				virtual control::Input<AxisVector>& getJointPosInput();
+				virtual control::Output<AxisVector>& getOut();
 			
 			protected:
-				eeros::control::Input<AxisVector> accelerationIn;
-				eeros::control::Input<AxisVector> tcpPosIn;
-				eeros::control::Input<AxisVector> jointPosIn;
-				eeros::control::Output<AxisVector> forceOut;
-				eeros::math::Matrix<3,3> tcpMass;
-				eeros::math::Matrix<3,3> motorInertia;
+				control::Input<AxisVector> accelerationIn;
+				control::Input<AxisVector> tcpPosIn;
+				control::Input<AxisVector> jointPosIn;
+				control::Output<AxisVector> forceOut;
+				Matrix<3,3> tcpMass;
+				Matrix<3,3> motorInertia;
 				Jacobian &jacobi;
 		};
 	}

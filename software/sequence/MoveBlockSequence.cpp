@@ -2,8 +2,7 @@
 #include "../safety/DeltaSafetyProperties.hpp"
 
 using namespace eeduro::delta;
-using namespace eeros::sequencer;
-using namespace eeros::safety;
+
 
 MoveBlockSequence::MoveBlockSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, BaseSequence* caller, SafetySystem& safetySys, Calibration& calibration): 
 	Sequence(name, sequencer, caller, true),

@@ -2,8 +2,7 @@
 
 
 using namespace eeduro::delta;
-using namespace eeros::sequencer;
-using namespace eeros::safety;
+
 
 HomingSequence::HomingSequence(std::string name, Sequencer& seq, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration): 
 	Sequence(name, seq),
@@ -15,13 +14,16 @@ HomingSequence::HomingSequence(std::string name, Sequencer& seq, DeltaControlSys
 
 int HomingSequence::action()
 {
-	raise();
+	//raise();
 	home();
 	
-	safetySys.triggerEvent(properties.homingDone);
+	log.info() << controlSys.muxEnc.getOut().getSignal().getValue();
+	log.warn() << controlSys.directKin.getOut().getSignal().getValue();
+	
+	//safetySys.triggerEvent(properties.homingDone);
 
 	
-	/*controlSys.pathPlanner.gotoPoint({0,0,0,0});
+	controlSys.pathPlanner.gotoPoint({0,0,0,0});
 	while(!controlSys.pathPlanner.posReached()){}
-	log.info() << "homing sequence, reached 0,0,0: " << controlSys.directKin.getOut().getSignal().getValue();*/
+	log.info() << "homing sequence, reached 0,0,0: " << controlSys.directKin.getOut().getSignal().getValue();
 }

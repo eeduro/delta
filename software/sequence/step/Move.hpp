@@ -7,20 +7,19 @@
 #include "../../control/DeltaControlSystem.hpp"
 #include "../../Calibration.hpp"
 
-#include "Wait.hpp"
+using namespace eeros::sequencer;
 
 namespace eeduro{
 	namespace delta{
-		class Move : public eeros::sequencer::Step {
+		class Move : public Step {
 			public:
-			Move(std::string name, eeros::sequencer::Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration) : 
+			Move(std::string name, Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration) : 
 				Step(name, seq, caller), 
 				controlSys(controlSys), 
-				calibration(calibration),
-				wait("wait", seq, this){
+				calibration(calibration){
 				this->position = 0;
 			}
-			int operator() (int pos) {this->position = pos; return Step::start();}
+			int operator() (int pos) {this->position = pos; return start();}
 			int action(){
 				auto p = controlSys.pathPlanner.getLastPoint();
 				p[0] = calibration.position[position].x;
@@ -34,19 +33,16 @@ namespace eeduro{
 					
 				}
 				controlSys.pathPlanner.gotoPoint(p);
-				waitUntilPointReached();
 			};
+			bool checkExitCondition(){
+					controlSys.pathPlanner.posReached();
+			}
+			
 		private:
-			void waitUntilPointReached(){
-				while (!controlSys.pathPlanner.posReached()) {
-					wait(0.1);
-				} 
-			};
 		      
 			DeltaControlSystem &controlSys;
 			Calibration calibration;
 			int position;
-			Wait wait;
 		      
 		  };
 	}
