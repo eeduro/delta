@@ -7,7 +7,7 @@
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
 #include "step/Move.hpp"
-#include "step/Detect.hpp"
+#include "DetectSequence.hpp"
 #include "MoveBlockSequence.hpp"
 #include "../conditions/MoveMouseCondition.hpp"
 #include "ExceptionSequence.hpp"
@@ -30,8 +30,9 @@ namespace eeduro {
 				
 				DeltaControlSystem& controlSys;
 				SafetySystem& safetySys;
+				Calibration& calibration;
 				Move move;
-				Detect detect;
+				DetectSequence detectSequence;
 				MoveBlockSequence moveBlock;
 
 		};

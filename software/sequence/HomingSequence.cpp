@@ -9,7 +9,6 @@ HomingSequence::HomingSequence(std::string name, Sequencer& seq, DeltaControlSys
 	controlSys(controlSys),
 	properties(properties),
 	safetySys(safetySys),
-	raise("raise", seq, this, controlSys),
 	home("home", seq, this, controlSys, calibration){}
 
 int HomingSequence::action()
@@ -17,13 +16,13 @@ int HomingSequence::action()
 	//raise();
 	home();
 	
-	log.info() << controlSys.muxEnc.getOut().getSignal().getValue();
-	log.warn() << controlSys.directKin.getOut().getSignal().getValue();
+	//log.info() << controlSys.muxEnc.getOut().getSignal().getValue();
+	//log.warn() << controlSys.directKin.getOut().getSignal().getValue();
 	
-	//safetySys.triggerEvent(properties.homingDone);
+	safetySys.triggerEvent(properties.homingDone);
 
 	
-	controlSys.pathPlanner.gotoPoint({0,0,0,0});
-	while(!controlSys.pathPlanner.posReached()){}
-	log.info() << "homing sequence, reached 0,0,0: " << controlSys.directKin.getOut().getSignal().getValue();
+	//controlSys.pathPlanner.gotoPoint({0,0,0,0});
+	/*while(!controlSys.pathPlanner.posReached()){}
+	log.info() << "homing sequence, reached 0,0,0: " << controlSys.directKin.getOut().getSignal().getValue();*/
 }

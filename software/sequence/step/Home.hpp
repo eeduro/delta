@@ -24,36 +24,36 @@ namespace eeduro{
 				
 				int action(){
 					
-					controlSys.setVoltageForInitializing({2,2,2,7});
+					controlSys.setVoltageForInitializing({2,2,2,-7});
 					
-					wait(2);
+					wait(2.5);
 					
 					controlSys.enc1.callInputFeature<>("setFqdPos", q012homingOffset);
 					controlSys.enc2.callInputFeature<>("setFqdPos", q012homingOffset);
 					controlSys.enc3.callInputFeature<>("setFqdPos", q012homingOffset);
-
-					controlSys.disableAxis();
-					controlSys.voltageSetPoint.setValue({0.5,0.5,0.5,-7});
-					wait(2);
-					controlSys.voltageSetPoint.setValue({0.5,0.5,0.5,7});
+					
 					wait(0.2);
-					controlSys.voltageSetPoint.setValue({0.5,0.5,0.5,0});
-					controlSys.enc4.callInputFeature<>("resetFqd");
-					wait(1);
-					
-					controlSys.enableAxis();
-					
-					controlSys.pathPlanner.gotoPoint({0,0,0,0});
 					
 					controlSys.disableAxis();
 					
-					while(true){
-						wait(1);
-						log.info() << controlSys.muxEnc.getOut().getSignal().getValue();
-					}
-					while(!controlSys.pathPlanner.posReached());
+					controlSys.setVoltageForInitializing({0.5,0.5,0.5,-7});
+					wait(0.5);
+					controlSys.setVoltageForInitializing({0.5,0.5,0.5,0});
+					controlSys.enc4.callInputFeature<>("resetFqd");
+					wait(0.2);
+					
+					controlSys.pathPlanner.setInitPos({q012homingOffset,q012homingOffset,q012homingOffset,0});
+					controlSys.enableAxis();
+					wait(0.2);
+
+					controlSys.pathPlanner.gotoPoint({0,0,calibration.transportation_height,0});
+					
 					
 				};
+				
+				bool checkExitCondition(){
+					controlSys.pathPlanner.posReached();
+				}
 		      
 			private:
 			

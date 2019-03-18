@@ -8,10 +8,9 @@ MoveBlockSequence::MoveBlockSequence(std::string name, Sequencer& sequencer, Del
 	Sequence(name, sequencer, caller, true),
 	controlSys(controlSys),
 	safetySys(safetySys),
-	move("move", seq, this, controlSys, calibration),
-	up("up", seq, this, controlSys, calibration),
-	down("down", seq, this, controlSys, calibration),
+	move("move", seq, this, controlSys),
 	grab("grab", seq, this, controlSys),
+	calibration(calibration),
 	release("release", seq, this, controlSys){}
 
 int MoveBlockSequence::operator()(int from, int to)
@@ -24,16 +23,63 @@ int MoveBlockSequence::operator()(int from, int to)
 int MoveBlockSequence::action()
 {
 	if(from != -1){
-		up();
-		move(from);
-		down(from);
+		auto p = controlSys.pathPlanner.getLastPoint();
+		p[2] = calibration.transportation_height;
+		move(p);
+		
+		p = controlSys.pathPlanner.getLastPoint();
+		p[0] = calibration.position[from].x;
+		p[1] = calibration.position[from].y;
+		
+		if (p[3] > 1) {
+			p[3] = calibration.position[from].r;
+		}
+		else {
+			p[3] = calibration.position[from].r + pi / 2.0;
+		}
+		move(p);
+		
+		double down = calibration.position[from].zblockmax[1] + 0.001;
+		p = controlSys.pathPlanner.getLastPoint();
+		p[2] = down;
+		move(p);
+		
+		double touch = calibration.position[from].zblockmax[3];
+		p[2] = touch;
+		move(p);
+		
 		grab();
 	}
 	if(to != -1){
-		up();
-		move(to);
-		down(to);
+		auto p = controlSys.pathPlanner.getLastPoint();
+		p[2] = calibration.transportation_height;
+		move(p);
+		
+		p = controlSys.pathPlanner.getLastPoint();
+		p[0] = calibration.position[to].x;
+		p[1] = calibration.position[to].y;			
+		
+		if (p[3] > 1) {
+			p[3] = calibration.position[to].r;
+		}
+		else {
+			p[3] = calibration.position[to].r + pi / 2.0;
+		}
+		move(p);
+		
+		double down = calibration.position[to].zblockmax[1] + 0.001;
+		p = controlSys.pathPlanner.getLastPoint();
+		p[2] = down;
+		move(p);
+		
+		double touch = calibration.position[from].zblockmax[3];
+		p[2] = touch;
+		move(p);
+		
 		release();
-		up();
+		
+		p = controlSys.pathPlanner.getLastPoint();
+		p[2] = calibration.transportation_height;
+		move(p);
 	}
 }

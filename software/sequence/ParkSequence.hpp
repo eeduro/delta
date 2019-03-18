@@ -7,8 +7,6 @@
 #include "../safety/DeltaSafetyProperties.hpp"
 
 #include "step/Move.hpp"
-#include "step/Up.hpp"
-#include "step/Down.hpp"
 #include "step/Release.hpp"
 #include "step/Wait.hpp"
 
@@ -30,9 +28,7 @@ namespace eeduro{
 				DeltaSafetyProperties& properties;
 				
 				Release release;
-				Up up;
 				Move move;
-				Down down;
 				Wait wait;
 				
 			

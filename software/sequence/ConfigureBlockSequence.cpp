@@ -11,7 +11,8 @@ ConfigureBlockSequence::ConfigureBlockSequence(std::string name, eeros::sequence
 	controlSys(controlSys),
 	safetySys(safetySys),
 	safetyProp(safetyProp),
-	calibration(calibration)
+	calibration(calibration),
+	wait("wait", sequencer, this)
 	{
 		HAL& hal = HAL::instance();
 		buttonBlue = hal.getLogicInput("buttonBlue");
@@ -28,8 +29,7 @@ bool ConfigureBlockSequence::getDone()
 
 void ConfigureBlockSequence::waitUntilReady() {
 	while(safetySys.getCurrentLevel() != safetyProp.slConfigureBlocks) {
-		usleep(100000);
-		std::this_thread::yield();
+		wait(0.1);
 	}
 }
 
@@ -39,7 +39,7 @@ void ConfigureBlockSequence::waitForButton(std::vector<int> buttons) {
 		eeros::Fault("index out of range");
 		  
 	}
-	usleep(200000);
+	wait(0.2);
 
 
 	while(true){
@@ -63,13 +63,20 @@ void ConfigureBlockSequence::logAndWaitForButton(std::vector<int> buttons) {
 		eeros::Fault("index out of range");
 		  
 	}
-	usleep(200000);
+	wait(0.2);
 
+	double x,y,z;
 
 	while(true){
-		log.info() << "x: " << controlSys.directKin.getOut().getSignal().getValue()[0] << "\ty: " << controlSys.directKin.getOut().getSignal().getValue()[1]
-			<< "\tz: " << controlSys.directKin.getOut().getSignal().getValue()[2] << "\tq0: " << controlSys.enc1.getOut().getSignal().getValue()
-			<< "\tq1: " << controlSys.enc2.getOut().getSignal().getValue() << "\tq2: " << controlSys.enc3.getOut().getSignal().getValue();
+		x = controlSys.directKin.getOut().getSignal().getValue()[0];
+		y = controlSys.directKin.getOut().getSignal().getValue()[1];
+		z = controlSys.directKin.getOut().getSignal().getValue()[2];
+		log.info() << "x: " << x << "\ty: " << y
+			<< "\tz: " << z;/* << "\tq0: " << controlSys.enc1.getOut().getSignal().getValue()
+			<< "\tq1: " << controlSys.enc2.getOut().getSignal().getValue() << "\tq2: " << controlSys.enc3.getOut().getSignal().getValue();*/
+			
+		int block = calibration.getBlock(x, y, z);
+		log.trace() << ": z = " << z << " -> block = " << block;
 		switch(buttons[0]){
 			case 0:		//blue button
 				ledBlue->set(true);
@@ -95,7 +102,7 @@ int ConfigureBlockSequence::action() {
 	const char *block[] = { "[no block]", "[block 1]", "[block 2]", "[block 3]" };
 	
 	controlSys.start();
-	usleep(500000);
+	wait(0.5);
 	controlSys.setVoltageForInitializing({0,0,0,0});
 	
 	
@@ -143,82 +150,124 @@ int ConfigureBlockSequence::action() {
 	
 	/*test for controlsys*/
 	
+	double minz = 0.0;
+	double maxz = 0.0;
 	
-
-	for (int i = 0; i < 4; i++) {
-		for (int j = 0; j < 4; j++) {
+	double minx = 0.0;
+	double maxx = 0.0;
+	double miny = 0.0;
+	double maxy = 0.0;
+	
+	for (int i = 0; i < 4; i++) {		// i = blocks
+		for (int j = 0; j < 4; j++) {	// j = positions
 			log.trace() << block[i] << " move TCP to position " << j << " and press the blue button";
-			//waitForBlueButton();
-			logAndWaitForButton({0});
+			waitForBlueButton();
+			//logAndWaitForButton({0});
+			wait(1);
+			
+			log.trace() << "move TCP inside area of block " << block[i] << " in position " << j << " and press the blue button when finished";
 			
 			auto p = controlSys.directKin.getOut().getSignal().getValue();
+			minx = p[0];
+			maxx = p[0];
+			miny = p[1];
+			maxy = p[1];
+			minz = p[2];
+			maxz = p[2];
+			
+			
+			while(!buttonBlue->get()){
+				p = controlSys.directKin.getOut().getSignal().getValue();
+				
+				if(p[2] < minz) minz = p[2];
+				else if(p[2] > maxz) maxz = p[2];
+				
+				if(i==3){
+					if(p[0] < minx) minx = p[0];
+					else if(p[0] > maxx) maxx = p[0];
+					if(p[1] < miny) miny = p[1];
+					else if(p[1] > maxy) maxy = p[1];
+				}
+			}
+			wait(1);
+			log.info() << "z min: " << minz*1000 << "\tz max: " << maxz*1000 << "\tdiff: " << (maxz-minz)*1000;
+			
 			log.info() << "p: " << p;
-			calibration.position[j].zblock[i] = p[2];
+			calibration.position[j].zblockmin[i] = minz;
+			calibration.position[j].zblockmax[i] = maxz;
 			if (i == 3) {
-				calibration.position[j].x = p[0];
-				calibration.position[j].y = p[1];
+				
+				calibration.position[j].x = (maxx+minx)/2;
+				calibration.position[j].y = (maxy+miny)/2;
 			}
 		}
 	}
 	
 
 	for (int i = 0; i < 4; i++) {
-		calibration.position[i].level12 = (calibration.position[i].zblock[1] + calibration.position[i].zblock[2]) / 2.0;
+		calibration.position[i].level12 = (calibration.position[i].zblockmin[1] + calibration.position[i].zblockmax[2]) / 2;
+		calibration.position[i].level23 = (calibration.position[i].zblockmin[2] + calibration.position[i].zblockmax[3]) / 2;
+		calibration.position[i].level30 = (calibration.position[i].zblockmin[3] + calibration.position[i].zblockmax[0]) / 2;
+		
+		/*calibration.position[i].level12 = (calibration.position[i].zblock[1] + calibration.position[i].zblock[2]) / 2.0;
 		calibration.position[i].level23 = (calibration.position[i].zblock[2] + calibration.position[i].zblock[3]) / 2.0;
-		calibration.position[i].level30 = (calibration.position[i].zblock[3] + calibration.position[i].zblock[0]) / 2.0;
+		calibration.position[i].level30 = (calibration.position[i].zblock[3] + calibration.position[i].zblock[0]) / 2.0;*/
 	}
 
 	bool good = true;
-	for (int i = 0; i < 4; i++) {
-		double z0 = calibration.position[i].zblock[0];
-		double z1 = calibration.position[i].zblock[1];
-		double z2 = calibration.position[i].zblock[2];
-		double z3 = calibration.position[i].zblock[3];
+	/*for (int i = 0; i < 4; i++) {
+		double z0min = calibration.position[i].zblockmin[0];
+		double z0max = calibration.position[i].zblockmax[0];
+		double z1min = calibration.position[i].zblockmin[1];
+		double z1max = calibration.position[i].zblockmax[1];
+		double z2min = calibration.position[i].zblockmin[2];
+		double z2max = calibration.position[i].zblockmax[2];
+		double z3min = calibration.position[i].zblockmin[3];
+		double z3max = calibration.position[i].zblockmax[3];
 		
-		if (z0 >= z3) {
-			log.error() << "[position " << i << "] invalid calibration zblock0 >= zblock3";
-			log.warn() << "[position " << i << "] z0: " << z0 << ", z3: " << z3;
+		if (z0max >= z3min) {
+			log.error() << "[position " << i << "] invalid calibration zblock0 max >= zblock3 min";
+			log.warn() << "[position " << i << "] z0: " << z0max << ", z3: " << z3min;
 			good = false;
 		}
-		if (z3 >= z2) {
-			log.error() << "[position " << i << "] invalid calibration zblock3 >= zblock2";
-			log.warn() << "[position " << i << "] z3: " << z3 << ", z2: " << z2;
+		if (z3max >= z2min) {
+			log.error() << "[position " << i << "] invalid calibration zblock3 max >= zblock2 min";
+			log.warn() << "[position " << i << "] z3: " << z3max << ", z2: " << z2min;
 			good = false;
 		}
-		if (z2 >= z1) {
-			log.error() << "[position " << i << "] invalid calibration zblock2 >= zblock1";
-			log.warn() << "[position " << i << "] z2: " << z2 << ", z1: " << z1;
-			good = false;
-		}
-		
-		if (z1 <= calibration.position[i].level12) {
-			log.error() << "[position " << i << "] invalid calibration zblock1 <= level12";
-			log.warn() << "[position " << i << "] z1: " << z1 << ", level12: " << calibration.position[i].level12;
-			good = false;
-		}
-		if (z2 >= calibration.position[i].level12) {
-			log.error() << "[position " << i << "] invalid calibration zblock2 >= level12";
+		if (z2max >= z1min) {
+			log.error() << "[position " << i << "] invalid calibration zblock2 max >= zblock1 min";
+			log.warn() << "[position " << i << "] z2: " << z2max << ", z1: " << z1min;
 			good = false;
 		}
 		
-		if (z2 <= calibration.position[i].level23) {
-			log.error() << "[position " << i << "] invalid calibration zblock2 <= level23";
+		if (z1min <= calibration.position[i].level12) {
+			log.error() << "[position " << i << "] invalid calibration zblock1 min <= level12";
 			good = false;
 		}
-		if (z3 >= calibration.position[i].level23) {
-			log.error() << "[position " << i << "] invalid calibration zblock3 >= level23";
+		if (z2max >= calibration.position[i].level12) {
+			log.error() << "[position " << i << "] invalid calibration zblock2 max >= level12";
 			good = false;
 		}
 		
-		if (z3 <= calibration.position[i].level30) {
-			log.error() << "[position " << i << "] invalid calibration zblock3 <= level30";
+		if (z2min <= calibration.position[i].level23) {
+			log.error() << "[position " << i << "] invalid calibration zblock2 min <= level23";
 			good = false;
 		}
-		if (z0 >= calibration.position[i].level30) {
-			log.error() << "[position " << i << "] invalid calibration zblock0 >= level30";
+		if (z3max >= calibration.position[i].level23) {
+			log.error() << "[position " << i << "] invalid calibration zblock3 max >= level23";
 			good = false;
 		}
-	}
+		
+		if (z3min <= calibration.position[i].level30) {
+			log.error() << "[position " << i << "] invalid calibration zblock3 min <= level30";
+			good = false;
+		}
+		if (z0max >= calibration.position[i].level30) {
+			log.error() << "[position " << i << "] invalid calibration zblock0 max >= level30";
+			good = false;
+		}
+	}*/
 	
 	if (!good) return -1;
 	if (calibration.save("/opt/eeros/etc/delta-sort.conf")) {
@@ -230,7 +279,8 @@ int ConfigureBlockSequence::action() {
 		    log.info() << "p" << i << "x = " << calibration.position[i].x;
 		    log.info() << "p" << i << "y = " << calibration.position[i].y;
 		    for(int j = 0; j < 4; j++){
-		      log.info() << "p" << i << "z" << j << " = " << calibration.position[i].zblock[j];
+		      log.info() << "p" << i << "z" << j << "min = " << calibration.position[i].zblockmin[j];
+		      log.info() << "p" << i << "z" << j << "max = " << calibration.position[i].zblockmax[j];
 		    }
 		}
 	}

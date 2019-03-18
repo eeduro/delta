@@ -30,8 +30,6 @@ int AutoMoveSequence::action() {
 	while(Sequencer::running && safetySys.getCurrentLevel() == properties.slAutoMoving){
 		sortSeq.start();
 		shuffSeq.start();
-		
-		//log.warn() << "sequencer running: " << Sequencer::running;
 	}
 }
 

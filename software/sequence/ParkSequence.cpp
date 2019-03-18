@@ -9,10 +9,8 @@ ParkSequence::ParkSequence(std::string name, Sequencer& seq, DeltaControlSystem&
 	controlSys(controlSys),
 	properties(properties),
 	safetySys(safetySys),
-	move("park move", seq, this, controlSys, calibration),
-	up("park up", seq, this, controlSys, calibration),
+	move("park move", seq, this, controlSys),
 	release("park release", seq, this, controlSys),
-	down("park down", seq, this, controlSys, calibration),
 	wait("park wait", seq, this){
 	}
 

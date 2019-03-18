@@ -16,6 +16,8 @@ namespace eeduro {
 				
 				int getBlock(int pos, double z);
 				
+				int getBlock(double x, double y, double z);
+				
 				struct {
 					double x;
 					double y;
@@ -23,7 +25,8 @@ namespace eeduro {
 					double level12;
 					double level23;
 					double level30;
-					double zblock[4];
+					double zblockmin[4];
+					double zblockmax[4];
 				} position[4];
 				double transportation_height;
 		};

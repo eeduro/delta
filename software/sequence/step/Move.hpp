@@ -13,26 +13,14 @@ namespace eeduro{
 	namespace delta{
 		class Move : public Step {
 			public:
-			Move(std::string name, Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration) : 
+			Move(std::string name, Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys) : 
 				Step(name, seq, caller), 
-				controlSys(controlSys), 
-				calibration(calibration){
-				this->position = 0;
+				controlSys(controlSys){
+				this->position = {0,0,0,0};
 			}
-			int operator() (int pos) {this->position = pos; return start();}
+			int operator() (AxisVector position) {this->position = position; return start();}
 			int action(){
-				auto p = controlSys.pathPlanner.getLastPoint();
-				p[0] = calibration.position[position].x;
-				p[1] = calibration.position[position].y;			
-				
-				if (p[3] > 1) {
-					p[3] = calibration.position[position].r;
-				}
-				else {
-					p[3] = calibration.position[position].r + pi / 2.0;
-					
-				}
-				controlSys.pathPlanner.gotoPoint(p);
+				controlSys.pathPlanner.gotoPoint(position);
 			};
 			bool checkExitCondition(){
 					controlSys.pathPlanner.posReached();
@@ -41,8 +29,7 @@ namespace eeduro{
 		private:
 		      
 			DeltaControlSystem &controlSys;
-			Calibration calibration;
-			int position;
+			AxisVector position;
 		      
 		  };
 	}

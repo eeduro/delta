@@ -162,7 +162,7 @@
 							"minIn": 	0, "maxIn": 1,
 							"minOut":	0, "maxOut": 120 },
 					   { "id" : "enc",
-							"minIn": 	0, "maxIn": 6.283185307179586476925286766559,
+							"minIn": 	0, "maxIn": -6.283185307179586476925286766559,
 							"minOut":	0, "maxOut": 256},
 					   { "id" : "fqd",
 							"minIn":	0, "maxIn": 1,

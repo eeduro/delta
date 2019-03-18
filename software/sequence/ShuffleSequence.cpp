@@ -9,20 +9,32 @@ using namespace eeduro::delta;
 
 ShuffleSequence::ShuffleSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, Calibration& calibration, DeltaSafetyProperties &properties) :
 	Sequence(name, sequencer, caller, true),
-	move("move", sequencer, this, controlSys, calibration),
-	detect("detect", sequencer, this, controlSys, calibration),
+	move("move", sequencer, this, controlSys),
+	detectSequence("detect sequence", sequencer, controlSys, this, safetySys, calibration),
 	moveBlock("moveBlock", sequencer,controlSys, this, safetySys, calibration),
 	controlSys(controlSys),
-	safetySys(safetySys){}
+	safetySys(safetySys),
+	calibration(calibration){}
 	
 
 int ShuffleSequence::action() {
 	std::array<int,4> blocks;
 	// detect positions of all blocks
 	for (int i = 0; i < 4; i++) {
-		move(i);
-		detect(i);
-		blocks[i] = detect.getBlock();
+		auto p = controlSys.pathPlanner.getLastPoint();
+		p[0] = calibration.position[i].x;
+		p[1] = calibration.position[i].y;
+
+		if (p[3] > 1) {
+			p[3] = calibration.position[i].r;
+		}
+		else {
+			p[3] = calibration.position[i].r + pi / 2.0;
+			
+		}
+		move(p);
+		detectSequence(i);
+		blocks[i] = detectSequence.getBlock();
 		
 	}
 
@@ -56,7 +68,7 @@ int ShuffleSequence::action() {
 	if (!all_ok) return -1;
 	
 	for(int i = 0; i < blocks.size(); i++){
-	  if(blocks[i] != i) return;	// blocks are not sorted -> start sort sequence
+	  if(blocks[i] != i) return -1;	// blocks are not sorted -> start sort sequence
 	}
 	
 	int empty_position = 0;

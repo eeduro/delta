@@ -6,10 +6,11 @@ using namespace eeduro::delta;
 
 SortSequence::SortSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, Calibration& calibration, DeltaSafetyProperties &properties):
 	Sequence(name, sequencer, caller, true),
-	move("move", sequencer, this, controlSys, calibration),
-	detect("detect", sequencer, this, controlSys, calibration),
+	move("move", sequencer, this, controlSys),
+	detectSequence("detect sequence", sequencer, controlSys, this, safetySys, calibration),
 	moveBlock("moveBlock", sequencer,controlSys, this, safetySys, calibration),
 	controlSys(controlSys),
+	calibration(calibration),
 	safetySys(safetySys){}
 
 int SortSequence::action() {
@@ -17,9 +18,20 @@ int SortSequence::action() {
 	
 	// detect positions of all blocks
 	for (int i = 0; i < 4; i++) {
-		move(i);
-		detect(i);
-		blocks[i] = detect.getBlock();
+		auto p = controlSys.pathPlanner.getLastPoint();
+		p[0] = calibration.position[i].x;
+		p[1] = calibration.position[i].y;
+
+		if (p[3] > 1) {
+			p[3] = calibration.position[i].r;
+		}
+		else {
+			p[3] = calibration.position[i].r + pi / 2.0;
+			
+		}
+		move(p);
+		detectSequence(i);
+		blocks[i] = detectSequence.getBlock();
 		
 	}
 
@@ -60,7 +72,7 @@ int SortSequence::action() {
 			wrong_position = find(blocks, i);
 			if (wrong_position < 0) {
 				log.error() << "cannot find block " << i;
-				return;
+				return -1;
 			}
 			if (wrong_position != i) {
 				wrong_block = i;
@@ -77,7 +89,7 @@ int SortSequence::action() {
 			log.info() << "wrong position: " << wrong_position;
 			if (correct_position < 0) {
 				log.error() << "cannot find block " << wrong_position;
-				return;
+				return -1;
 			}
 			
 			log.info() << "move block from position " << correct_position << " to " << wrong_position;
@@ -89,7 +101,7 @@ int SortSequence::action() {
 			int empty_position = find(blocks, 0);
 			if (empty_position < 0) {
 				log.error() << "cannot find block 0";
-				return;
+				return -1;
 			}
 			
 			log.info() << "move block from position " << correct_position << " to " << empty_position;

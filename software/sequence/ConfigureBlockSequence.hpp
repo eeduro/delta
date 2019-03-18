@@ -7,6 +7,7 @@
 #include "../safety/DeltaSafetyProperties.hpp"
 #include "MouseSequence.hpp"
 #include "../Calibration.hpp"
+#include "step/Wait.hpp"
 
 #include <vector>
 
@@ -40,6 +41,8 @@ namespace eeduro {
 				DeltaControlSystem& controlSys;
 				DeltaSafetyProperties& safetyProp;
 				SafetySystem& safetySys;
+				
+				Wait wait;
 				
 				eeros::hal::Input<bool>* buttonBlue;			
 				eeros::hal::Output<bool>* ledBlue;

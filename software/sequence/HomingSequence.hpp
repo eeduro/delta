@@ -7,7 +7,6 @@
 #include "../safety/DeltaSafetyProperties.hpp"
 #include "../Calibration.hpp"
 
-#include "step/Raise.hpp"
 #include "step/Home.hpp"
 
 #include <vector>
@@ -27,7 +26,6 @@ namespace eeduro{
 				SafetySystem& safetySys;
 				DeltaSafetyProperties& properties;
 				
-				Raise raise;
 				Home home;
 				
 			
