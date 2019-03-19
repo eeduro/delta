@@ -23,11 +23,10 @@ namespace eeduro{
 				controlSys.pathPlanner.gotoPoint(position);
 			};
 			bool checkExitCondition(){
-					controlSys.pathPlanner.posReached();
+					return controlSys.pathPlanner.posReached();
 			}
 			
 		private:
-		      
 			DeltaControlSystem &controlSys;
 			AxisVector position;
 		      

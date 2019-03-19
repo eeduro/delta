@@ -8,6 +8,7 @@
 #include "../Calibration.hpp"
 
 #include "step/Home.hpp"
+#include "step/Move.hpp"
 
 #include <vector>
 
@@ -25,6 +26,8 @@ namespace eeduro{
 				DeltaControlSystem& controlSys;
 				SafetySystem& safetySys;
 				DeltaSafetyProperties& properties;
+				Calibration& calibration;
+				Move move;
 				
 				Home home;
 				

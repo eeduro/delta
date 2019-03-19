@@ -5,10 +5,10 @@
 
 #include "../control/DeltaControlSystem.hpp"
 #include "step/Move.hpp"
-#include "step/Detect.hpp"
 #include "MoveBlockSequence.hpp"
 #include "ExceptionSequence.hpp"
-#include "step/Emag.hpp"
+#include "step/Grab.hpp"
+#include "step/Release.hpp"
 
 #include <array>
 
@@ -33,7 +33,8 @@ namespace eeduro {
 				AxisVector mouseNew;
 				AxisVector mouseOld;
 				MouseTimeOutExceptionSequence mousetimeoutSeq;
-				Emag emag;
+				Grab grab;
+				Release release;
 		};
 	}
 }

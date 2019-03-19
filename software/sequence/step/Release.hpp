@@ -16,7 +16,6 @@ namespace eeduro{
 				Release(std::string name, Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys) : 
 					Step(name, seq, caller), controlSys(controlSys){
 				}
-				int operator() () {return start();}
 				int action(){
 					controlSys.emagVal.setValue(false);
 				};

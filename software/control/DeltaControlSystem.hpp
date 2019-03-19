@@ -107,7 +107,6 @@ namespace eeduro{
 				Gain<AxisVector, AxisVector, true> torqueGear;
 				Gain<AxisVector, AxisVector, true> angleGear;
 
-				eeros::control::D<AxisVector> encDiff;
 				MotorModel motorModel;
 
 				Switch<2, AxisVector> voltageSwitch;

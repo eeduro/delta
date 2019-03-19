@@ -7,7 +7,6 @@
 #include "step/Move.hpp"
 #include "step/Grab.hpp"
 #include "step/Release.hpp"
-#include "step/Emag.hpp"
 
 #include <array>
 

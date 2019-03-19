@@ -193,8 +193,6 @@ DeltaControlSystem::DeltaControlSystem() :
 
 	torqueGear.getIn().connect(torqueLimitation.getOut());
 
-	encDiff.getIn().connect(muxEnc.getOut());
-
 	motorModel.getTorqueIn().connect(torqueGear.getOut());
 	motorModel.getSpeedIn().connect(posDiff.getOut());
 
@@ -218,16 +216,18 @@ DeltaControlSystem::DeltaControlSystem() :
 		* add all blocks to the timedomain
 		* ###
 		*/
-	timedomain.addBlock(muxEnc);
+	
+	timedomain.addBlock(mouse);
+	timedomain.addBlock(pathPlanner);
+	timedomain.addBlock(inputSwitch);
+	
 	timedomain.addBlock(enc1);
 	timedomain.addBlock(enc2);
 	timedomain.addBlock(enc3);
 	timedomain.addBlock(enc4);
+	timedomain.addBlock(muxEnc);
 
 	timedomain.addBlock(directKin);
-	timedomain.addBlock(mouse);
-	timedomain.addBlock(pathPlanner);
-	timedomain.addBlock(inputSwitch);
 
 	timedomain.addBlock(posSum);
 	timedomain.addBlock(posDiff);
@@ -244,8 +244,6 @@ DeltaControlSystem::DeltaControlSystem() :
 	timedomain.addBlock(jacobi);
 	timedomain.addBlock(torqueLimitation);
 	timedomain.addBlock(torqueGear);
-
-	timedomain.addBlock(encDiff);
 
 	timedomain.addBlock(motorModel);
 	timedomain.addBlock(voltageSetPoint);
