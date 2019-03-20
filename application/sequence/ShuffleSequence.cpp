@@ -33,8 +33,8 @@ int ShuffleSequence::action() {
 			
 		}
 		move(p);
-		detectSequence(i);
-		blocks[i] = detectSequence.getBlock();
+		
+		blocks[i] = detectSequence(i);
 		
 	}
 

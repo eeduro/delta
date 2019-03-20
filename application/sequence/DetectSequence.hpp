@@ -4,9 +4,10 @@
 #include <eeros/safety/SafetySystem.hpp>
 
 #include "../control/DeltaControlSystem.hpp"
+#include "../Calibration.hpp"
+#include "step/Wait.hpp"
 #include "step/Move.hpp"
-#include "step/Grab.hpp"
-#include "step/Release.hpp"
+
 
 #include <array>
 
@@ -15,23 +16,24 @@ using namespace eeros::safety;
 
 namespace eeduro {
 	namespace delta {
-		class MoveBlockSequence : public Sequence {
+		class DetectSequence : public Sequence {
 			public:
-				MoveBlockSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys,BaseSequence* caller, SafetySystem& safetySys, Calibration& calibration);
+				DetectSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys,BaseSequence* caller, SafetySystem& safetySys, Calibration& calibration);
 				
-				int operator() (int from, int to);
+				int operator() (int pos);
 				
 				int action();
+				
+				int getBlock();
 				
 			private:		
 				DeltaControlSystem& controlSys;
 				SafetySystem& safetySys;
 				Calibration& calibration;
 				Move move;
-				Grab grab;
-				Release release;
-				int from;
-				int to;
+				int position;
+				int blockNumber;
+				Wait wait;
 		};
 	}
 }

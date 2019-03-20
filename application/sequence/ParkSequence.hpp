@@ -5,6 +5,7 @@
 
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
+#include "../Calibration.hpp"
 
 #include "step/Move.hpp"
 #include "step/Release.hpp"

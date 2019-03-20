@@ -1,5 +1,4 @@
 #include "SortSequence.hpp"
-#include "../safety/DeltaSafetyProperties.hpp"
 
 using namespace eeduro::delta;
 
@@ -30,8 +29,8 @@ int SortSequence::action() {
 			
 		}
 		move(p);
-		detectSequence(i);
-		blocks[i] = detectSequence.getBlock();
+		
+		blocks[i] = detectSequence(i);
 		
 	}
 

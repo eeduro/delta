@@ -2,7 +2,6 @@
 
 #include <eeros/sequencer/Step.hpp>
 #include <eeros/sequencer/Sequencer.hpp>
-#include <eeros/sequencer/BaseSequence.hpp>
 
 #include "../../control/DeltaControlSystem.hpp"
 

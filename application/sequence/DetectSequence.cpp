@@ -20,29 +20,24 @@ int DetectSequence::operator()(int pos)
 
 int DetectSequence::action()
 {	
-	double down = calibration.position[position].level12 + 0.002;
-	double touch = calibration.position[position].level30 - 0.0002;
-
 	eeros::math::Vector<4> torqueLimit{ q012gearTorqueLimit, q012gearTorqueLimit, q012gearTorqueLimit, q3gearTorqueLimit };
-	eeros::math::Vector<4> torqueLimitDown = torqueLimit * 0.1;
-	eeros::math::Vector<4> zero = torqueLimit * 0.01;
 
 	auto p = controlSys.pathPlanner.getLastPoint();
 	double last_z = p[2];
-	p[2] = down;
+	p[2] = calibration.position[position].level12 + 0.002;
 	move(p);
 
-	controlSys.torqueLimitation.setLimit(-torqueLimitDown, torqueLimitDown);
-	p[2] = touch;
+	controlSys.torqueLimitation.setLimit(-torqueLimit * 0.1, torqueLimit * 0.1);
+	p[2] = calibration.position[position].level30 - 0.0002;
 	move(p);
 
-	controlSys.torqueLimitation.setLimit(-zero, zero);
-	wait(0.5);
+	controlSys.torqueLimitation.setLimit(-torqueLimit * 0.01, torqueLimit * 0.01);
+	wait(0.5);		// final position may not be reached
 	
 	double z = controlSys.directKin.getOut().getSignal().getValue()[2];
-	controlSys.torqueLimitation.setLimit(-torqueLimitDown, torqueLimitDown);
-	p[2] = down;
-	move(p);
+	controlSys.torqueLimitation.setLimit(-torqueLimit * 0.1, torqueLimit * 0.1);
+	p[2] = calibration.position[position].level12 + 0.002;
+	move(p);		// start slowly move in z+
 
 	controlSys.torqueLimitation.setLimit(-torqueLimit, torqueLimit);
 	p[2] = last_z;

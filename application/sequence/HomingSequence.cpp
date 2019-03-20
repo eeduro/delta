@@ -9,13 +9,29 @@ HomingSequence::HomingSequence(std::string name, Sequencer& seq, DeltaControlSys
 	controlSys(controlSys),
 	properties(properties),
 	safetySys(safetySys),
-	home("home", seq, this, controlSys),
+	wait("wait", seq, this),
 	move("move", seq, this, controlSys),
 	calibration(calibration){}
 
 int HomingSequence::action()
 {
-	home();
+	controlSys.setVoltageForInitializing({2,2,2,-7});
+					
+	wait(2.5);
+
+	controlSys.enc1.callInputFeature<>("setFqdPos", q012homingOffset);
+	controlSys.enc2.callInputFeature<>("setFqdPos", q012homingOffset);
+	controlSys.enc3.callInputFeature<>("setFqdPos", q012homingOffset);
+	controlSys.enc4.callInputFeature<>("resetFqd");
+
+	wait(0.1);
+
+	controlSys.pathPlanner.setInitPos(controlSys.directKin.getOut().getSignal().getValue());
+
+	wait(0.1);
+
+	controlSys.enableAxis();
+	
 	move({0,0,calibration.transportation_height, pi/2});
 	
 	safetySys.triggerEvent(properties.homingDone);

@@ -194,6 +194,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 				}
 				
 				controlSys.voltageSetPoint.setValue({0.0,0.0,0.0,0.0});
+				controlSys.emagVal.setValue(false);
 				controlSys.voltageSwitch.switchToInput(1);
 				controlSys.inputSwitch.switchToInput(1);
 			}

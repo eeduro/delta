@@ -7,7 +7,7 @@
 #include "../safety/DeltaSafetyProperties.hpp"
 #include "../Calibration.hpp"
 
-#include "step/Home.hpp"
+#include "step/Wait.hpp"
 #include "step/Move.hpp"
 
 #include <vector>
@@ -28,10 +28,7 @@ namespace eeduro{
 				DeltaSafetyProperties& properties;
 				Calibration& calibration;
 				Move move;
-				
-				Home home;
-				
-			
+				Wait wait;
 		};
 	}
 }
