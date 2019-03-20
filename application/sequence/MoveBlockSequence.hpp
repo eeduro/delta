@@ -1,7 +1,6 @@
 #pragma once
 
 #include <eeros/sequencer/Sequence.hpp>
-#include <eeros/safety/SafetySystem.hpp>
 
 #include "../control/DeltaControlSystem.hpp"
 #include "step/Move.hpp"
@@ -18,7 +17,7 @@ namespace eeduro {
 	namespace delta {
 		class MoveBlockSequence : public Sequence {
 			public:
-				MoveBlockSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys,BaseSequence* caller, SafetySystem& safetySys, Calibration& calibration);
+				MoveBlockSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys,BaseSequence* caller, Calibration& calibration);
 				
 				int operator() (int from, int to);
 				
@@ -26,7 +25,6 @@ namespace eeduro {
 				
 			private:		
 				DeltaControlSystem& controlSys;
-				SafetySystem& safetySys;
 				Calibration& calibration;
 				Move move;
 				Grab grab;

@@ -11,21 +11,23 @@ ParkSequence::ParkSequence(std::string name, Sequencer& seq, DeltaControlSystem&
 	safetySys(safetySys),
 	move("park move", seq, this, controlSys),
 	release("park release", seq, this, controlSys),
-	wait("park wait", seq, this){
+	calibration(calibration){
 	}
 
 int ParkSequence::action()
 {	
 	controlSys.start();
-	wait(0.5);
-
-	controlSys.setVoltageForInitializing({-2,-2,-2,0});
-
-	wait(2.5);
+	
+	release();
+	
+	AxisVector p = {0, 0, calibration.transportation_height, 0};
+	move(p);
+	
+	p[2] = -0.05;
+	move(p);
+	wait(2);
 	
 	controlSys.disableAxis();
-	
-	//controlSys.mot1.callOutputFeature<>("disable");
 	
 	safetySys.triggerEvent(properties.parkingDone);
 }

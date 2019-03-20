@@ -19,7 +19,7 @@ namespace eeduro {
 	namespace delta {
 		class ShuffleSequence : public Sequence {
 			public:
-				ShuffleSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, Calibration& calibration, DeltaSafetyProperties &properties);
+				ShuffleSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties);
 				
 				int action();
 				
@@ -27,7 +27,6 @@ namespace eeduro {
 				virtual int find(const std::array<int,4> &blocks, int block);
 				
 				DeltaControlSystem& controlSys;
-				SafetySystem& safetySys;
 				Move move;
 				DetectSequence detectSequence;
 				MoveBlockSequence moveBlock;

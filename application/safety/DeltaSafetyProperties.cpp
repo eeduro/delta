@@ -43,12 +43,12 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 	slPoweringUp("Powering up"),
 	slHoming("Homing"),
 	slAxesHomed("Axes homed"),
+	slSystemReady("System ready"),
 	slParking("Parking"),
 	slParked("Parked"),
-	slSystemReady("System ready"),
+	slConfigureBlocks("Configuring blocks"),
 	slAutoMoving("Auto moving"),
-	slMouseControl("Mouse control"),
-	slConfigureBlocks("Configuring blocks")
+	slMouseControl("Mouse control")
 	{
 	  
 		HAL& hal = HAL::instance();
@@ -116,14 +116,16 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 
 		slHoming.addEvent(homingDone, slAxesHomed, kPublicEvent);
 		slAxesHomed.addEvent(doSystemReady, slSystemReady, kPrivateEvent);
+		
+		slSystemReady.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
+		slSystemReady.addEvent(doParking, slParking, kPublicEvent);
+		
 		slParking.addEvent(parkingDone, slParked, kPublicEvent);
 		slParked.addEvent(doControlStop, slControlStopping, kPublicEvent);
-
-		slSystemReady.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
+		
 		slAutoMoving.addEvent(doMouseControl, slMouseControl, kPublicEvent);
 		slMouseControl.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
-		slSystemReady.addEvent(doParking, slParking, kPublicEvent);
-
+		
 		slAutoMoving.addEvent(stopMoving, slSystemReady, kPublicEvent);
 		slMouseControl.addEvent(stopMoving, slSystemReady, kPublicEvent);
 
@@ -146,12 +148,12 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		slPoweringUp.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
 		slHoming.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
 		slAxesHomed.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
+		slSystemReady.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
 		slParking.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
 		slParked.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
-		slSystemReady.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
+		slConfigureBlocks.setInputActions({ignore(emergencyStop), check(approval, false, doSystemReady)});
 		slAutoMoving.setInputActions({check(emergencyStop,false,doEmergency),check(approval, false, doMouseControl)});
 		slMouseControl.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
-		slConfigureBlocks.setInputActions({ignore(emergencyStop), check(approval, false, doSystemReady)});
 
 		/*
 		* ###
@@ -167,12 +169,13 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		slPoweringUp.setOutputActions({set(led,true), set(errorLed, false)});
 		slHoming.setOutputActions({set(led,true), set(errorLed, false)});
 		slAxesHomed.setOutputActions({set(led,true), set(errorLed, false)});
+		slSystemReady.setOutputActions({set(led,true), set(errorLed, false)});
 		slParking.setOutputActions({set(led,false), set(errorLed, false)});
 		slParked.setOutputActions({set(led,false), set(errorLed, false)});
-		slSystemReady.setOutputActions({set(led,true), set(errorLed, false)});
+		slConfigureBlocks.setOutputActions({set(led,true), set(errorLed,true)});
 		slAutoMoving.setOutputActions({set(led,true), set(errorLed, false)});
 		slMouseControl.setOutputActions({set(led,true), set(errorLed, false)});
-		slConfigureBlocks.setOutputActions({set(led,true), set(errorLed,true)});
+
 
 		/*
 		* ###
@@ -190,7 +193,6 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 
 				if(sequencer.running){
 					sequencer.abort(); 
-					//std::cout << "SEQUENCER: " << sequencer.running << std::endl;
 				}
 				
 				controlSys.voltageSetPoint.setValue({0.0,0.0,0.0,0.0});

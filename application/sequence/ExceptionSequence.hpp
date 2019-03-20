@@ -20,21 +20,17 @@ namespace eeduro {
 				Sequence(name, sequencer, caller, true),
 				controlSys(controlSys),
 				safetySys(safetySys),
-				properties(properties),
-				sequencer(sequencer){}
+				properties(properties){}
 				
 				int action(){
 					controlSys.setMouseInput();
 					safetySys.triggerEvent(properties.doMouseControl);			    
 				}
 
-				
 			private:
-
 				SafetySystem& safetySys;
 				DeltaSafetyProperties& properties;
 				DeltaControlSystem& controlSys;
-				Sequencer& sequencer;
 
 
 		};
@@ -44,9 +40,7 @@ namespace eeduro {
 				MouseTimeOutExceptionSequence(std::string name, Sequencer& sequencer, BaseSequence* caller,DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties):
 				Sequence(name, sequencer, caller, true),
 				safetySys(safetySys),
-				properties(properties),
-				controlSys(controlSys),
-				sequencer(sequencer){}
+				properties(properties){}
 				
 				int action(){
 					safetySys.triggerEvent(properties.doAutoMoving);
@@ -55,8 +49,6 @@ namespace eeduro {
 			private:
 				SafetySystem& safetySys;
 				DeltaSafetyProperties& properties;
-				DeltaControlSystem& controlSys;
-				Sequencer& sequencer;
 		};
 	}
 }

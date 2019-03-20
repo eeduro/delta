@@ -2,10 +2,10 @@
 
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
+#include <eeros/sequencer/Wait.hpp>
 
 #include "../control/DeltaControlSystem.hpp"
 #include "../Calibration.hpp"
-#include "step/Wait.hpp"
 #include "step/Move.hpp"
 
 
@@ -18,21 +18,17 @@ namespace eeduro {
 	namespace delta {
 		class DetectSequence : public Sequence {
 			public:
-				DetectSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys,BaseSequence* caller, SafetySystem& safetySys, Calibration& calibration);
+				DetectSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys,BaseSequence* caller, Calibration& calibration);
 				
 				int operator() (int pos);
 				
 				int action();
 				
-				int getBlock();
-				
 			private:		
 				DeltaControlSystem& controlSys;
-				SafetySystem& safetySys;
 				Calibration& calibration;
 				Move move;
 				int position;
-				int blockNumber;
 				Wait wait;
 		};
 	}

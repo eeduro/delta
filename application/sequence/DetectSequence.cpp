@@ -1,13 +1,12 @@
 #include "DetectSequence.hpp"
-#include "../safety/DeltaSafetyProperties.hpp"
+
 
 using namespace eeduro::delta;
 
 
-DetectSequence::DetectSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, BaseSequence* caller, SafetySystem& safetySys, Calibration& calibration): 
+DetectSequence::DetectSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, BaseSequence* caller, Calibration& calibration): 
 	Sequence(name, sequencer, caller, true),
 	controlSys(controlSys),
-	safetySys(safetySys),
 	calibration(calibration),
 	move("move", seq, this, controlSys),
 	wait("wait", seq, this){}
@@ -46,14 +45,7 @@ int DetectSequence::action()
 	int block = calibration.getBlock(position, z);
 	log.trace() << "[DETECT] pos " << position << ": z = " << z << " -> block = " << block;
 
-	blockNumber = block;
-
 	return block;
 	
-}
-
-int DetectSequence::getBlock()
-{
-	return blockNumber;
 }
 

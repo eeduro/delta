@@ -27,14 +27,8 @@ namespace eeduro {
 
 				
 			private:
-				
-				DeltaControlSystem& controlSys;
 				SafetySystem& safetySys;
 				DeltaSafetyProperties& properties;
-				
-				Calibration& calibration;
-
-				Sequencer& sequencer;
 				
 				MouseExceptionSequence mexSeq;
 				MoveMouseCondition mmc;

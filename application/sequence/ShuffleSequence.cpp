@@ -7,13 +7,12 @@
 using namespace eeduro::delta;
 
 
-ShuffleSequence::ShuffleSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, Calibration& calibration, DeltaSafetyProperties &properties) :
+ShuffleSequence::ShuffleSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties) :
 	Sequence(name, sequencer, caller, true),
 	move("move", sequencer, this, controlSys),
-	detectSequence("detect sequence", sequencer, controlSys, this, safetySys, calibration),
-	moveBlock("moveBlock", sequencer,controlSys, this, safetySys, calibration),
+	detectSequence("detect sequence", sequencer, controlSys, this, calibration),
+	moveBlock("moveBlock", sequencer,controlSys, this, calibration),
 	controlSys(controlSys),
-	safetySys(safetySys),
 	calibration(calibration){}
 	
 
@@ -21,17 +20,8 @@ int ShuffleSequence::action() {
 	std::array<int,4> blocks;
 	// detect positions of all blocks
 	for (int i = 0; i < 4; i++) {
-		auto p = controlSys.pathPlanner.getLastPoint();
-		p[0] = calibration.position[i].x;
-		p[1] = calibration.position[i].y;
-
-		if (p[3] > 1) {
-			p[3] = calibration.position[i].r;
-		}
-		else {
-			p[3] = calibration.position[i].r + pi / 2.0;
-			
-		}
+		AxisVector p = {calibration.position[i].x,calibration.position[i].y, calibration.transportation_height, 0};
+		
 		move(p);
 		
 		blocks[i] = detectSequence(i);

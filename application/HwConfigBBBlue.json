@@ -99,19 +99,19 @@
 							"minIn": 	0, "maxIn": 1,
 							"minOut":	0, "maxOut": 76 },
 					   { "id" : "enc",
-							"minIn": 	0, "maxIn": -6.283185307,
-							"minOut":	0, "maxOut": 512},
+							"minIn": 	0, "maxIn": 6.283185307179586476925286766559,
+							"minOut":	0, "maxOut": 4096},
 					   { "id" : "fqd",
 							"minIn":	0, "maxIn": 1,
 							"minOut":	0, "maxOut": 4}
 					 ],
 				"range": [ { "id" : "gear",
-							"noLimit": true},
+							"noLimit": true },
 					   { "id" : "enc",
-							"noLimit": true},
+							"noLimit": true },
 					   { "id" : "fqd",
-							"noLimit": true}
-					 ],
+							"noLimit": true } 
+					],
 				"unit": "rad"
 			},
 			"channel2": {
@@ -120,19 +120,19 @@
 							"minIn": 	0, "maxIn": 1,
 							"minOut":	0, "maxOut": 76 },
 					   { "id" : "enc",
-							"minIn": 	0, "maxIn": -6.283185307,
-							"minOut":	0, "maxOut": 512},
+							"minIn": 	0, "maxIn": 6.283185307179586476925286766559,
+							"minOut":	0, "maxOut": 4096},
 					   { "id" : "fqd",
 							"minIn":	0, "maxIn": 1,
 							"minOut":	0, "maxOut": 4}
 					 ],
 				"range": [ { "id" : "gear",
-							"noLimit": true},
+							"noLimit": true },
 					   { "id" : "enc",
-							"noLimit": true},
+							"noLimit": true },
 					   { "id" : "fqd",
-							"noLimit": true}
-					 ],
+							"noLimit": true } 
+					],
 				"unit": "rad"
 			},
 			"channel3": {
@@ -141,19 +141,19 @@
 							"minIn": 	0, "maxIn": 1,
 							"minOut":	0, "maxOut": 76 },
 					   { "id" : "enc",
-							"minIn": 	0, "maxIn": -6.283185307,
-							"minOut":	0, "maxOut": 512},
+							"minIn": 	0, "maxIn": 6.283185307179586476925286766559,
+							"minOut":	0, "maxOut": 4096},
 					   { "id" : "fqd",
 							"minIn":	0, "maxIn": 1,
 							"minOut":	0, "maxOut": 4}
 					 ],
 				"range": [ { "id" : "gear",
-							"noLimit": true},
+							"noLimit": true },
 					   { "id" : "enc",
-							"noLimit": true},
+							"noLimit": true },
 					   { "id" : "fqd",
-							"noLimit": true}
-					 ],
+							"noLimit": true } 
+					],
 				"unit": "rad"
 			},
 			"channel4": {
@@ -162,7 +162,7 @@
 							"minIn": 	0, "maxIn": 1,
 							"minOut":	0, "maxOut": 120 },
 					   { "id" : "enc",
-							"minIn": 	0, "maxIn": -6.283185307179586476925286766559,
+							"minIn": 	0, "maxIn": 6.283185307179586476925286766559,
 							"minOut":	0, "maxOut": 256},
 					   { "id" : "fqd",
 							"minIn":	0, "maxIn": 1,
