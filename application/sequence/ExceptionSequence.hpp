@@ -17,7 +17,7 @@ namespace eeduro {
 		class MouseExceptionSequence : public Sequence{
 			public:
 				MouseExceptionSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, SafetySystem& safetySys, DeltaSafetyProperties& properties, DeltaControlSystem& controlSys):
-				Sequence(name, sequencer, caller, true),
+				Sequence(name, caller, true),
 				controlSys(controlSys),
 				safetySys(safetySys),
 				properties(properties){}
@@ -37,8 +37,8 @@ namespace eeduro {
 			
 		class MouseTimeOutExceptionSequence : public Sequence{
 			public:
-				MouseTimeOutExceptionSequence(std::string name, Sequencer& sequencer, BaseSequence* caller,DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties):
-				Sequence(name, sequencer, caller, true),
+				MouseTimeOutExceptionSequence(std::string name, BaseSequence* caller,DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties):
+				Sequence(name, caller, true),
 				safetySys(safetySys),
 				properties(properties){}
 				

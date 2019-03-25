@@ -10,10 +10,10 @@ MouseSequence::MouseSequence(std::string name, Sequencer& sequencer, DeltaContro
 	Sequence(name, sequencer),
 	controlSys(controlSys),
 	safetySys(safetySys),
-	grab("grab", sequencer, this, controlSys),
-	release("release", sequencer, this, controlSys),
+	grab("grab", this, controlSys),
+	release("release", this, controlSys),
 	properties(properties),
-	mousetimeoutSeq("Mouse TimeOut Exception Sequence", sequencer, this, controlSys, safetySys, properties){
+	mousetimeoutSeq("Mouse TimeOut Exception Sequence", this, controlSys, safetySys, properties){
 		setTimeoutTime(2.0);
 		setTimeoutExceptionSequence(mousetimeoutSeq);				
 		setTimeoutBehavior(SequenceProp::abort);
@@ -30,7 +30,7 @@ MouseSequence::MouseSequence(std::string name, Sequencer& sequencer, DeltaContro
 int MouseSequence::action() {
 		mouseNew = controlSys.mouse.getOut().getSignal().getValue();
 		log.warn() << controlSys.directKin.getOut().getSignal().getValue();
-		if(controlSys.mouse.getButtonOut().getSignal().getValue()[0]){
+		if(controlSys.mouse.getButtonOut().getSignal().getValue()[0] || controlSys.mouse.getButtonOut().getSignal().getValue()[1]){
 			buttonPressed = true;
 			grab();
 		}

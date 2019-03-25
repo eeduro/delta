@@ -4,12 +4,12 @@
 using namespace eeduro::delta;
 
 
-DetectSequence::DetectSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, BaseSequence* caller, Calibration& calibration): 
-	Sequence(name, sequencer, caller, true),
+DetectSequence::DetectSequence(std::string name, DeltaControlSystem& controlSys, BaseSequence* caller, Calibration& calibration): 
+	Sequence(name, caller, true),
 	controlSys(controlSys),
 	calibration(calibration),
-	move("move", seq, this, controlSys),
-	wait("wait", seq, this){}
+	move("move", this, controlSys),
+	wait("wait", this){}
 
 int DetectSequence::operator()(int pos)
 {

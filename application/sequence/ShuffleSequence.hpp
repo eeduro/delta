@@ -19,7 +19,7 @@ namespace eeduro {
 	namespace delta {
 		class ShuffleSequence : public Sequence {
 			public:
-				ShuffleSequence(std::string name, Sequencer& sequencer, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties);
+				ShuffleSequence(std::string name, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties);
 				
 				int action();
 				

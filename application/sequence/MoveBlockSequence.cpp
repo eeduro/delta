@@ -4,13 +4,13 @@
 using namespace eeduro::delta;
 
 
-MoveBlockSequence::MoveBlockSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, BaseSequence* caller, Calibration& calibration): 
-	Sequence(name, sequencer, caller, true),
+MoveBlockSequence::MoveBlockSequence(std::string name, DeltaControlSystem& controlSys, BaseSequence* caller, Calibration& calibration): 
+	Sequence(name, caller, true),
 	controlSys(controlSys),
-	move("move", seq, this, controlSys),
-	grab("grab", seq, this, controlSys),
+	move("move", this, controlSys),
+	grab("grab", this, controlSys),
 	calibration(calibration),
-	release("release", seq, this, controlSys){}
+	release("release", this, controlSys){}
 
 int MoveBlockSequence::operator()(int from, int to)
 {

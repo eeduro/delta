@@ -9,8 +9,9 @@ ParkSequence::ParkSequence(std::string name, Sequencer& seq, DeltaControlSystem&
 	controlSys(controlSys),
 	properties(properties),
 	safetySys(safetySys),
-	move("park move", seq, this, controlSys),
-	release("park release", seq, this, controlSys),
+	move("park move",this, controlSys),
+	release("park release", this, controlSys),
+	wait("wait", this),
 	calibration(calibration){
 	}
 
@@ -23,7 +24,7 @@ int ParkSequence::action()
 	AxisVector p = {0, 0, calibration.transportation_height, 0};
 	move(p);
 	
-	p[2] = -0.05;
+	p[2] = -0.07;
 	move(p);
 	wait(2);
 	

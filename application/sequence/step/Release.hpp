@@ -11,8 +11,8 @@ namespace eeduro{
 	namespace delta{
 		class Release : public Step {
 			public:
-				Release(std::string name, Sequencer & seq, BaseSequence* caller, DeltaControlSystem& controlSys) : 
-					Step(name, seq, caller), controlSys(controlSys){
+				Release(std::string name, BaseSequence* caller, DeltaControlSystem& controlSys) : 
+					Step(name, caller), controlSys(controlSys){
 				}
 				int action(){
 					controlSys.emagVal.setValue(false);

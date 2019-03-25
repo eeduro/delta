@@ -72,18 +72,17 @@ int main(int argc, char **argv) {
 	
 	auto& sequencer = Sequencer::instance();
 
-  	AutoMoveSequence autoMoveSequence{"AutoMove Sequence", sequencer, controlSys, safetySys, properties, calibration};
- 	MouseSequence mouseSequence{"Mouse Sequence", sequencer, controlSys, safetySys, properties, calibration};
-  	ConfigureBlockSequence calibSequence{"Configure block Sequence", sequencer, controlSys, safetySys, calibration};
 	HomingSequence homingSequence{"Homing Sequence", sequencer, controlSys, safetySys, properties, calibration};
+	AutoMoveSequence autoMoveSequence{"AutoMove Sequence", sequencer, controlSys, safetySys, properties, calibration};
+	MouseSequence mouseSequence{"Mouse Sequence", sequencer, controlSys, safetySys, properties, calibration};
+	ConfigureBlockSequence calibSequence{"Configure block Sequence", sequencer, controlSys, safetySys, calibration};
 	ParkSequence parkSequence{"Park Sequence", sequencer, controlSys, safetySys, properties, calibration};
 	
 
-	
- 	sequencer.addSequence(autoMoveSequence);
- 	sequencer.addSequence(mouseSequence);
-  	sequencer.addSequence(calibSequence);
 	sequencer.addSequence(homingSequence);
+	sequencer.addSequence(autoMoveSequence);
+	sequencer.addSequence(mouseSequence);
+	sequencer.addSequence(calibSequence);
 	sequencer.addSequence(parkSequence);
 	
 	auto &executor = Executor::instance();

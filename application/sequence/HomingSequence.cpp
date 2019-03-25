@@ -9,8 +9,8 @@ HomingSequence::HomingSequence(std::string name, Sequencer& seq, DeltaControlSys
 	controlSys(controlSys),
 	properties(properties),
 	safetySys(safetySys),
-	wait("wait", seq, this),
-	move("move", seq, this, controlSys),
+	wait("wait", this),
+	move("move", this, controlSys),
 	calibration(calibration){}
 
 int HomingSequence::action()

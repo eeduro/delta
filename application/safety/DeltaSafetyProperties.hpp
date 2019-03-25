@@ -37,7 +37,6 @@ namespace eeduro {
 				SafetyLevel slControlStopping;
 				SafetyLevel slControlStarting;
 				SafetyLevel slSystemOn;
-				SafetyLevel slPoweringDown;
 				SafetyLevel slPoweringUp;
 				SafetyLevel slHoming;
 				SafetyLevel slAxesHomed;
@@ -60,8 +59,6 @@ namespace eeduro {
 				SafetyEvent controlStartingDone;
 				SafetyEvent doPoweringUp;
 				SafetyEvent poweringUpDone;
-				SafetyEvent doPoweringDown;
-				SafetyEvent poweringDownDone;
 				SafetyEvent doHoming;
 				SafetyEvent homingDone;
 				SafetyEvent doParking;

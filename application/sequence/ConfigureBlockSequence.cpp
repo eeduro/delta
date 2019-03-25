@@ -12,7 +12,7 @@ ConfigureBlockSequence::ConfigureBlockSequence(std::string name, eeros::sequence
 	safetySys(safetySys),
 	safetyProp(safetyProp),
 	calibration(calibration),
-	wait("wait", sequencer, this)
+	wait("wait", this)
 	{
 		HAL& hal = HAL::instance();
 		buttonBlue = hal.getLogicInput("buttonBlue");

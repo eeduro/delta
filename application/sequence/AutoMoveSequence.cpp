@@ -13,8 +13,8 @@ AutoMoveSequence::AutoMoveSequence(std::string name, eeros::sequencer::Sequencer
 	mmc(controlSys),
 	mexSeq("Mouse Exception Sequence", sequencer, this,  safetySys, properties, controlSys),
 	mouseMove("MouseMoveMonitor", this, mmc, eeros::sequencer::SequenceProp::abort, &mexSeq),
-	sortSeq("Sort Sequence", sequencer, this, controlSys, calibration, properties),
-	shuffSeq("Shuffle Sequence",sequencer, this, controlSys, calibration, properties)
+	sortSeq("Sort Sequence", this, controlSys, calibration, properties),
+	shuffSeq("Shuffle Sequence", this, controlSys, calibration, properties)
 	
 	{
 		mouseMove.setBehavior(eeros::sequencer::SequenceProp::abort);
