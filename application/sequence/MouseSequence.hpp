@@ -3,6 +3,7 @@
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
 
+#include "../conditions/EmergencyCondition.hpp"
 #include "../control/DeltaControlSystem.hpp"
 #include "step/Move.hpp"
 #include "MoveBlockSequence.hpp"
@@ -35,6 +36,9 @@ namespace eeduro {
 				MouseTimeOutExceptionSequence mousetimeoutSeq;
 				Grab grab;
 				Release release;
+				
+				EmergencyCondition ec;
+				Monitor emergencyLevel;
 		};
 	}
 }

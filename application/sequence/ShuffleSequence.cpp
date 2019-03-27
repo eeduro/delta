@@ -7,7 +7,7 @@
 using namespace eeduro::delta;
 
 
-ShuffleSequence::ShuffleSequence(std::string name, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties) :
+ShuffleSequence::ShuffleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties) :
 	Sequence(name, caller, true),
 	move("move", this, controlSys),
 	detectSequence("detect sequence", controlSys, this, calibration),
@@ -81,6 +81,7 @@ int ShuffleSequence::action() {
 	}
 	
 	log.info() << "finished shuffling";
+	move({ 0, 0, calibration.transportation_height, 0});
 
 }
 

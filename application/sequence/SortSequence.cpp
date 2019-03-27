@@ -3,7 +3,7 @@
 using namespace eeduro::delta;
 
 
-SortSequence::SortSequence(std::string name, BaseSequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties):
+SortSequence::SortSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties):
 	Sequence(name, caller, true),
 	move("move", this, controlSys),
 	detectSequence("detect sequence", controlSys, this, calibration),
@@ -50,7 +50,10 @@ int SortSequence::action() {
 			all_ok = false;
 		}
 	}
-	if (!all_ok) return -1;
+	if (!all_ok) {
+		move({ 0, 0, calibration.transportation_height, 0});
+		return -1;
+	}
 	
 	while (true) {
 		// find wrong block
@@ -101,6 +104,7 @@ int SortSequence::action() {
 			std::swap(blocks[wrong_position], blocks[correct_position]);
 		}
 	}
+	move({ 0, 0, calibration.transportation_height, 0});
 	log.info() << "finished sorting";
 }
 

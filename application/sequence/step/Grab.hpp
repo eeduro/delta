@@ -11,7 +11,7 @@ namespace eeduro{
 	namespace delta{
 		class Grab : public Step {
 			public:
-				Grab(std::string name, BaseSequence* caller, DeltaControlSystem& controlSys) : 
+				Grab(std::string name, Sequence* caller, DeltaControlSystem& controlSys) : 
 					Step(name, caller), controlSys(controlSys){
 				}
 				int action(){

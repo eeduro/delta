@@ -18,9 +18,9 @@ using namespace eeros::hal;
 
 namespace eeduro {
 	namespace delta {
-		class ConfigureBlockSequence : public Sequence{
+		class CalibrateBlockSequence : public Sequence{
 			public:
-				ConfigureBlockSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, SafetySystem& safetySys, Calibration& calibration);
+				CalibrateBlockSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
 				
 				virtual int action();
 
@@ -45,7 +45,7 @@ namespace eeduro {
 				
 				Wait wait;
 				
-				eeros::hal::Input<bool>* buttonBlue;			
+				eeros::hal::Input<bool>* buttonBlue;
 				eeros::hal::Output<bool>* ledBlue;
 
 		};

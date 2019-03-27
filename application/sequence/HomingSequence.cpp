@@ -4,14 +4,18 @@
 using namespace eeduro::delta;
 
 
-HomingSequence::HomingSequence(std::string name, Sequencer& seq, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration): 
-	Sequence(name, seq),
+HomingSequence::HomingSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration): 
+	Sequence(name, caller, true),
 	controlSys(controlSys),
 	properties(properties),
 	safetySys(safetySys),
 	wait("wait", this),
 	move("move", this, controlSys),
-	calibration(calibration){}
+	calibration(calibration),
+	ec(safetySys, properties),
+	emergencyLevel("Emergency Level Monitor", this, ec, eeros::sequencer::SequenceProp::abort){
+		addMonitor(&emergencyLevel);
+	}
 
 int HomingSequence::action()
 {

@@ -18,7 +18,7 @@ namespace eeduro {
 	namespace delta {
 		class DetectSequence : public Sequence {
 			public:
-				DetectSequence(std::string name, DeltaControlSystem& controlSys,BaseSequence* caller, Calibration& calibration);
+				DetectSequence(std::string name, DeltaControlSystem& controlSys, Sequence* caller, Calibration& calibration);
 				
 				int operator() (int pos);
 				

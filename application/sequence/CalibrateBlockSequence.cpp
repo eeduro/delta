@@ -1,13 +1,11 @@
-#include "ConfigureBlockSequence.hpp"
-#include "../safety/DeltaSafetyProperties.hpp"
-#include <unistd.h>
+#include "CalibrateBlockSequence.hpp"
 
 using namespace eeduro::delta;
 
 
 
-ConfigureBlockSequence::ConfigureBlockSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, Calibration& calibration) :
-	Sequence(name, sequencer),
+CalibrateBlockSequence::CalibrateBlockSequence(std::string name, eeros::sequencer::Sequence* caller, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration) :
+	Sequence(name, caller, true),
 	controlSys(controlSys),
 	safetySys(safetySys),
 	safetyProp(safetyProp),
@@ -15,25 +13,25 @@ ConfigureBlockSequence::ConfigureBlockSequence(std::string name, eeros::sequence
 	wait("wait", this)
 	{
 		HAL& hal = HAL::instance();
-		buttonBlue = hal.getLogicInput("buttonBlue");
-		ledBlue = hal.getLogicOutput("ledBlue");
+		buttonBlue = hal.getLogicInput("buttonBlue", false);
+		ledBlue = hal.getLogicOutput("ledBlue", false);
 	
 	}
 
 
-bool ConfigureBlockSequence::getDone()
+bool CalibrateBlockSequence::getDone()
 {
 	return done;
 }
 
 
-void ConfigureBlockSequence::waitUntilReady() {
-	while(safetySys.getCurrentLevel() != safetyProp.slConfigureBlocks) {
+void CalibrateBlockSequence::waitUntilReady() {
+	while(safetySys.getCurrentLevel() < safetyProp.slSystemReady) {
 		wait(0.1);
 	}
 }
 
-void ConfigureBlockSequence::waitForButton(std::vector<int> buttons) {
+void CalibrateBlockSequence::waitForButton(std::vector<int> buttons) {
 	for (auto i: buttons) {
 		if (i < 0 || i > 3)
 		eeros::Fault("index out of range");
@@ -57,7 +55,7 @@ void ConfigureBlockSequence::waitForButton(std::vector<int> buttons) {
 	}
 }
 
-void ConfigureBlockSequence::logAndWaitForButton(std::vector<int> buttons) {
+void CalibrateBlockSequence::logAndWaitForButton(std::vector<int> buttons) {
 	for (auto i: buttons) {
 		if (i < 0 || i > 3)
 		eeros::Fault("index out of range");
@@ -91,12 +89,12 @@ void ConfigureBlockSequence::logAndWaitForButton(std::vector<int> buttons) {
 	}
 }
 
-void ConfigureBlockSequence::waitForGreenButton()		{ waitForButton({2}); }
-void ConfigureBlockSequence::waitForRedButton()		{ waitForButton({1}); }
-void ConfigureBlockSequence::waitForBlueButton()		{ waitForButton({0}); }
-void ConfigureBlockSequence::waitForBlueOrRedButton()	{ waitForButton({ 0, 1 }); }
+void CalibrateBlockSequence::waitForGreenButton()		{ waitForButton({2}); }
+void CalibrateBlockSequence::waitForRedButton()		{ waitForButton({1}); }
+void CalibrateBlockSequence::waitForBlueButton()		{ waitForButton({0}); }
+void CalibrateBlockSequence::waitForBlueOrRedButton()	{ waitForButton({ 0, 1 }); }
 
-int ConfigureBlockSequence::action() {
+int CalibrateBlockSequence::action() {
 	log.info() << "Start calibration";
 	
 	const char *block[] = { "[no block]", "[block 1]", "[block 2]", "[block 3]" };

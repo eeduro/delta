@@ -69,7 +69,6 @@ DeltaControlSystem::DeltaControlSystem() :
 	jacobi.setName("Jacobi");
 
 	torqueLimitation.setName("Torque limitations");
-	torqueGear.setName("Torque gear");
 
 	motorModel.setName("Motor model");
 	voltageSetPoint.setName("Voltage setpoint");
@@ -104,18 +103,18 @@ DeltaControlSystem::DeltaControlSystem() :
 
 	inputSwitch.getOut().getSignal().setName("xDes");
 
-	enc1.getOut().getSignal().setName("phiA1");			// Actual position of encoder 1 in radian
-	enc2.getOut().getSignal().setName("phiA2");			// Actual position of encoder 2 in radian
-	enc3.getOut().getSignal().setName("phiA3");			// Actual position of encoder 3 in radian
-	enc4.getOut().getSignal().setName("phiA4");			// Actual position of encoder 4 in radian
+	enc1.getOut().getSignal().setName("phiAct1");			// Actual position of encoder 1 in radian
+	enc2.getOut().getSignal().setName("phiAct2");			// Actual position of encoder 2 in radian
+	enc3.getOut().getSignal().setName("phiAct3");			// Actual position of encoder 3 in radian
+	enc4.getOut().getSignal().setName("phiAct4");			// Actual position of encoder 4 in radian
 
-	muxEnc.getOut().getSignal().setName("phiA");			// all 4 encoder values combined in an AxisVector[4]
+	muxEnc.getOut().getSignal().setName("phiAct");			// all 4 encoder values combined in an AxisVector[4]
 
-	directKin.getOut().getSignal().setName("xA");			// Actual Position
+	directKin.getOut().getSignal().setName("xAct");			// Actual Position
 
 	posSum.getOut().getSignal().setName("xDiff");
 	posController.getOut().getSignal().setName("dxDes");
-	posDiff.getOut().getSignal().setName("dxA");
+	posDiff.getOut().getSignal().setName("dxAct");
 
 	speedSum.getOut().getSignal().setName("dxDiff");
 	speedLimitation.getOut().getSignal().setName("dxDiff");
@@ -127,16 +126,15 @@ DeltaControlSystem::DeltaControlSystem() :
 
 	jacobi.getOut().getSignal().setName("txDes");
 	torqueLimitation.getOut().getSignal().setName("txDes");
-	torqueGear.getOut().getSignal().setName("txDes");
 
-	motorModel.getOut().getSignal().setName("VDes");
-	voltageSetPoint.getOut().getSignal().setName("VDes");
-	voltageSwitch.getOut().getSignal().setName("VDes");
+	motorModel.getOut().getSignal().setName("UDes");
+	voltageSetPoint.getOut().getSignal().setName("UDes");
+	voltageSwitch.getOut().getSignal().setName("UDes");
 
-	demuxMot.getOut(0).getSignal().setName("VDes Axismotor 1");
-	demuxMot.getOut(1).getSignal().setName("VDes Axismotor 2");
-	demuxMot.getOut(2).getSignal().setName("VDes Axismotor 3");
-	demuxMot.getOut(3).getSignal().setName("VDes TCP motor");
+	demuxMot.getOut(0).getSignal().setName("UDes Axismotor 1");
+	demuxMot.getOut(1).getSignal().setName("UDes Axismotor 2");
+	demuxMot.getOut(2).getSignal().setName("UDes Axismotor 3");
+	demuxMot.getOut(3).getSignal().setName("UDes TCP motor");
 
 
 	/*
@@ -145,8 +143,6 @@ DeltaControlSystem::DeltaControlSystem() :
 		* ###
 		*/
 	torqueLimitation.enable();
-	torqueGear.setGain(1.0/i);
-	angleGear.setGain(1.0/i);
 
 	posSum.negateInput(1);
 	speedSum.negateInput(2);
@@ -191,9 +187,7 @@ DeltaControlSystem::DeltaControlSystem() :
 
 	torqueLimitation.getIn().connect(jacobi.getOut());
 
-	torqueGear.getIn().connect(torqueLimitation.getOut());
-
-	motorModel.getTorqueIn().connect(torqueGear.getOut());
+	motorModel.getTorqueIn().connect(torqueLimitation.getOut());
 	motorModel.getSpeedIn().connect(posDiff.getOut());
 
 	voltageSwitch.getIn(0).connect(motorModel.getOut());
@@ -243,7 +237,6 @@ DeltaControlSystem::DeltaControlSystem() :
 	timedomain.addBlock(forceLimitation);
 	timedomain.addBlock(jacobi);
 	timedomain.addBlock(torqueLimitation);
-	timedomain.addBlock(torqueGear);
 
 	timedomain.addBlock(motorModel);
 	timedomain.addBlock(voltageSetPoint);

@@ -39,11 +39,10 @@ namespace eeduro {
 				SafetyLevel slSystemOn;
 				SafetyLevel slPoweringUp;
 				SafetyLevel slHoming;
-				SafetyLevel slAxesHomed;
+				SafetyLevel slHomed;
 				SafetyLevel slSystemReady;
 				SafetyLevel slParking;
 				SafetyLevel slParked;
-				SafetyLevel slConfigureBlocks;
 				SafetyLevel slAutoMoving;
 				SafetyLevel slMouseControl;
 		
@@ -67,7 +66,6 @@ namespace eeduro {
 				SafetyEvent doAutoMoving;
 				SafetyEvent doMouseControl;
 				SafetyEvent stopMoving;
-				SafetyEvent doConfigureBlocks;
 	
 
 	
@@ -77,7 +75,7 @@ namespace eeduro {
 				* critical outputs
 				* ###
 				*/
-				hal::Output<bool>* led;
+				hal::Output<bool>* greenLed;
 				hal::Output<bool>* errorLed;
 				
 				/* 
@@ -86,7 +84,8 @@ namespace eeduro {
 				* ###
 				*/
 				hal::Input<bool>* emergencyStop;
-				hal::Input<bool>* approval;
+				
+				eeros::hal::Input<bool>* buttonGreen;
 					
 				DeltaControlSystem& controlSys;
 		};

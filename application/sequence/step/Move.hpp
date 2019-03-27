@@ -11,7 +11,7 @@ namespace eeduro{
 	namespace delta{
 		class Move : public Step {
 			public:
-			Move(std::string name, BaseSequence* caller, DeltaControlSystem& controlSys) : 
+			Move(std::string name, Sequence* caller, DeltaControlSystem& controlSys) : 
 				Step(name, caller), 
 				controlSys(controlSys){
 				this->position = {0,0,0,0};

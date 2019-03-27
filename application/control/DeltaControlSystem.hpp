@@ -104,8 +104,6 @@ namespace eeduro{
 				Saturation<AxisVector> forceLimitation;
 
 				Saturation<AxisVector> torqueLimitation;
-				Gain<AxisVector, AxisVector, true> torqueGear;
-				Gain<AxisVector, AxisVector, true> angleGear;
 
 				MotorModel motorModel;
 

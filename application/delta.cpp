@@ -15,14 +15,7 @@
 #include "control/DeltaControlSystem.hpp"
 #include "safety/DeltaSafetyProperties.hpp"
 
-#include "sequence/ConfigureBlockSequence.hpp"
-#include "sequence/ShuffleSequence.hpp"
-#include "sequence/SortSequence.hpp"
-#include "sequence/MouseSequence.hpp"
-#include "sequence/AutoMoveSequence.hpp"
-#include "sequence/ExceptionSequence.hpp"
-#include "sequence/HomingSequence.hpp"
-#include "sequence/ParkSequence.hpp"
+#include "sequence/MainSequence.hpp"
 
 #include "conditions/MoveMouseCondition.hpp"
 
@@ -72,18 +65,11 @@ int main(int argc, char **argv) {
 	
 	auto& sequencer = Sequencer::instance();
 
-	HomingSequence homingSequence{"Homing Sequence", sequencer, controlSys, safetySys, properties, calibration};
-	AutoMoveSequence autoMoveSequence{"AutoMove Sequence", sequencer, controlSys, safetySys, properties, calibration};
-	MouseSequence mouseSequence{"Mouse Sequence", sequencer, controlSys, safetySys, properties, calibration};
-	ConfigureBlockSequence calibSequence{"Configure block Sequence", sequencer, controlSys, safetySys, calibration};
-	ParkSequence parkSequence{"Park Sequence", sequencer, controlSys, safetySys, properties, calibration};
+	MainSequence mainSequence{"Main Sequence", sequencer, controlSys, safetySys, properties, calibration};
 	
-
-	sequencer.addSequence(homingSequence);
-	sequencer.addSequence(autoMoveSequence);
-	sequencer.addSequence(mouseSequence);
-	sequencer.addSequence(calibSequence);
-	sequencer.addSequence(parkSequence);
+	sequencer.addSequence(mainSequence);
+	
+	mainSequence.start();
 	
 	auto &executor = Executor::instance();
 	executor.setMainTask(safetySys);

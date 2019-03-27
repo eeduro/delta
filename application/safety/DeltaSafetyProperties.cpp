@@ -25,7 +25,6 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 	doAutoMoving("Do auto moving"),
 	doMouseControl("Do mouse control"),
 	stopMoving("Stop moving"),
-	doConfigureBlocks("Do configure blocks"),
 	
 	/*
 	* ###
@@ -39,11 +38,10 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 	slSystemOn("System on"),
 	slPoweringUp("Powering up"),
 	slHoming("Homing"),
-	slAxesHomed("Axes homed"),
+	slHomed("Homed"),
 	slSystemReady("System ready"),
 	slParking("Parking"),
 	slParked("Parked"),
-	slConfigureBlocks("Configuring blocks"),
 	slAutoMoving("Auto moving"),
 	slMouseControl("Mouse control")
 	{
@@ -55,10 +53,10 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* Define critical outputs
 		* ###
 		*/
-		led = hal.getLogicOutput("onBoardRed");		 //equals ledGreen of extern Led (GPIO)
+		greenLed = hal.getLogicOutput("onBoardRed");		 //equals ledGreen of extern Led (GPIO)
 		errorLed = hal.getLogicOutput("ledRed");
 		
-		criticalOutputs = { led , errorLed};
+		criticalOutputs = { greenLed , errorLed};
 		
 		/*
 		* ###
@@ -66,9 +64,10 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* ###
 		*/
 		emergencyStop = hal.getLogicInput("buttonRed");
-		approval = hal.getLogicInput("buttonGreen");
 		
-		criticalInputs = { emergencyStop, approval};
+		criticalInputs = { emergencyStop };
+		
+		buttonGreen = hal.getLogicInput("buttonGreen", false);
 	  
 	  
 		/*
@@ -83,11 +82,10 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		addLevel(slSystemOn);
 		addLevel(slPoweringUp);
 		addLevel(slHoming);
-		addLevel(slAxesHomed);
+		addLevel(slHomed);
 		addLevel(slSystemReady);
 		addLevel(slParking);
 		addLevel(slParked);
-		addLevel(slConfigureBlocks);
 		addLevel(slAutoMoving);
 		addLevel(slMouseControl);
 		
@@ -101,21 +99,18 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		slControlStarting.addEvent(controlStartingDone, slSystemOn, kPublicEvent);
 		slSystemOn.addEvent(doPoweringUp, slPoweringUp, kPublicEvent);
 		slPoweringUp.addEvent(doHoming, slHoming, kPrivateEvent);
-		slHoming.addEvent(homingDone, slAxesHomed, kPublicEvent);
-		slAxesHomed.addEvent(doSystemReady, slSystemReady, kPrivateEvent);
+		slHoming.addEvent(homingDone, slHomed, kPublicEvent);
+		slHomed.addEvent(doSystemReady, slSystemReady, kPrivateEvent);
 		slSystemReady.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
 		slAutoMoving.addEvent(doMouseControl, slMouseControl, kPublicEvent);
 		slMouseControl.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
-		slConfigureBlocks.addEvent(doSystemReady, slSystemReady, kPublicEvent);
 		
 		addEventToLevelAndAbove(slSystemOn, doEmergency, slEmergency, kPublicEvent);
 		slEmergency.addEvent(doControlStart, slControlStarting, kPublicEvent);
-		slEmergency.addEvent(doConfigureBlocks, slConfigureBlocks, kPublicEvent);
 		slEmergency.addEvent(doParking, slParking, kPublicEvent);
 		
 		slAutoMoving.addEvent(stopMoving, slParking, kPublicEvent);
 		slMouseControl.addEvent(stopMoving, slParking, kPublicEvent);
-		slConfigureBlocks.addEvent(stopMoving, slParking, kPublicEvent);
 		slParking.addEvent(parkingDone, slParked, kPublicEvent);
 		slParked.addEvent(doControlStop, slControlStopping, kPublicEvent);
 		slControlStopping.addEvent(controlStoppingDone, slOff, kPublicEvent);
@@ -126,40 +121,38 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* Define input states and events for all levels
 		* ###
 		*/
-		slOff.setInputActions({ignore(emergencyStop),ignore(approval)});
-		slEmergency.setInputActions({ignore(emergencyStop),check(approval, false, doControlStart)});
-		slControlStopping.setInputActions({ignore(emergencyStop),ignore(approval)});
-		slControlStarting.setInputActions({ignore(emergencyStop),ignore(approval)});
-		slSystemOn.setInputActions({ignore(emergencyStop),check(approval,false,doPoweringUp)});
-		slPoweringUp.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
-		slHoming.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
-		slAxesHomed.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
-		slSystemReady.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
-		slParking.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
-		slParked.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
-		slConfigureBlocks.setInputActions({ignore(emergencyStop), check(approval, false, doSystemReady)});
-		slAutoMoving.setInputActions({check(emergencyStop,false,doEmergency),check(approval, false, doMouseControl)});
-		slMouseControl.setInputActions({check(emergencyStop,false,doEmergency),ignore(approval)});
+		slOff.setInputActions({ignore(emergencyStop)});
+		slEmergency.setInputActions({ignore(emergencyStop)});
+		slControlStopping.setInputActions({ignore(emergencyStop)});
+		slControlStarting.setInputActions({ignore(emergencyStop)});
+		slSystemOn.setInputActions({ignore(emergencyStop)});
+		slPoweringUp.setInputActions({check(emergencyStop,false,doEmergency)});
+		slHoming.setInputActions({check(emergencyStop,false,doEmergency)});
+		slHomed.setInputActions({check(emergencyStop,false,doEmergency)});
+		slSystemReady.setInputActions({check(emergencyStop,false,doEmergency)});
+		slParking.setInputActions({check(emergencyStop,false,doEmergency)});
+		slParked.setInputActions({check(emergencyStop,false,doEmergency)});
+		slAutoMoving.setInputActions({check(emergencyStop,false,doEmergency)});
+		slMouseControl.setInputActions({check(emergencyStop,false,doEmergency)});
 
 		/*
 		* ###
 		* Define output states and events for all levels
 		* ###
 		*/
-		slOff.setOutputActions({set(led,false), set(errorLed, false)});
-		slEmergency.setOutputActions({set(led,false), set(errorLed, true)});
-		slControlStopping.setOutputActions({set(led,false), set(errorLed, false)});
-		slControlStarting.setOutputActions({set(led,true), set(errorLed, false)});
-		slSystemOn.setOutputActions({set(led,false), set(errorLed, false)});
-		slPoweringUp.setOutputActions({set(led,true), set(errorLed, false)});
-		slHoming.setOutputActions({set(led,true), set(errorLed, false)});
-		slAxesHomed.setOutputActions({set(led,true), set(errorLed, false)});
-		slSystemReady.setOutputActions({set(led,true), set(errorLed, false)});
-		slParking.setOutputActions({set(led,false), set(errorLed, false)});
-		slParked.setOutputActions({set(led,false), set(errorLed, false)});
-		slConfigureBlocks.setOutputActions({set(led,true), set(errorLed,true)});
-		slAutoMoving.setOutputActions({set(led,true), set(errorLed, false)});
-		slMouseControl.setOutputActions({set(led,true), set(errorLed, false)});
+		slOff.setOutputActions({set(greenLed,false), set(errorLed, false)});
+		slEmergency.setOutputActions({set(greenLed,false), set(errorLed, true)});
+		slControlStopping.setOutputActions({set(greenLed,false), set(errorLed, false)});
+		slControlStarting.setOutputActions({set(greenLed,true), set(errorLed, false)});
+		slSystemOn.setOutputActions({set(greenLed,false), set(errorLed, false)});
+		slPoweringUp.setOutputActions({set(greenLed,true), set(errorLed, false)});
+		slHoming.setOutputActions({set(greenLed,true), set(errorLed, false)});
+		slHomed.setOutputActions({set(greenLed,true), set(errorLed, false)});
+		slSystemReady.setOutputActions({set(greenLed,true), set(errorLed, false)});
+		slParking.setOutputActions({set(greenLed,false), set(errorLed, false)});
+		slParked.setOutputActions({set(greenLed,false), set(errorLed, false)});
+		slAutoMoving.setOutputActions({set(greenLed,true), set(errorLed, false)});
+		slMouseControl.setOutputActions({set(greenLed,true), set(errorLed, false)});
 
 
 		/*
@@ -168,32 +161,26 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* ###
 		*/
 		slOff.setLevelAction([&](SafetyContext*privateContext){
+			
 			Executor::stop();
 		});
 
 
 		slEmergency.setLevelAction([&](SafetyContext*privateContext){
-			if(slEmergency.getNofActivations() == 1){  
-				auto& sequencer = sequencer::Sequencer::instance();
-
-				if(sequencer.running){
-					sequencer.abort(); 
-				}
-				
-				controlSys.voltageSetPoint.setValue({0.0,0.0,0.0,0.0});
+			if(slEmergency.getNofActivations() == 1){  				
+				/*controlSys.voltageSetPoint.setValue({0.0,0.0,0.0,0.0});
 				controlSys.emagVal.setValue(false);
 				controlSys.voltageSwitch.switchToInput(1);
-				controlSys.inputSwitch.switchToInput(1);
+				controlSys.inputSwitch.switchToInput(1);*/
 			}
 			
-			if(emergencyStop->get() && (slEmergency.getNofActivations() > 1000)){
-				controlSys.setVoltageForInitializing({0.0,0.0,0.0,0.0});
-
-				privateContext->triggerEvent(doConfigureBlocks);
+			if(buttonGreen->get() && (slEmergency.getNofActivations() > 1000)){
+				//controlSys.setVoltageForInitializing({0.0,0.0,0.0,0.0});
+				privateContext->triggerEvent(doControlStart);
 			}
 			
 			if(slEmergency.getNofActivations() == 5000){
-				controlSys.enableAxis();
+				//controlSys.enableAxis();
 				privateContext->triggerEvent(doParking);
 			}
 
@@ -208,6 +195,9 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		
 		slControlStopping.setLevelAction([&](SafetyContext*privateContext){
 			controlSys.stop();
+			auto& sequencer = Sequencer::instance();
+			sequencer.abort();
+
 			privateContext->triggerEvent(controlStoppingDone);
 		});
 
@@ -221,58 +211,32 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		});
     
 		slHoming.setLevelAction([&](SafetyContext*privateContext){
-			if(slHoming.getNofActivations()==1){
-				static auto& sequencer = Sequencer::instance();
-				sequencer.getSequenceByName("Homing Sequence")->start();
-			}
+			
 		});
 
-		slAxesHomed.setLevelAction([&](SafetyContext*privateContext){
+		slHomed.setLevelAction([&](SafetyContext*privateContext){
 			privateContext->triggerEvent(doSystemReady);
 		});
 		
 		slSystemReady.setLevelAction([&](SafetyContext*privateContext){ 
-			controlSys.inputSwitch.switchToInput(0);
-			controlSys.voltageSwitch.switchToInput(0);
-			controlSys.setPathPlannerInput();
-
-			privateContext->triggerEvent(doAutoMoving);
+			
 		
 		});
 		
 		slParking.setLevelAction([&](SafetyContext*privateContext){
-			if(slParking.getNofActivations()==1){
-				static auto& sequencer = Sequencer::instance();
-				sequencer.getSequenceByName("Park Sequence")->start();
-			}
+			
 		});
 		
 		slParked.setLevelAction([&](SafetyContext*privateContext){
 			privateContext->triggerEvent(doControlStop);
 		});
-			  
-		slConfigureBlocks.setLevelAction([&](SafetyContext*privateContext){
-			controlSys.emagVal.setValue(controlSys.mouse.getButtonOut().getSignal().getValue()[0]);
-			if(slConfigureBlocks.getNofActivations()==1){			
-				auto& sequencer = sequencer::Sequencer::instance();
-				sequencer.getSequenceByName("Configure block Sequence")->start();
-			}
-		});
     
 		slAutoMoving.setLevelAction([&](SafetyContext*privateContext){
-			if(slAutoMoving.getNofActivations()==1){
-				static auto& sequencer = Sequencer::instance();
-				controlSys.setPathPlannerInput();
-				sequencer.getSequenceByName("AutoMove Sequence")->start();
-			}
+
 		});
     
 		slMouseControl.setLevelAction([&](SafetyContext*privateContext){
-			//if(slMouseControl.getNofActivations()==1){
-			static auto& sequencer = Sequencer::instance();
-			if(sequencer.getSequenceByName("Mouse Sequence")->getRunningState() != SequenceState::running){
-				sequencer.getSequenceByName("Mouse Sequence")->start();
-			}
+
 		});
     
     

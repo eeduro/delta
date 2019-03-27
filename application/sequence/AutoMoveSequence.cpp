@@ -1,33 +1,29 @@
 #include "AutoMoveSequence.hpp"
-#include "../safety/DeltaSafetyProperties.hpp"
-#include <eeros/sequencer/Sequencer.hpp>
-#include "../sequence/ConfigureBlockSequence.hpp"
-#include <unistd.h>
 
 using namespace eeduro::delta;
 
-AutoMoveSequence::AutoMoveSequence(std::string name, eeros::sequencer::Sequencer& sequencer, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties properties, Calibration& calibration):
-	Sequence(name, sequencer),
-	properties(properties),
-	safetySys(safetySys),
-	mmc(controlSys),
-	mexSeq("Mouse Exception Sequence", sequencer, this,  safetySys, properties, controlSys),
-	mouseMove("MouseMoveMonitor", this, mmc, eeros::sequencer::SequenceProp::abort, &mexSeq),
+AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties properties, Calibration& calibration):
+	Sequence(name, caller, true),
 	sortSeq("Sort Sequence", this, controlSys, calibration, properties),
-	shuffSeq("Shuffle Sequence", this, controlSys, calibration, properties)
-	
-	{
+	shuffSeq("Shuffle Sequence", this, controlSys, calibration, properties),
+	wait("wait", this),
+	mmc(controlSys),
+	mexSeq("Mouse Exception Sequence", this,  safetySys, properties, controlSys, calibration),
+	mouseMove("MouseMoveMonitor", this, mmc, eeros::sequencer::SequenceProp::abort, &mexSeq),
+	ec(safetySys, properties),
+	emergencyLevel("Emergency Level Monitor", this, ec, eeros::sequencer::SequenceProp::abort)
+	{ 
 		mouseMove.setBehavior(eeros::sequencer::SequenceProp::abort);
-		addMonitor(&mouseMove);
+		wait.addMonitor(&mouseMove);
+		addMonitor(&emergencyLevel);
 	}
 	
 
 
 int AutoMoveSequence::action() {
-	while(Sequencer::running && safetySys.getCurrentLevel() == properties.slAutoMoving){
-		sortSeq.start();
-		shuffSeq.start();
-	}
+	sortSeq.start();
+	wait(5);
+	shuffSeq.start();
 }
 
 

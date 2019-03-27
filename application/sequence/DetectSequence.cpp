@@ -4,7 +4,7 @@
 using namespace eeduro::delta;
 
 
-DetectSequence::DetectSequence(std::string name, DeltaControlSystem& controlSys, BaseSequence* caller, Calibration& calibration): 
+DetectSequence::DetectSequence(std::string name, DeltaControlSystem& controlSys, Sequence* caller, Calibration& calibration): 
 	Sequence(name, caller, true),
 	controlSys(controlSys),
 	calibration(calibration),
@@ -22,6 +22,7 @@ int DetectSequence::action()
 	eeros::math::Vector<4> torqueLimit{ q012gearTorqueLimit, q012gearTorqueLimit, q012gearTorqueLimit, q3gearTorqueLimit };
 
 	auto p = controlSys.pathPlanner.getLastPoint();
+	p[3] = 0;
 	double last_z = p[2];
 	p[2] = calibration.position[position].level12 + 0.002;
 	move(p);

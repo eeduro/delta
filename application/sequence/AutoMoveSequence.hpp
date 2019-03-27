@@ -4,13 +4,12 @@
 #include <eeros/safety/SafetySystem.hpp>
 #include <eeros/sequencer/Monitor.hpp>
 
+#include "../conditions/EmergencyCondition.hpp"
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
-#include "../conditions/MoveMouseCondition.hpp"
-#include "ConfigureBlockSequence.hpp"
 #include "SortSequence.hpp"
 #include "ShuffleSequence.hpp"
-#include "ExceptionSequence.hpp"
+#include <eeros/sequencer/Wait.hpp>
 
 #include <array>
 
@@ -21,21 +20,22 @@ namespace eeduro {
 	namespace delta {
 		class AutoMoveSequence : public Sequence {
 			public:
-				AutoMoveSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties properties, Calibration& calibration);
+				AutoMoveSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties properties, Calibration& calibration);
 				
 				int action();
 
 				
 			private:
-				SafetySystem& safetySys;
-				DeltaSafetyProperties& properties;
+				SortSequence sortSeq;
+				ShuffleSequence shuffSeq;
+				Wait wait;
 				
 				MouseExceptionSequence mexSeq;
 				MoveMouseCondition mmc;
 				Monitor mouseMove;
 				
-				SortSequence sortSeq;
-				ShuffleSequence shuffSeq;
+				EmergencyCondition ec;
+				Monitor emergencyLevel;
 			};
 	}
 }
