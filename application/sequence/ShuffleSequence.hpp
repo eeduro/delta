@@ -7,8 +7,7 @@
 #include "step/Move.hpp"
 #include "DetectSequence.hpp"
 #include "MoveBlockSequence.hpp"
-#include "ExceptionSequence.hpp"
-#include "../conditions/MoveMouseCondition.hpp"
+#include "../safety/DeltaSafetyProperties.hpp"
 
 #include <array>
 

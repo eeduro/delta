@@ -37,6 +37,5 @@ int HomingSequence::action()
 	controlSys.enableAxis();
 	
 	move({0,0,calibration.transportation_height, pi/2});
-	
-	safetySys.triggerEvent(properties.homingDone);
+
 }

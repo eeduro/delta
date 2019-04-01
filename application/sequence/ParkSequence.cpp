@@ -17,8 +17,6 @@ ParkSequence::ParkSequence(std::string name, Sequence* caller, DeltaControlSyste
 
 int ParkSequence::action()
 {	
-	controlSys.start();
-	
 	release();
 	
 	AxisVector p = {0, 0, calibration.transportation_height, 0};

@@ -7,14 +7,14 @@ AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaCont
 	sortSeq("Sort Sequence", this, controlSys, calibration, properties),
 	shuffSeq("Shuffle Sequence", this, controlSys, calibration, properties),
 	wait("wait", this),
-	mmc(controlSys),
-	mexSeq("Mouse Exception Sequence", this,  safetySys, properties, controlSys, calibration),
-	mouseMove("MouseMoveMonitor", this, mmc, eeros::sequencer::SequenceProp::abort, &mexSeq),
+	moveMouseCondition(controlSys),
+	mouseExceptionSequence("Mouse Exception Sequence", this,  safetySys, properties, controlSys, calibration),
+	moveMouseMonitor("MouseMoveMonitor", this, moveMouseCondition, SequenceProp::abort, &mouseExceptionSequence),
 	ec(safetySys, properties),
-	emergencyLevel("Emergency Level Monitor", this, ec, eeros::sequencer::SequenceProp::abort)
+	emergencyLevel("Emergency Level Monitor", this, ec, SequenceProp::abort)
 	{ 
-		mouseMove.setBehavior(eeros::sequencer::SequenceProp::abort);
-		wait.addMonitor(&mouseMove);
+		moveMouseMonitor.setBehavior(SequenceProp::abort);
+		wait.addMonitor(&moveMouseMonitor);
 		addMonitor(&emergencyLevel);
 	}
 	

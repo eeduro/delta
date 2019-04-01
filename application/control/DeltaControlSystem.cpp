@@ -9,7 +9,9 @@ DeltaControlSystem::DeltaControlSystem() :
 	i(i1524, i1524, i1524, i0816),
 	kM(kM1524, kM1524, kM1524, kM0816),
 	RA(RA1524, RA1524, RA1524, RA0816),
-	inputSwitch(0),
+	posSwitch(0),
+	velSwitch(0),
+	accSwitch(0),
 
 	emagVal(false),
 	emag("emag"),
@@ -26,6 +28,8 @@ DeltaControlSystem::DeltaControlSystem() :
 	directKin(kinematic),
 
 	voltageSetPoint({0.0,0.0,0.0,0.0}),
+	velSetPoint({0,0,0,0}),
+	accSetPoint({0,0,0,0}),
 
 	enc1("enc1"),
 	enc2("enc2"),
@@ -46,7 +50,12 @@ DeltaControlSystem::DeltaControlSystem() :
 		*/
 	pathPlanner.setName("Pathplanner");
 	mouse.setName("Mouse input");
-	inputSwitch.setName("Inputswitch");
+	posSwitch.setName("Position Switch");
+	velSwitch.setName("Velocity Switch");
+	accSwitch.setName("Acceleration Switch");
+	
+	velSetPoint.setName("Velocity set point");
+	accSetPoint.setName("Acceleration set point");
 
 	enc1.setName("Encoder axismotor 1");
 	enc2.setName("Encoder axismotor 2");
@@ -101,7 +110,12 @@ DeltaControlSystem::DeltaControlSystem() :
 	mouse.getOut().getSignal().setName("mousexDes");		// Mouse Position
 	mouse.getButtonOut().getSignal().setName("mouseButtons"); 	//3 Mouse Buttons
 
-	inputSwitch.getOut().getSignal().setName("xDes");
+	posSwitch.getOut().getSignal().setName("xDes");
+	velSwitch.getOut().getSignal().setName("dxDes");
+	accSwitch.getOut().getSignal().setName("ddxDes");
+	
+	velSetPoint.getOut().getSignal().setName("dxDes");
+	accSwitch.getOut().getSignal().setName("ddxDes");
 
 	enc1.getOut().getSignal().setName("phiAct1");			// Actual position of encoder 1 in radian
 	enc2.getOut().getSignal().setName("phiAct2");			// Actual position of encoder 2 in radian
@@ -158,22 +172,28 @@ DeltaControlSystem::DeltaControlSystem() :
 	muxEnc.getIn(2).connect(enc3.getOut());
 	muxEnc.getIn(3).connect(enc4.getOut());
 
-	inputSwitch.getIn(0).connect(pathPlanner.getPosOut());
-	inputSwitch.getIn(1).connect(mouse.getOut());	
+	posSwitch.getIn(0).connect(pathPlanner.getPosOut());
+	posSwitch.getIn(1).connect(mouse.getOut());
+	
+	velSwitch.getIn(0).connect(pathPlanner.getVelOut());
+	velSwitch.getIn(1).connect(velSetPoint.getOut());
+	
+	accSwitch.getIn(0).connect(pathPlanner.getAccOut());
+	accSwitch.getIn(1).connect(accSetPoint.getOut());
 
-	posSum.getIn(0).connect(inputSwitch.getOut());
+	posSum.getIn(0).connect(posSwitch.getOut());
 	posSum.getIn(1).connect(directKin.getOut());
 	posController.getIn().connect(posSum.getOut());
 	posDiff.getIn().connect(directKin.getOut());
 
-	speedSum.getIn(0).connect(pathPlanner.getVelOut());
+	speedSum.getIn(0).connect(velSwitch.getOut());
 	speedSum.getIn(1).connect(posController.getOut());
 	speedSum.getIn(2).connect(posDiff.getOut());
 	speedLimitation.getIn().connect(speedSum.getOut());
 	speedController.getIn().connect(speedLimitation.getOut());
 
 	accSum.getIn(0).connect(speedController.getOut());
-	accSum.getIn(1).connect(pathPlanner.getAccOut());
+	accSum.getIn(1).connect(accSwitch.getOut());
 
 	inertia.getAccelerationInput().connect(accSum.getOut());
 	inertia.getJointPosInput().connect(muxEnc.getOut());
@@ -203,6 +223,9 @@ DeltaControlSystem::DeltaControlSystem() :
 	mot4.getIn().connect(demuxMot.getOut(3));
 
 	emag.getIn().connect(emagVal.getOut());
+	
+	posSwitch.connect(velSwitch);
+	posSwitch.connect(accSwitch);
 
 
 	/*
@@ -213,7 +236,7 @@ DeltaControlSystem::DeltaControlSystem() :
 	
 	timedomain.addBlock(mouse);
 	timedomain.addBlock(pathPlanner);
-	timedomain.addBlock(inputSwitch);
+	timedomain.addBlock(posSwitch);
 	
 	timedomain.addBlock(enc1);
 	timedomain.addBlock(enc2);
@@ -226,10 +249,16 @@ DeltaControlSystem::DeltaControlSystem() :
 	timedomain.addBlock(posSum);
 	timedomain.addBlock(posDiff);
 	timedomain.addBlock(posController);
+	
+	timedomain.addBlock(velSetPoint);
+	timedomain.addBlock(velSwitch);
 
 	timedomain.addBlock(speedSum);
 	timedomain.addBlock(speedLimitation);
 	timedomain.addBlock(speedController);
+	
+	timedomain.addBlock(accSetPoint);
+	timedomain.addBlock(accSwitch);
 
 	timedomain.addBlock(accSum);
 
@@ -322,13 +351,13 @@ void DeltaControlSystem::setMouseInput()
 {
 	mouse.setInitPos(directKin.getOut().getSignal().getValue());
 	pathPlanner.setInitPos(directKin.getOut().getSignal().getValue());		//disable pathplanner by setting the desired position to the current position
-	inputSwitch.switchToInput(1);
+	posSwitch.switchToInput(1);
 	voltageSwitch.switchToInput(0);
 }
 
 void DeltaControlSystem::setPathPlannerInput()
 {
-	inputSwitch.switchToInput(0);		// set input to pathplanner
+	posSwitch.switchToInput(0);		// set input to pathplanner
 	voltageSwitch.switchToInput(0);
 }
 

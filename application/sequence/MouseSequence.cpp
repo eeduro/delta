@@ -13,11 +13,12 @@ MouseSequence::MouseSequence(std::string name, Sequencer& sequencer, DeltaContro
 	grab("grab", this, controlSys),
 	release("release", this, controlSys),
 	properties(properties),
-	mousetimeoutSeq("Mouse TimeOut Exception Sequence", this, controlSys, safetySys, properties, calibration),
+	mouseTimeoutSequence("Mouse TimeOut Exception Sequence", this, controlSys, safetySys, properties, calibration),
 	ec(safetySys, properties),
-	emergencyLevel("Emergency Level Monitor", this, ec, eeros::sequencer::SequenceProp::abort){
+	emergencyLevel("Emergency Level Monitor", this, ec, SequenceProp::abort)
+	{
 		setTimeoutTime(2.0);
-		setTimeoutExceptionSequence(mousetimeoutSeq);				
+		setTimeoutExceptionSequence(mouseTimeoutSequence);				
 		setTimeoutBehavior(SequenceProp::abort);
 		controlSys.mouse.setInitPos(controlSys.pathPlanner.getLastPoint());
 		mouseNew = controlSys.mouse.getOut().getSignal().getValue();

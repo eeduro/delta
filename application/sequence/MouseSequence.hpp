@@ -3,7 +3,7 @@
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
 
-#include "../conditions/EmergencyCondition.hpp"
+#include "conditions/EmergencyCondition.hpp"
 #include "../control/DeltaControlSystem.hpp"
 #include "step/Move.hpp"
 #include "MoveBlockSequence.hpp"
@@ -33,7 +33,7 @@ namespace eeduro {
 				bool buttonPressed = false;
 				AxisVector mouseNew;
 				AxisVector mouseOld;
-				MouseTimeOutExceptionSequence mousetimeoutSeq;
+				MouseTimeOutExceptionSequence mouseTimeoutSequence;
 				Grab grab;
 				Release release;
 				

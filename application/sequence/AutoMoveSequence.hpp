@@ -4,7 +4,7 @@
 #include <eeros/safety/SafetySystem.hpp>
 #include <eeros/sequencer/Monitor.hpp>
 
-#include "../conditions/EmergencyCondition.hpp"
+#include "conditions/EmergencyCondition.hpp"
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
 #include "SortSequence.hpp"
@@ -30,9 +30,9 @@ namespace eeduro {
 				ShuffleSequence shuffSeq;
 				Wait wait;
 				
-				MouseExceptionSequence mexSeq;
-				MoveMouseCondition mmc;
-				Monitor mouseMove;
+				MouseExceptionSequence mouseExceptionSequence;
+				MoveMouseCondition moveMouseCondition;
+				Monitor moveMouseMonitor;
 				
 				EmergencyCondition ec;
 				Monitor emergencyLevel;

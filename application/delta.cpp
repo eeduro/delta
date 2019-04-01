@@ -17,7 +17,7 @@
 
 #include "sequence/MainSequence.hpp"
 
-#include "conditions/MoveMouseCondition.hpp"
+#include "sequence/conditions/MoveMouseCondition.hpp"
 
 using namespace eeros;
 using namespace eeros::hal;
@@ -42,7 +42,7 @@ int main(int argc, char **argv) {
 	Logger log;
 	w.show();
 	
-	log.info() << "delta test started...";
+	//log.info() << "delta test started...";
 	
 	log.info() << "Initializing Hardware...";
 	HAL& hal = HAL::instance();
@@ -75,6 +75,8 @@ int main(int argc, char **argv) {
 	executor.setMainTask(safetySys);
 	
 	executor.run();
+	
+	sequencer.wait();
 	
 	log.info() << "Example finished...";
 	return 0;

@@ -57,7 +57,6 @@ namespace eeduro {
 				SafetyEvent controlStoppingDone;
 				SafetyEvent controlStartingDone;
 				SafetyEvent doPoweringUp;
-				SafetyEvent poweringUpDone;
 				SafetyEvent doHoming;
 				SafetyEvent homingDone;
 				SafetyEvent doParking;
@@ -84,8 +83,6 @@ namespace eeduro {
 				* ###
 				*/
 				hal::Input<bool>* emergencyStop;
-				
-				eeros::hal::Input<bool>* buttonGreen;
 					
 				DeltaControlSystem& controlSys;
 		};

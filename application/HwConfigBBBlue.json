@@ -4,9 +4,6 @@
 		"devHandle": "dummy",
 		"subdevice0": {
 			"type": "DigOut",
-			"channel0": {
-			        "signalId": "onBoardGreen"
-			},
 			"channel1": {
 				"signalId": "ledBlue"
 			},
@@ -14,7 +11,7 @@
 				"signalId": "ledRed"
 			},
 			"channel116": {
-				"signalId": "onBoardRed"
+				"signalId": "ledGreen"
 			},
 			"channel98": {
 				"signalId": "emag"
@@ -22,12 +19,6 @@
 		},
 		"subdevice1": {
 			"type": "DigIn",
-			"channel0": {
-				"signalId": "buttonMode"
-			},
-			"channel1": {
-			        "signalId": "buttonPause"
-			},
 			"channel97": {
 				"signalId": "buttonBlue"
 			},

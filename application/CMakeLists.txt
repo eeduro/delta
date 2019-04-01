@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 2.8)
 project(myApp)
 
-find_package(EEROS 1.0.0.19 REQUIRED)
+find_package(EEROS 1.0.0.22 REQUIRED)
 include_directories(${EEROS_INCLUDE_DIR};${EEROS_LIBUCL_INCLUDE_DIR})
 link_directories(${EEROS_LIB_DIR};${EEROS_LIBUCL_LINK_DIR})
 

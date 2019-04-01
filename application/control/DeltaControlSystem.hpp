@@ -72,7 +72,7 @@ namespace eeduro{
 				MouseInput mouse;
 				PathPlanner pathPlanner;
 
-				Switch<2,AxisVector> inputSwitch;
+				Switch<2,AxisVector> posSwitch;
 
 				PeripheralInput<double> enc1;
 				PeripheralInput<double> enc2;
@@ -113,7 +113,14 @@ namespace eeduro{
 				PeripheralOutput<bool> emag;
 				Constant<bool> emagVal;  
 
-				DirectKinematic directKin;	
+				DirectKinematic directKin;
+				
+				Constant<AxisVector> accSetPoint;
+				Constant<AxisVector> velSetPoint;
+				
+				Switch<2, AxisVector> accSwitch;
+				Switch<2, AxisVector> velSwitch;
+				
 
 				TimeDomain timedomain;
 

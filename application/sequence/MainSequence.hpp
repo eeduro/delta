@@ -3,6 +3,7 @@
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
 #include <eeros/sequencer/Monitor.hpp>
+#include <eeros/sequencer/Wait.hpp>
 
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
@@ -33,9 +34,11 @@ namespace eeduro {
 				CalibrateBlockSequence cbSeq;
 				MouseSequence mouseSeq;
 				
+				DeltaControlSystem& controlSys;
 				SafetySystem& safetySys;
 				DeltaSafetyProperties& properties;
-				uint8_t currentState;
+				
+				Wait wait;
 				
 				eeros::hal::Input<bool>* buttonGreen;
 				eeros::hal::Input<bool>* buttonBlue;

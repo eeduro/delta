@@ -9,7 +9,7 @@
 #include "step/Move.hpp"
 #include "DetectSequence.hpp"
 #include "MoveBlockSequence.hpp"
-#include "../conditions/MoveMouseCondition.hpp"
+#include "conditions/MoveMouseCondition.hpp"
 #include "ExceptionSequence.hpp"
 
 #include <array>
