@@ -10,9 +10,6 @@
 
 #include "../control/DeltaControlSystem.hpp"
 
-#include <vector>
-#include <initializer_list>
-
 using namespace eeros;
 using namespace eeros::hal;
 using namespace eeros::safety;
@@ -68,7 +65,7 @@ namespace eeduro {
 	
 
 	
-			protected:
+			private:
 				/*
 				* ###
 				* critical outputs

@@ -32,8 +32,8 @@ namespace eeduro{
 				Move move;
 				Wait wait;
 				
-				EmergencyCondition ec;
-				Monitor emergencyLevel;
+				//EmergencyCondition ec;
+				//Monitor emergencyLevel;
 		};
 	}
 }

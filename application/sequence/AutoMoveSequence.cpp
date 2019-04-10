@@ -2,7 +2,7 @@
 
 using namespace eeduro::delta;
 
-AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties properties, Calibration& calibration):
+AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration):
 	Sequence(name, caller, true),
 	sortSeq("Sort Sequence", this, controlSys, calibration, properties),
 	shuffSeq("Shuffle Sequence", this, controlSys, calibration, properties),
@@ -10,20 +10,26 @@ AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaCont
 	moveMouseCondition(controlSys),
 	mouseExceptionSequence("Mouse Exception Sequence", this,  safetySys, properties, controlSys, calibration),
 	moveMouseMonitor("MouseMoveMonitor", this, moveMouseCondition, SequenceProp::abort, &mouseExceptionSequence),
-	ec(safetySys, properties),
-	emergencyLevel("Emergency Level Monitor", this, ec, SequenceProp::abort)
+	safetySys(safetySys),
+	properties(properties),
+	blueButtonCondition(),
+	blueButtonExceptionSequence("Blue button exception sequence", this, controlSys, safetySys, properties, calibration),
+	blueButtonMonitor("BlueButtonMonitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSequence)
 	{ 
-		moveMouseMonitor.setBehavior(SequenceProp::abort);
 		wait.addMonitor(&moveMouseMonitor);
-		addMonitor(&emergencyLevel);
+		addMonitor(&blueButtonMonitor);
 	}
 	
 
 
 int AutoMoveSequence::action() {
-	sortSeq.start();
-	wait(5);
-	shuffSeq.start();
+	while(getRunningState() == SequenceState::running){
+		log.warn() << getRunningState();
+		sortSeq.start();
+		moveMouseCondition.reset();
+		wait(5);
+		shuffSeq.start();
+	}
 }
 
 

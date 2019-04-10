@@ -15,21 +15,18 @@ namespace eeduro{
 
 				bool validate() {
 					bool retVal = false;
-					mouseNew = controlSys.mouse.getOut().getSignal().getValue();
-					if(controlSys.mouse.getButtonOut().getSignal().getValue()[0]
-					|| controlSys.mouse.getButtonOut().getSignal().getValue()[1]
-					|| controlSys.mouse.getButtonOut().getSignal().getValue()[2])
-					{
-						retVal = true;
-					}
-					if(mouseNew!= mouseOld){
+// 					mouseNew = controlSys.mouse.getOut().getSignal().getValue();
+// 					if(controlSys.mouse.getButtonOut().getSignal().getValue()[0]
+// 					|| controlSys.mouse.getButtonOut().getSignal().getValue()[1]
+// 					|| controlSys.mouse.getButtonOut().getSignal().getValue()[2])
+// 						retVal = true;
+// 					if(mouseNew!= mouseOld)
 						retVal = true; 
-					}
-
-					mouseOld = mouseNew;
-
 					return retVal;
-
+				}
+				
+				void reset(){
+// 					mouseOld = controlSys.mouse.getOut().getSignal().getValue();
 				}
 
 				DeltaControlSystem& controlSys;

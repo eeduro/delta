@@ -92,26 +92,29 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* ###
 		*/
 
-		slControlStarting.addEvent(controlStartingDone, slSystemOn, kPublicEvent);
+		slControlStarting.addEvent(controlStartingDone, slSystemOn, kPrivateEvent);
 		slSystemOn.addEvent(doPoweringUp, slPoweringUp, kPublicEvent);
 		slPoweringUp.addEvent(doHoming, slHoming, kPublicEvent);
 		slHoming.addEvent(homingDone, slHomed, kPublicEvent);
 		slHomed.addEvent(doSystemReady, slSystemReady, kPublicEvent);
 		slSystemReady.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
+		slSystemReady.addEvent(doParking, slParking, kPublicEvent);
 		slAutoMoving.addEvent(doMouseControl, slMouseControl, kPublicEvent);
 		slMouseControl.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
 		
-		addEventToLevelAndAbove(slSystemOn, doEmergency, slEmergency, kPublicEvent);
 		slEmergency.addEvent(doControlStart, slControlStarting, kPublicEvent);
 		slEmergency.addEvent(doParking, slParking, kPublicEvent);
 		
-		slAutoMoving.addEvent(stopMoving, slParking, kPublicEvent);
-		slMouseControl.addEvent(stopMoving, slParking, kPublicEvent);
+		slAutoMoving.addEvent(stopMoving, slSystemReady, kPublicEvent);
+		slMouseControl.addEvent(stopMoving, slSystemReady, kPublicEvent);
 		slParking.addEvent(parkingDone, slParked, kPublicEvent);
 		slParked.addEvent(doControlStop, slControlStopping, kPublicEvent);
 		slControlStopping.addEvent(controlStoppingDone, slOff, kPublicEvent);
 		
-
+		slSystemOn.addEvent(controlStoppingDone, slOff, eeros::safety::kPrivateEvent);
+		
+		addEventToLevelAndAbove(slSystemOn, doEmergency, slEmergency, kPublicEvent);
+		
 		/*
 		* ###
 		* Define input states and events for all levels
@@ -137,15 +140,15 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* ###
 		*/
 		slOff.setOutputActions({set(greenLed,false), set(errorLed, false)});
-		slEmergency.setOutputActions({set(greenLed,false), set(errorLed, true)});
+		slEmergency.setOutputActions({set(greenLed,true), set(errorLed, true)});
 		slControlStopping.setOutputActions({set(greenLed,false), set(errorLed, false)});
-		slControlStarting.setOutputActions({set(greenLed,true), set(errorLed, false)});
-		slSystemOn.setOutputActions({set(greenLed,true), set(errorLed, false)});
-		slPoweringUp.setOutputActions({set(greenLed,true), set(errorLed, false)});
-		slHoming.setOutputActions({set(greenLed,true), set(errorLed, false)});
-		slHomed.setOutputActions({set(greenLed,true), set(errorLed, false)});
+		slControlStarting.setOutputActions({set(greenLed,false), set(errorLed, false)});
+		slSystemOn.setOutputActions({set(greenLed,false), set(errorLed, false)});
+		slPoweringUp.setOutputActions({set(greenLed,false), set(errorLed, false)});
+		slHoming.setOutputActions({set(greenLed,false), set(errorLed, false)});
+		slHomed.setOutputActions({set(greenLed,false), set(errorLed, false)});
 		slSystemReady.setOutputActions({set(greenLed,true), set(errorLed, false)});
-		slParking.setOutputActions({set(greenLed,true), set(errorLed, false)});
+		slParking.setOutputActions({set(greenLed,false), set(errorLed, false)});
 		slParked.setOutputActions({set(greenLed,false), set(errorLed, false)});
 		slAutoMoving.setOutputActions({set(greenLed,true), set(errorLed, false)});
 		slMouseControl.setOutputActions({set(greenLed,true), set(errorLed, false)});
@@ -162,12 +165,11 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 
 
 		slEmergency.setLevelAction([&](SafetyContext*privateContext){
-			if(slEmergency.getNofActivations() == 1){  				
-				controlSys.voltageSetPoint.setValue({0.0,0.0,0.0,0.0});
-				controlSys.emagVal.setValue(false);
-				controlSys.voltageSwitch.switchToInput(1);
-				controlSys.posSwitch.switchToInput(1);
-			}
+			controlSys.voltageSetPoint.setValue({0.0,0.0,0.0,0.0});
+			controlSys.emagVal.setValue(false);
+			controlSys.voltageSwitch.switchToInput(1);
+			controlSys.posSwitch.switchToInput(1);
+			controlSys.stop();
 		});
 
 
@@ -184,6 +186,12 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 
 			privateContext->triggerEvent(controlStoppingDone);
 		});	
+		
+		slSystemOn.setLevelAction([&](SafetyContext*privateContext){
+			if(slSystemOn.getNofActivations() >= 3000){
+				privateContext->triggerEvent(controlStoppingDone);
+			}
+		});
 
 
 		/*
@@ -194,9 +202,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		setEntryLevel(slControlStarting);
 	
 		exitFunction = ([&](SafetyContext* privateContext){
-			controlSys.voltageSetPoint.setValue({0.0,0.0,0.0,0.0});
-			controlSys.voltageSwitch.switchToInput(1);
-			privateContext->triggerEvent(stopMoving);
+			Executor::stop();
 		});
 	
 	}

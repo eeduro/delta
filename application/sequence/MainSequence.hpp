@@ -12,6 +12,7 @@
 #include "HomingSequence.hpp"
 #include "ParkSequence.hpp"
 #include "MouseSequence.hpp"
+#include "step/WaitForLevel.hpp"
 
 #include <array>
 
@@ -39,10 +40,16 @@ namespace eeduro {
 				DeltaSafetyProperties& properties;
 				
 				Wait wait;
+				WaitForLevel waitForLevel;
+				
+				EmergencyCondition ec;
+				Monitor emergencyLevel;
 				
 				eeros::hal::Input<bool>* buttonGreen;
 				eeros::hal::Input<bool>* buttonBlue;
 				eeros::hal::Output<bool>* ledBlue;
+				
+				uint8_t blueButtonCounter = 0;
 			};
 	}
 }

@@ -10,6 +10,8 @@
 #include "SortSequence.hpp"
 #include "ShuffleSequence.hpp"
 #include <eeros/sequencer/Wait.hpp>
+#include "ExceptionSequence.hpp"
+#include "conditions/BlueButtonCondition.hpp"
 
 #include <array>
 
@@ -20,7 +22,7 @@ namespace eeduro {
 	namespace delta {
 		class AutoMoveSequence : public Sequence {
 			public:
-				AutoMoveSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties properties, Calibration& calibration);
+				AutoMoveSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
 				
 				int action();
 
@@ -34,8 +36,12 @@ namespace eeduro {
 				MoveMouseCondition moveMouseCondition;
 				Monitor moveMouseMonitor;
 				
-				EmergencyCondition ec;
-				Monitor emergencyLevel;
+				SafetySystem& safetySys;
+				DeltaSafetyProperties& properties;
+				
+				BlueButtonExceptionSequence blueButtonExceptionSequence;
+				BlueButtonCondition blueButtonCondition;
+				Monitor blueButtonMonitor;
 			};
 	}
 }

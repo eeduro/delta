@@ -11,10 +11,11 @@ HomingSequence::HomingSequence(std::string name, Sequence* caller, DeltaControlS
 	safetySys(safetySys),
 	wait("wait", this),
 	move("move", this, controlSys),
-	calibration(calibration),
-	ec(safetySys, properties),
-	emergencyLevel("Emergency Level Monitor", this, ec, eeros::sequencer::SequenceProp::abort){
-		addMonitor(&emergencyLevel);
+	calibration(calibration)//,
+	//ec(safetySys, properties),
+	//emergencyLevel("Emergency Level Monitor", this, ec, eeros::sequencer::SequenceProp::abort)
+	{
+		//addMonitor(&emergencyLevel);
 	}
 
 int HomingSequence::action()
@@ -26,16 +27,25 @@ int HomingSequence::action()
 	controlSys.enc1.callInputFeature<>("setFqdPos", q012homingOffset);
 	controlSys.enc2.callInputFeature<>("setFqdPos", q012homingOffset);
 	controlSys.enc3.callInputFeature<>("setFqdPos", q012homingOffset);
-	controlSys.enc4.callInputFeature<>("resetFqd");
+	controlSys.enc4.callInputFeature<>("setFqdPos", q3homingOffset);
 
 	wait(0.1);
-
+	log.warn() << "DK: " << controlSys.directKin.getOut().getSignal().getValue();
 	controlSys.pathPlanner.setInitPos(controlSys.directKin.getOut().getSignal().getValue());
+	log.warn() << "PP: " << controlSys.pathPlanner.getLastPoint();
 
 	wait(0.1);
 
 	controlSys.enableAxis();
+	controlSys.setPathPlannerInput();
 	
-	move({0,0,calibration.transportation_height, pi/2});
+	AxisVector p = controlSys.pathPlanner.getLastPoint();
+	p[0] = 0;
+	p[1] = 0;
+	p[2] = calibration.transportation_height;
+	
+	move(p);
+	
+	safetySys.triggerEvent(properties.homingDone);
 
 }

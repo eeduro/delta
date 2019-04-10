@@ -10,6 +10,7 @@
 #include "ExceptionSequence.hpp"
 #include "step/Grab.hpp"
 #include "step/Release.hpp"
+#include "conditions/BlueButtonCondition.hpp"
 
 #include <array>
 
@@ -20,13 +21,13 @@ namespace eeduro {
 	namespace delta {
 		class MouseSequence : public Sequence {
 			public:
-				MouseSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
+				MouseSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
 				
 				int action();
 				bool mouseMoved();
 
 			private:
-				int count;
+				//int count;
 				DeltaControlSystem& controlSys;
 				DeltaSafetyProperties& properties;
 				SafetySystem& safetySys;
@@ -37,8 +38,9 @@ namespace eeduro {
 				Grab grab;
 				Release release;
 				
-				EmergencyCondition ec;
-				Monitor emergencyLevel;
+				BlueButtonExceptionSequence blueButtonExceptionSequence;
+				BlueButtonCondition blueButtonCondition;
+				Monitor blueButtonMonitor;
 		};
 	}
 }

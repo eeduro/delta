@@ -6,16 +6,17 @@
 
 using namespace eeduro::delta;
 
-MouseSequence::MouseSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration) :
-	Sequence(name, sequencer),
+MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration) :
+	Sequence(name, caller, true),
 	controlSys(controlSys),
 	safetySys(safetySys),
 	grab("grab", this, controlSys),
 	release("release", this, controlSys),
 	properties(properties),
 	mouseTimeoutSequence("Mouse TimeOut Exception Sequence", this, controlSys, safetySys, properties, calibration),
-	ec(safetySys, properties),
-	emergencyLevel("Emergency Level Monitor", this, ec, SequenceProp::abort)
+	blueButtonCondition(),
+	blueButtonExceptionSequence("Blue button exception sequence", this, controlSys, safetySys, properties, calibration),
+	blueButtonMonitor("BlueButtonMonitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSequence)
 	{
 		setTimeoutTime(2.0);
 		setTimeoutExceptionSequence(mouseTimeoutSequence);				
@@ -23,9 +24,8 @@ MouseSequence::MouseSequence(std::string name, Sequencer& sequencer, DeltaContro
 		controlSys.mouse.setInitPos(controlSys.pathPlanner.getLastPoint());
 		mouseNew = controlSys.mouse.getOut().getSignal().getValue();
 		mouseOld = mouseNew;
-		count = 0;
 		
-		addMonitor(&emergencyLevel);
+		addMonitor(&blueButtonMonitor);
 	}
 	
 
@@ -33,9 +33,9 @@ MouseSequence::MouseSequence(std::string name, Sequencer& sequencer, DeltaContro
 
 
 int MouseSequence::action() {
+	while(getRunningState() == SequenceState::running){
 		mouseNew = controlSys.mouse.getOut().getSignal().getValue();
-		log.warn() << controlSys.directKin.getOut().getSignal().getValue();
-		if(controlSys.mouse.getButtonOut().getSignal().getValue()[0] || controlSys.mouse.getButtonOut().getSignal().getValue()[1]){
+		if(controlSys.mouse.getButtonOut().getSignal().getValue()[0] || controlSys.mouse.getButtonOut().getSignal().getValue()[2]){
 			buttonPressed = true;
 			grab();
 		}
@@ -44,14 +44,11 @@ int MouseSequence::action() {
 			release();
 		}
 		
-		while(!buttonPressed && mouseNew == mouseOld && count < (2000)){
-			mouseNew = controlSys.mouse.getOut().getSignal().getValue();
-			release();
-			count++;
+		if(buttonPressed || mouseNew != mouseOld){
+			resetTimeout();
 		}
-		
-		count = 0;
 		mouseOld = mouseNew;
+	}
 }
 
 bool MouseSequence::mouseMoved(){

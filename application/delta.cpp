@@ -30,12 +30,10 @@ using namespace eeduro::delta;
 
 void signalHandler(int signum){
 	SafetySystem::exitHandler();
-
 	Sequencer::instance().abort();
 }
 
 int main(int argc, char **argv) {
-	signal(SIGINT, signalHandler);
 	
 	StreamLogWriter w(std::cout);
 	Logger::setDefaultWriter(&w);
@@ -48,11 +46,13 @@ int main(int argc, char **argv) {
 	HAL& hal = HAL::instance();
 	hal.readConfigFromFile(&argc, argv);
 	
+	signal(SIGINT, signalHandler);
+	
 	// Create the control system
 	DeltaControlSystem controlSys{};
 	
 	// Create and initialize a safety system
-	DeltaSafetyProperties properties{controlSys};
+	/*DeltaSafetyProperties properties{controlSys};
 	SafetySystem safetySys{properties, dt};
 	controlSys.timedomain.registerSafetyEvent(safetySys, properties.doEmergency);
 	
@@ -61,22 +61,24 @@ int main(int argc, char **argv) {
 	calibration.loadDefaults();
 	if (!calibration.load()) {
 		log.warn() << "could not load calibration";
-	}
+	}*/
 	
-	auto& sequencer = Sequencer::instance();
+	//auto& sequencer = Sequencer::instance();
 
-	MainSequence mainSequence{"Main Sequence", sequencer, controlSys, safetySys, properties, calibration};
+	//MainSequence mainSequence{"Main Sequence", sequencer, controlSys, safetySys, properties, calibration};
 	
-	sequencer.addSequence(mainSequence);
+	//sequencer.addSequence(mainSequence);
 	
-	mainSequence.start();
+	//mainSequence.start();
 	
-	auto &executor = Executor::instance();
+	/*auto &executor = Executor::instance();
 	executor.setMainTask(safetySys);
 	
 	executor.run();
 	
-	sequencer.wait();
+	sleep(5);*/
+	
+	//sequencer.wait();
 	
 	log.info() << "Example finished...";
 	return 0;

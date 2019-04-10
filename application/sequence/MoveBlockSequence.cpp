@@ -32,7 +32,7 @@ int MoveBlockSequence::action()
 		p[3] = calibration.position[from].r;
 	}
 	else {
-		p[3] = calibration.position[from].r + pi / 2.0;
+		p[3] = calibration.position[from].r + pi / 2;
 	}
 	move(p);
 	

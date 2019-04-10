@@ -21,7 +21,7 @@ namespace eeduro{
 				controlSys.pathPlanner.gotoPoint(position);
 			};
 			bool checkExitCondition(){
-					return controlSys.pathPlanner.posReached();
+				return controlSys.pathPlanner.posReached();
 			}
 			
 		private:
