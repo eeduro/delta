@@ -6,7 +6,6 @@ using namespace eeros::math;
 
 namespace eeduro {
 	namespace delta {
-		
 		template < int M, int N >
 		class Kinematics{
 			public:

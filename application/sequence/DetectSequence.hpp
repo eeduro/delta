@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
 #include <eeros/sequencer/Wait.hpp>
@@ -7,9 +9,6 @@
 #include "../control/DeltaControlSystem.hpp"
 #include "../Calibration.hpp"
 #include "step/Move.hpp"
-
-
-#include <array>
 
 using namespace eeros::sequencer;
 using namespace eeros::safety;

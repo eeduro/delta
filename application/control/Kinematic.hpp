@@ -1,5 +1,7 @@
 #pragma once
 
+#include <cmath>
+
 #include <eeros/math/Matrix.hpp>
 
 #include "Kinematics.hpp"
@@ -8,7 +10,6 @@ using namespace eeros::math;
 
 namespace eeduro {
 	namespace delta {
-
 		class Kinematic : public Kinematics<3,3> {
 			public:
 				/** A new kinematic Delta-Robot.

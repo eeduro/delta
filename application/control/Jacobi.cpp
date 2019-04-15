@@ -1,5 +1,4 @@
 #include "Jacobi.hpp"
-#include <eeros/math/Matrix.hpp>
 
 using namespace eeduro::delta;
 

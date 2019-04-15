@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
 
@@ -12,8 +14,6 @@
 #include "step/Release.hpp"
 #include "conditions/BlueButtonCondition.hpp"
 
-#include <array>
-
 using namespace eeros::sequencer;
 using namespace eeros::safety;
 
@@ -22,9 +22,7 @@ namespace eeduro {
 		class MouseSequence : public Sequence {
 			public:
 				MouseSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
-				
 				int action();
-				bool mouseMoved();
 
 			private:
 				//int count;

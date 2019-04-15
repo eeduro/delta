@@ -2,8 +2,6 @@
 #include "../safety/DeltaSafetyProperties.hpp"
 #include "ExceptionSequence.hpp"
 
-#include <unistd.h>
-
 using namespace eeduro::delta;
 
 MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration) :
@@ -27,10 +25,6 @@ MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSys
 		
 		addMonitor(&blueButtonMonitor);
 	}
-	
-
-      
-
 
 int MouseSequence::action() {
 	while(getRunningState() == SequenceState::running){
@@ -48,15 +42,6 @@ int MouseSequence::action() {
 			resetTimeout();
 		}
 		mouseOld = mouseNew;
-	}
-}
-
-bool MouseSequence::mouseMoved(){
-	if(mouseNew[0] == mouseOld[0] && mouseNew[1] == mouseOld[1] && mouseNew[2] == mouseOld[2]){
-		return false;
-	}
-	else{
-		return true;
 	}
 }
 

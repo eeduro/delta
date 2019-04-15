@@ -1,17 +1,17 @@
 #pragma once
 
+#include <vector>
+
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/sequencer/Sequencer.hpp>
 #include <eeros/safety/SafetySystem.hpp>
+#include <eeros/sequencer/Wait.hpp>
 
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
 #include "../Calibration.hpp"
 #include "step/Move.hpp"
 #include "step/WaitForLevel.hpp"
-#include <eeros/sequencer/Wait.hpp>
-
-#include <vector>
 
 using namespace eeros::sequencer;
 using namespace eeros::safety;
@@ -20,7 +20,6 @@ namespace eeduro {
 	namespace delta {
 		class MouseExceptionSequence : public Sequence{
 			public:
-				
 				MouseExceptionSequence(std::string name, Sequence* caller, SafetySystem& safetySys, DeltaSafetyProperties& properties, DeltaControlSystem& controlSys, Calibration& calibration):
 				Sequence(name, caller, true),
 				controlSys(controlSys),
@@ -44,8 +43,6 @@ namespace eeduro {
 				Calibration& calibration;
 				Move move;
 				WaitForLevel waitForLevel;
-
-
 		};
 			
 		class MouseTimeOutExceptionSequence : public Sequence{

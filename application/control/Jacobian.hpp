@@ -1,13 +1,15 @@
 #pragma once
 
+#include <cmath>
+
 #include <eeros/math/Matrix.hpp>
 
+#include "Kinematic.hpp"
 
 using namespace eeros::math;
 
 namespace eeduro {
 	namespace delta {
-
 		class Jacobian {
 			public:
 				Jacobian(Vector3 offset);

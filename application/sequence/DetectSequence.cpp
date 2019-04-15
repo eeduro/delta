@@ -1,8 +1,6 @@
 #include "DetectSequence.hpp"
 
-
 using namespace eeduro::delta;
-
 
 DetectSequence::DetectSequence(std::string name, DeltaControlSystem& controlSys, Sequence* caller, Calibration& calibration): 
 	Sequence(name, caller, true),

@@ -10,14 +10,10 @@
 #include <eeros/safety/SafetySystem.hpp>
 #include <eeros/logger/StreamLogWriter.hpp>
 #include <eeros/sequencer/Sequencer.hpp>
-#include <eeros/sequencer/Monitor.hpp>
 
 #include "control/DeltaControlSystem.hpp"
 #include "safety/DeltaSafetyProperties.hpp"
-
 #include "sequence/MainSequence.hpp"
-
-#include "sequence/conditions/MoveMouseCondition.hpp"
 
 using namespace eeros;
 using namespace eeros::hal;
@@ -40,8 +36,6 @@ int main(int argc, char **argv) {
 	Logger log;
 	w.show();
 	
-	//log.info() << "delta test started...";
-	
 	log.info() << "Initializing Hardware...";
 	HAL& hal = HAL::instance();
 	hal.readConfigFromFile(&argc, argv);
@@ -52,33 +46,30 @@ int main(int argc, char **argv) {
 	DeltaControlSystem controlSys{};
 	
 	// Create and initialize a safety system
-	/*DeltaSafetyProperties properties{controlSys};
+	DeltaSafetyProperties properties{controlSys};
 	SafetySystem safetySys{properties, dt};
 	controlSys.timedomain.registerSafetyEvent(safetySys, properties.doEmergency);
-	
 	
 	Calibration calibration{};
 	calibration.loadDefaults();
 	if (!calibration.load()) {
 		log.warn() << "could not load calibration";
-	}*/
+	}
 	
-	//auto& sequencer = Sequencer::instance();
+	auto& sequencer = Sequencer::instance();
 
-	//MainSequence mainSequence{"Main Sequence", sequencer, controlSys, safetySys, properties, calibration};
+	MainSequence mainSequence{"Main Sequence", sequencer, controlSys, safetySys, properties, calibration};
 	
-	//sequencer.addSequence(mainSequence);
+	sequencer.addSequence(mainSequence);
 	
-	//mainSequence.start();
+	mainSequence.start();
 	
-	/*auto &executor = Executor::instance();
+	auto &executor = Executor::instance();
 	executor.setMainTask(safetySys);
 	
 	executor.run();
 	
-	sleep(5);*/
-	
-	//sequencer.wait();
+	sequencer.wait();
 	
 	log.info() << "Example finished...";
 	return 0;

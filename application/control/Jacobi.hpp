@@ -3,6 +3,8 @@
 #include <eeros/control/Block.hpp>
 #include <eeros/control/Input.hpp>
 #include <eeros/control/Output.hpp>
+#include <eeros/math/Matrix.hpp>
+
 #include "types.hpp"
 #include "Jacobian.hpp"
 
@@ -12,7 +14,6 @@ using namespace eeros::control;
 
 namespace eeduro {
 	namespace delta {
-
 		class Jacobi : public Block {
 			public:
 				Jacobi(Jacobian& j);

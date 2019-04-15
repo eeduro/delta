@@ -1,9 +1,12 @@
 #pragma once
 
+#include <mutex>
+
+#include <eeros/core/System.hpp>
 #include <eeros/control/Block.hpp>
 #include <eeros/control/Output.hpp>
 #include <eeros/control/ConstantAccTrajectoryGenerator.hpp>
-#include <mutex>
+
 #include "types.hpp"
 
 using namespace eeros;
@@ -11,9 +14,7 @@ using namespace eeros::control;
 
 namespace eeduro {
 	namespace delta {
-		
 		class PathPlanner: public Block {
-			
 			public:
 				PathPlanner(AxisVector velMax, AxisVector accMax, double dt);
 				

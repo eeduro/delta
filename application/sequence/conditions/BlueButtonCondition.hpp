@@ -3,12 +3,11 @@
 #include <eeros/sequencer/Condition.hpp>
 #include <eeros/hal/HAL.hpp>
 
-
 using namespace eeros::hal;
 using namespace eeros::sequencer;
+
 namespace eeduro{
 	namespace delta{
-    
 		class BlueButtonCondition : public Condition{
 			public:
 				BlueButtonCondition()
@@ -23,7 +22,6 @@ namespace eeduro{
 				}
 
 				eeros::hal::Input<bool>* buttonBlue;
-				
 		};
 	}
 }

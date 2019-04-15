@@ -1,5 +1,7 @@
 #pragma once
 
+#include <array>
+
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
 #include <eeros/sequencer/Monitor.hpp>
@@ -14,8 +16,6 @@
 #include "MouseSequence.hpp"
 #include "step/WaitForLevel.hpp"
 
-#include <array>
-
 using namespace eeros::sequencer;
 using namespace eeros::safety;
 
@@ -24,9 +24,7 @@ namespace eeduro {
 		class MainSequence : public Sequence {
 			public:
 				MainSequence(std::string name, Sequencer& sequencer, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties properties, Calibration& calibration);
-				
 				int action();
-
 				
 			private:
 				HomingSequence homeSeq;

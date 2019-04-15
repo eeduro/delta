@@ -1,5 +1,4 @@
 #include "Inertia.hpp"
-#include "constants.hpp"
 
 using namespace eeduro::delta;
 
@@ -26,10 +25,6 @@ void Inertia::run() {
 		if (jacobian.isInvertible()) {
 			Matrix<3,3> inverseJacobian = !jacobian;
 			Matrix<3,3> inverseJacobianTransposed = inverseJacobian.transpose();
-
-// 			a[0] = 0; // Regelung in x-Richtung ausschalten
-// 			a[1] = 0; // Regelung in y-Richtung ausschalten
-// 			a[2] = 0; // Regelung in z-Richtung ausschalten
 
 			Matrix<3,3> M = tcpMass + inverseJacobianTransposed * motorInertia * inverseJacobian;
 			Vector3 F = M * a;

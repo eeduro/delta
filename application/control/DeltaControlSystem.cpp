@@ -1,7 +1,4 @@
 #include "DeltaControlSystem.hpp"
-#include <eeros/core/Executor.hpp>
-#include <eeros/logger/Logger.hpp>
-
 
 DeltaControlSystem::DeltaControlSystem() : 
 	mouse("/dev/input/event1"),
@@ -44,10 +41,10 @@ DeltaControlSystem::DeltaControlSystem() :
 		
 		
 	/*
-		* ###
-		* label the blocks
-		* ###
-		*/
+	* ###
+	* label the blocks
+	* ###
+	*/
 	pathPlanner.setName("Pathplanner");
 	mouse.setName("Mouse input");
 	posSwitch.setName("Position Switch");
@@ -91,18 +88,18 @@ DeltaControlSystem::DeltaControlSystem() :
 	mot4.setName("TCP Motor");
 
 	/*
-		* ###
-		* label the signals,
-		* Des -> Desired,
-		* A -> Actual,
-		* x -> Value Kartesian Coordinatesystem,
-		* phi -> Value in radian
-		* diff -> difference between desired and actual
-		* f -> Force
-		* t -> Torque
-		* V -> Voltage
-		* ###
-		*/
+	* ###
+	* label the signals,
+	* Des -> Desired,
+	* A -> Actual,
+	* x -> Value Kartesian Coordinatesystem,
+	* phi -> Value in radian
+	* diff -> difference between desired and actual
+	* f -> Force
+	* t -> Torque
+	* V -> Voltage
+	* ###
+	*/
 	pathPlanner.getPosOut().getSignal().setName("xDes");
 	pathPlanner.getVelOut().getSignal().setName("dxDes");		// dx/dt -> Speed
 	pathPlanner.getAccOut().getSignal().setName("ddxDes");		// ddx/dt² -> Acceleration
@@ -152,10 +149,10 @@ DeltaControlSystem::DeltaControlSystem() :
 
 
 	/*
-		* ###
-		* configure blocks	  
-		* ###
-		*/
+	* ###
+	* configure blocks	  
+	* ###
+	*/
 	torqueLimitation.enable();
 
 	posSum.negateInput(1);
@@ -163,10 +160,10 @@ DeltaControlSystem::DeltaControlSystem() :
 
 
 	/*
-		* ###
-		* connect blocks
-		* ###
-		*/
+	* ###
+	* connect blocks
+	* ###
+	*/
 	muxEnc.getIn(0).connect(enc1.getOut());
 	muxEnc.getIn(1).connect(enc2.getOut());
 	muxEnc.getIn(2).connect(enc3.getOut());
@@ -229,11 +226,10 @@ DeltaControlSystem::DeltaControlSystem() :
 
 
 	/*
-		* ###
-		* add all blocks to the timedomain
-		* ###
-		*/
-	
+	* ###
+	* add all blocks to the timedomain
+	* ###
+	*/
 	timedomain.addBlock(mouse);
 	timedomain.addBlock(pathPlanner);
 	timedomain.addBlock(posSwitch);
@@ -282,10 +278,10 @@ DeltaControlSystem::DeltaControlSystem() :
 
 
 	/*
-		* ###
-		* add timedomain to the executor
-		* ###
-		*/
+	* ###
+	* add timedomain to the executor
+	* ###
+	*/
 	Executor::instance().add(timedomain);
 }
 
@@ -315,7 +311,6 @@ bool DeltaControlSystem::switchToPosControl() {
 	if(homed || !allAxisStopped()){
 	  return false;
 	}
-  
 	setVoltageForInitializing({0, 0, 0, 0});
 	homed = true;
 	return true;
@@ -351,13 +346,13 @@ void DeltaControlSystem::setMouseInput()
 {
 	mouse.setInitPos(directKin.getOut().getSignal().getValue());
 	pathPlanner.setInitPos(directKin.getOut().getSignal().getValue());		//disable pathplanner by setting the desired position to the current position
-	posSwitch.switchToInput(1);
+	posSwitch.switchToInput(1);							// set input to mouseinput, also switches the velSwitch and accSwitch
 	voltageSwitch.switchToInput(0);
 }
 
 void DeltaControlSystem::setPathPlannerInput()
 {
-	posSwitch.switchToInput(0);		// set input to pathplanner
+	posSwitch.switchToInput(0);		// set input to pathplanner, also switches the velSwitch and accSwitch
 	voltageSwitch.switchToInput(0);
 }
 

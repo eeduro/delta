@@ -1,8 +1,6 @@
 #include "ParkSequence.hpp"
 
-
 using namespace eeduro::delta;
-
 
 ParkSequence::ParkSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration): 
 	Sequence(name, caller, true),

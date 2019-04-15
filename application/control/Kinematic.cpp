@@ -1,6 +1,5 @@
 #include "Kinematic.hpp"
-#include <cmath>
-#include <iostream>
+
 
 using namespace eeduro::delta;
 
@@ -38,7 +37,6 @@ Kinematic::Kinematic() {
 	
 	if (forward(q, tcp)) {
 		offset = tcp;
-		std::cout << "offset: " <<  offset[2] << std::endl;
 	}
 }
 

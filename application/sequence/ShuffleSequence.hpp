@@ -1,15 +1,15 @@
 #pragma once
 
+#include <array>
+
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
 
 #include "../control/DeltaControlSystem.hpp"
+#include "../safety/DeltaSafetyProperties.hpp"
 #include "step/Move.hpp"
 #include "DetectSequence.hpp"
 #include "MoveBlockSequence.hpp"
-#include "../safety/DeltaSafetyProperties.hpp"
-
-#include <array>
 
 using namespace eeros::sequencer;
 using namespace eeros::safety;
@@ -19,9 +19,8 @@ namespace eeduro {
 		class ShuffleSequence : public Sequence {
 			public:
 				ShuffleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties);
-				
 				int action();
-				
+
 			private:
 				virtual int find(const std::array<int,4> &blocks, int block);
 				
@@ -30,7 +29,6 @@ namespace eeduro {
 				DetectSequence detectSequence;
 				MoveBlockSequence moveBlock;
 				Calibration& calibration;
-		
 		};
 	}
 }

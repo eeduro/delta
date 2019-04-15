@@ -1,8 +1,6 @@
 #include "HomingSequence.hpp"
 
-
 using namespace eeduro::delta;
-
 
 HomingSequence::HomingSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration): 
 	Sequence(name, caller, true),
@@ -11,12 +9,8 @@ HomingSequence::HomingSequence(std::string name, Sequence* caller, DeltaControlS
 	safetySys(safetySys),
 	wait("wait", this),
 	move("move", this, controlSys),
-	calibration(calibration)//,
-	//ec(safetySys, properties),
-	//emergencyLevel("Emergency Level Monitor", this, ec, eeros::sequencer::SequenceProp::abort)
-	{
-		//addMonitor(&emergencyLevel);
-	}
+	calibration(calibration)
+	{}
 
 int HomingSequence::action()
 {
@@ -47,5 +41,4 @@ int HomingSequence::action()
 	move(p);
 	
 	safetySys.triggerEvent(properties.homingDone);
-
 }

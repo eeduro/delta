@@ -1,11 +1,6 @@
 #include "ShuffleSequence.hpp"
-#include "../safety/DeltaSafetyProperties.hpp"
-#include <unistd.h>
-#include <cstdlib>
-#include <ctime>
 
 using namespace eeduro::delta;
-
 
 ShuffleSequence::ShuffleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties) :
 	Sequence(name, caller, true),

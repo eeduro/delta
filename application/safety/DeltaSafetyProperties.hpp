@@ -17,9 +17,7 @@ using namespace eeros::sequencer;
 
 namespace eeduro {
 	namespace delta {
-
 		class DeltaSafetyProperties : public SafetyProperties {
-	
 			public:
 				DeltaSafetyProperties(DeltaControlSystem& controlSys);
 				virtual ~DeltaSafetyProperties();
@@ -63,9 +61,9 @@ namespace eeduro {
 				SafetyEvent doMouseControl;
 				SafetyEvent stopMoving;
 	
-
-	
 			private:
+				DeltaControlSystem& controlSys;
+				
 				/*
 				* ###
 				* critical outputs
@@ -80,8 +78,6 @@ namespace eeduro {
 				* ###
 				*/
 				hal::Input<bool>* emergencyStop;
-					
-				DeltaControlSystem& controlSys;
 		};
 	}
 }

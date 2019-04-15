@@ -2,8 +2,6 @@
 
 using namespace eeduro::delta;
 
-
-
 CalibrateBlockSequence::CalibrateBlockSequence(std::string name, eeros::sequencer::Sequence* caller, DeltaControlSystem& controlSys, eeros::safety::SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration) :
 	Sequence(name, caller, true),
 	controlSys(controlSys),

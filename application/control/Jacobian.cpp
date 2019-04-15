@@ -1,6 +1,4 @@
 #include "Jacobian.hpp"
-#include "Kinematic.hpp"
-#include <cmath>
 
 using namespace eeduro::delta;
 

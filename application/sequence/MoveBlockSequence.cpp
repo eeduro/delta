@@ -1,5 +1,5 @@
 #include "MoveBlockSequence.hpp"
-#include "../safety/DeltaSafetyProperties.hpp"
+
 
 using namespace eeduro::delta;
 
@@ -68,5 +68,4 @@ int MoveBlockSequence::action()
 	
 	p[2] = calibration.transportation_height;
 	move(p);
-
 }

@@ -1,6 +1,4 @@
 #include "PathPlanner.hpp"
-#include <eeros/core/System.hpp>
-#include <iostream>
 
 using namespace eeduro::delta;
 

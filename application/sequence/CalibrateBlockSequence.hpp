@@ -1,5 +1,7 @@
 #pragma once
 
+#include <vector>
+
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
 #include <eeros/sequencer/Wait.hpp>
@@ -8,9 +10,6 @@
 #include "../safety/DeltaSafetyProperties.hpp"
 #include "MouseSequence.hpp"
 #include "../Calibration.hpp"
-
-
-#include <vector>
 
 using namespace eeros::sequencer;
 using namespace eeros::safety;
@@ -47,7 +46,6 @@ namespace eeduro {
 				
 				eeros::hal::Input<bool>* buttonBlue;
 				eeros::hal::Output<bool>* ledBlue;
-
 		};
 	}
 }

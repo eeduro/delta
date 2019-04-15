@@ -1,5 +1,8 @@
 #pragma once
 
+#include <eeros/core/Executor.hpp>
+#include <eeros/logger/Logger.hpp>
+
 #include <eeros/control/Sum.hpp>
 #include <eeros/control/D.hpp>
 #include <eeros/control/Gain.hpp>
@@ -23,13 +26,10 @@
 #include "constants.hpp"
 #include "PathPlanner.hpp"
 
-
 using namespace eeros::control;
-using namespace eeduro::delta;
 
 namespace eeduro{
 	namespace delta{
-
 		class DeltaControlSystem {
 			public:
 				DeltaControlSystem();
@@ -56,7 +56,6 @@ namespace eeduro{
 				void setPathPlannerInput();
 
 				bool homed;
-
 
 				/*
 				* ###
@@ -121,9 +120,7 @@ namespace eeduro{
 				Switch<2, AxisVector> accSwitch;
 				Switch<2, AxisVector> velSwitch;
 				
-
 				TimeDomain timedomain;
-
 		};
 	} 
 }

@@ -25,8 +25,6 @@ MainSequence::MainSequence(std::string name, Sequencer& sequencer, DeltaControlS
 		addMonitor(&emergencyLevel);
 	}
 	
-
-
 int MainSequence::action() {
 	ledBlue->set(false);
 	
@@ -42,7 +40,7 @@ int MainSequence::action() {
 	
 	ledBlue->set(true);
 
-	while(getRunningState() == SequenceState::running){		/* slSystemReady, green button will start automove, green&blue for calibration, 3x blue (or 3 seconds) to park*/
+	while(getRunningState() == SequenceState::running){				// slSystemReady, green button will start automove, green&blue for calibration, 3x blue (or 3 seconds) to park
 		if(safetySys.getCurrentLevel() == properties.slSystemReady){
 			if(buttonGreen->get()){
 				wait(1);
@@ -53,7 +51,7 @@ int MainSequence::action() {
 					waitForLevel(properties.slAutoMoving.getLevelId());
 				}
 			}
-			if(buttonBlue->get()){
+			if(buttonBlue->get()){						// start CalibrateBlockSequence
 				wait(1);
 				if(buttonGreen->get()){
 					cbSeq.start();
@@ -85,26 +83,9 @@ int MainSequence::action() {
 	while(safetySys.getCurrentLevel() == properties.slEmergency){
 		if(buttonGreen->get()){
 			safetySys.triggerEvent(properties.doControlStart);
-			break;						// should restart the mainsequence, due to emergencyMonitor
+			break;								// should restart the mainsequence, due to emergencyMonitor
 		}
-		//wait(0.1);						// emergencyMonitor is fired, so no sequence or step gets performed
 	}
-
-	
-	/*while(getRunningState() == SequenceState::running){			//normal operating mode
-		if(buttonBlue->get()){
-			safetySys.triggerEvent(properties.stopMoving);
-			waitForLevel(properties.slSystemReady.getLevelId());
-			
-		}
-		if(safetySys.getCurrentLevel() == properties.slAutoMoving){
-			amSeq.start();
-		}else if(safetySys.getCurrentLevel() == properties.slMouseControl){
-			mouseSeq.start();
-		}
-		
-		wait(0.1);
-	}*/
 }
 
 

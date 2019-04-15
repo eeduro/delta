@@ -1,5 +1,4 @@
 #include "DirectKinematic.hpp"
-#include <eeros/math/Matrix.hpp>
 
 DirectKinematic::DirectKinematic(Kinematic& kin) : 
 	kinematic(kin) { }

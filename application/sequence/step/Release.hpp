@@ -19,6 +19,6 @@ namespace eeduro{
 				};
 		      
 				DeltaControlSystem &controlSys;
-		  };
+		};
 	}
 }
