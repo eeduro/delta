@@ -14,7 +14,7 @@ HomingSequence::HomingSequence(std::string name, Sequence* caller, DeltaControlS
 
 int HomingSequence::action()
 {
-	controlSys.setVoltageForInitializing({2,2,2,-7});
+	controlSys.setVoltageForInitializing({2,2,2,7});
 					
 	wait(2.5);
 
