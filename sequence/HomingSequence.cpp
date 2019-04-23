@@ -24,9 +24,7 @@ int HomingSequence::action()
 	controlSys.enc4.callInputFeature<>("setFqdPos", q3homingOffset);
 
 	wait(0.1);
-	log.warn() << "DK: " << controlSys.directKin.getOut().getSignal().getValue();
 	controlSys.pathPlanner.setInitPos(controlSys.directKin.getOut().getSignal().getValue());
-	log.warn() << "PP: " << controlSys.pathPlanner.getLastPoint();
 
 	wait(0.1);
 
