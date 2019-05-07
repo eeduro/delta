@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 2.8)
+cmake_policy(SET CMP0015 NEW)
 project(delta)
 
 find_package(EEROS 1.0.0.30 REQUIRED)
@@ -7,7 +8,7 @@ link_directories(${EEROS_LIB_DIR};${EEROS_LIBUCL_LINK_DIR})
 
 set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
 
-link_directories("~/workspace/VTDelta/BeagleBoneBlue/robotics_cape_installer/libraries/")
+link_directories("../robotics_cape_installer/libraries/")
 
 file(GLOB_RECURSE SRC_FILES ${PROJECT_SOURCE_DIR}/*.cpp)
 
