@@ -9,9 +9,12 @@ using namespace eeros::control;
 
 namespace eeduro {
 	namespace delta {
-		class Circle : public Block {
+		class CircleInput : public Block {
 			public:
-				Circle(double radius, double speed);
+				CircleInput(double radius, double speed);
+				
+				virtual void setInitPos(double x, double y, double z, double r);
+				virtual void setInitPos(Vector4 pos);
 				
 				virtual control::Output<AxisVector>& getOut();
 				

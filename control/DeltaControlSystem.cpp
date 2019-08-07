@@ -350,17 +350,24 @@ bool DeltaControlSystem::axisHomed() {
 void DeltaControlSystem::setMouseInput()
 {
 	mouse.setInitPos(directKin.getOut().getSignal().getValue());
-	pathPlanner.setInitPos(directKin.getOut().getSignal().getValue());		//disable pathplanner by setting the desired position to the current position
-	posSwitch.switchToInput(1);							// set input to mouseinput, also switches the velSwitch and accSwitch
+	pathPlanner.setInitPos(directKin.getOut().getSignal().getValue());   // disable pathplanner by setting the desired position to the current position
+	posSwitch.switchToInput(1);                                          // set input to mouseinput, also switches the velSwitch and accSwitch
+	voltageSwitch.switchToInput(0);
+}
+
+void DeltaControlSystem::setCircleInput()
+{
+	circlePlanner.setInitPos(directKin.getOut().getSignal().getValue());
+	pathPlanner.setInitPos(directKin.getOut().getSignal().getValue());   // disable pathplanner by setting the desired position to the current position
+	posSwitch.switchToInput(2);                                          // set input to mouseinput, also switches the velSwitch and accSwitch
 	voltageSwitch.switchToInput(0);
 }
 
 void DeltaControlSystem::setPathPlannerInput()
 {
-	posSwitch.switchToInput(0);		// set input to pathplanner, also switches the velSwitch and accSwitch
+	posSwitch.switchToInput(0);                                          // set input to pathplanner, also switches the velSwitch and accSwitch
 	voltageSwitch.switchToInput(0);
 }
-
 
 
 DeltaControlSystem::~DeltaControlSystem() { }

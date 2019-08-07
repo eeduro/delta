@@ -49,6 +49,7 @@ int MainSequence::action() {
 				}else{
 					safetySys.triggerEvent(properties.doAutoMoving);
 					waitForLevel(properties.slAutoMoving.getLevelId());
+					controlSys.setCircleInput(); // TODO right place??
 				}
 			}
 			if(buttonBlue->get()){						// start CalibrateBlockSequence
@@ -58,7 +59,7 @@ int MainSequence::action() {
 				}else{
 					blueButtonCounter++;
 				}
-				if(blueButtonCounter >= 3){				// doParking and stop the application
+				if(blueButtonCounter >= 3){                    // doParking and stop the application
 					blueButtonCounter = 0;
 					ledBlue->set(false);
 					safetySys.triggerEvent(properties.doParking);
@@ -68,6 +69,9 @@ int MainSequence::action() {
 					safetySys.triggerEvent(properties.doControlStop);
 					waitForLevel(properties.slControlStopping.getLevelId());
 				}
+			}
+			else{
+			  mouseSeq.start();
 			}
 		}else if(safetySys.getCurrentLevel() == properties.slAutoMoving){
 			amSeq.start();
@@ -83,7 +87,7 @@ int MainSequence::action() {
 	while(safetySys.getCurrentLevel() == properties.slEmergency){
 		if(buttonGreen->get()){
 			safetySys.triggerEvent(properties.doControlStart);
-			break;								// should restart the mainsequence, due to emergencyMonitor
+			break;                                                 // should restart the mainsequence, due to emergencyMonitor
 		}
 	}
 }

@@ -57,7 +57,8 @@ namespace eeduro {
 				waitForLevel("WaitForLevel", this, safetySys){}
 				
 				int action(){
-					controlSys.setPathPlannerInput();
+// 					controlSys.setPathPlannerInput(); TODO
+					controlSys.setCircleInput();
 					move({ 0, 0, calibration.transportation_height, 0});
 					safetySys.triggerEvent(properties.doAutoMoving);
 					waitForLevel(properties.slAutoMoving.getLevelId());
@@ -87,7 +88,8 @@ namespace eeduro {
 				int action(){
 					eeros::math::Vector<4> torqueLimit{ q012gearTorqueLimit, q012gearTorqueLimit, q012gearTorqueLimit, q3gearTorqueLimit };
 					controlSys.torqueLimitation.setLimit(-torqueLimit, torqueLimit);
-					controlSys.setPathPlannerInput();
+// 					controlSys.setPathPlannerInput(); TODO
+					controlSys.setCircleInput();
 					AxisVector p = controlSys.directKin.getOut().getSignal().getValue();
 					controlSys.pathPlanner.setInitPos(p);
 					

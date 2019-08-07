@@ -11,6 +11,7 @@
 #include "../safety/DeltaSafetyProperties.hpp"
 #include "SortSequence.hpp"
 #include "ShuffleSequence.hpp"
+#include "CircleSequence.hpp"
 #include "ExceptionSequence.hpp"
 #include "conditions/BlueButtonCondition.hpp"
 #include "conditions/EmergencyCondition.hpp"
@@ -28,6 +29,7 @@ namespace eeduro {
 			private:
 				SortSequence sortSeq;
 				ShuffleSequence shuffSeq;
+				CircleSequence circleSeq;
 				Wait wait;
 				
 				MouseExceptionSequence mouseExceptionSequence;

@@ -4,41 +4,42 @@
 
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
+#include <eeros/sequencer/Monitor.hpp>
+#include <eeros/sequencer/Wait.hpp>
+
+#include <eeros/sequencer/Sequence.hpp>
+#include <eeros/safety/SafetySystem.hpp>
 
 #include "../control/DeltaControlSystem.hpp"
-#include "step/Move.hpp"
-#include "MoveBlockSequence.hpp"
+#include "../safety/DeltaSafetyProperties.hpp"
+#include "SortSequence.hpp"
+#include "ShuffleSequence.hpp"
 #include "ExceptionSequence.hpp"
-#include "step/Grab.hpp"
-#include "step/Release.hpp"
 #include "conditions/BlueButtonCondition.hpp"
 #include "conditions/EmergencyCondition.hpp"
+
 
 using namespace eeros::sequencer;
 using namespace eeros::safety;
 
 namespace eeduro {
 	namespace delta {
-		class MouseSequence : public Sequence {
+		class CircleSequence : public Sequence {
 			public:
-				MouseSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
+				CircleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
 				int action();
-
+				
 			private:
-				//int count;
+				Wait wait;
+			
 				DeltaControlSystem& controlSys;
 				DeltaSafetyProperties& properties;
 				SafetySystem& safetySys;
-				bool buttonPressed = false;
-				AxisVector mouseNew;
-				AxisVector mouseOld;
-				MouseTimeOutExceptionSequence mouseTimeoutSequence;
-				Grab grab;
-				Release release;
 				
 				BlueButtonExceptionSequence blueButtonExceptionSequence;
 				BlueButtonCondition blueButtonCondition;
 				Monitor blueButtonMonitor;
-		};
+			};
 	}
 }
+
