@@ -25,6 +25,7 @@
 #include "MotorModel.hpp"
 #include "constants.hpp"
 #include "PathPlanner.hpp"
+#include "Circle.hpp"
 
 using namespace eeros::control;
 
@@ -70,8 +71,9 @@ namespace eeduro{
 
 				MouseInput mouse;
 				PathPlanner pathPlanner;
+				Circle circlePlanner;
 
-				Switch<2,AxisVector> posSwitch;
+				Switch<3,AxisVector> posSwitch;
 
 				PeripheralInput<double> enc1;
 				PeripheralInput<double> enc2;
@@ -117,8 +119,8 @@ namespace eeduro{
 				Constant<AxisVector> accSetPoint;
 				Constant<AxisVector> velSetPoint;
 				
-				Switch<2, AxisVector> accSwitch;
-				Switch<2, AxisVector> velSwitch;
+				Switch<3, AxisVector> accSwitch;
+				Switch<3, AxisVector> velSwitch;
 				
 				TimeDomain timedomain;
 		};

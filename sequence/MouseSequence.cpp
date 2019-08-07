@@ -19,7 +19,7 @@ MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSys
 		setTimeoutTime(2.0);
 		setTimeoutExceptionSequence(mouseTimeoutSequence);				
 		setTimeoutBehavior(SequenceProp::abort);
-		controlSys.mouse.setInitPos(controlSys.pathPlanner.getLastPoint());
+		controlSys.circlePlanner.setInitPos(controlSys.pathPlanner.getLastPoint());
 		mouseNew = controlSys.mouse.getOut().getSignal().getValue();
 		mouseOld = mouseNew;
 		
@@ -28,20 +28,7 @@ MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSys
 
 int MouseSequence::action() {
 	while(getRunningState() == SequenceState::running){
-		mouseNew = controlSys.mouse.getOut().getSignal().getValue();
-		if(controlSys.mouse.getButtonOut().getSignal().getValue()[0] || controlSys.mouse.getButtonOut().getSignal().getValue()[2]){
-			buttonPressed = true;
-			grab();
-		}
-		else{
-			buttonPressed = false;
-			release();
-		}
-		
-		if(buttonPressed || mouseNew != mouseOld){
-			resetTimeout();
-		}
-		mouseOld = mouseNew;
+	
 	}
 }
 
