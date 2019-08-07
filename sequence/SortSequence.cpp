@@ -2,7 +2,7 @@
 
 using namespace eeduro::delta;
 
-SortSequence::SortSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties):
+SortSequence::SortSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, DeltaSafetyProperties &properties, Calibration& calibration):
 	Sequence(name, caller, true),
 	move("move", this, controlSys),
 	detectSequence("detect sequence", controlSys, this, calibration),
