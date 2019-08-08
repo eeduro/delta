@@ -26,21 +26,18 @@ namespace eeduro {
 				int action();
 				
 			private:
-				SortSequence sortSeq;
-				ShuffleSequence shuffSeq;
+				DeltaControlSystem& controlSys;
+				SafetySystem& safetySys;
+				DeltaSafetyProperties& properties;
+				
+// 				SortSequence sortSeq;
+// 				ShuffleSequence shuffSeq;
 				CircleSequence circleSeq;
 				Wait wait;
-				
-				EmergencyExceptionSequence emergencyExceptionSequence;
-				EmergencyCondition ec;
-				Monitor emergencyLevel;
 				
 				MouseExceptionSequence mouseExceptionSequence;
 				MoveMouseCondition moveMouseCondition;
 				Monitor moveMouseMonitor;
-				
-				SafetySystem& safetySys;
-				DeltaSafetyProperties& properties;
 			};
 	}
 }
