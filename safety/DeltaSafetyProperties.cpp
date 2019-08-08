@@ -98,6 +98,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		slHoming.addEvent(homingDone, slHomed, kPublicEvent);
 		slHomed.addEvent(doSystemReady, slSystemReady, kPublicEvent);
 		slSystemReady.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
+		slSystemReady.addEvent(doMouseControl, slMouseControl, kPublicEvent);
 		slSystemReady.addEvent(doParking, slParking, kPublicEvent);
 		slAutoMoving.addEvent(doMouseControl, slMouseControl, kPublicEvent);
 		slMouseControl.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);

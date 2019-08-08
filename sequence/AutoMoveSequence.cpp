@@ -13,12 +13,14 @@ AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaCont
 	moveMouseMonitor("MouseMoveMonitor", this, moveMouseCondition, SequenceProp::abort, &mouseExceptionSequence),
 	safetySys(safetySys),
 	properties(properties),
-	blueButtonCondition(),
-	blueButtonExceptionSequence("Blue button exception sequence", this, controlSys, safetySys, properties, calibration),
-	blueButtonMonitor("BlueButtonMonitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSequence)
+	ec(safetySys, properties),
+	emergencyLevel("Emergency Level Monitor", this, ec, eeros::sequencer::SequenceProp::abort),
+	emergencyExceptionSequence("Emergency exception sequence", this, controlSys, safetySys, properties)
+	
 	{ 
 		wait.addMonitor(&moveMouseMonitor);
-		addMonitor(&blueButtonMonitor);
+		
+		addMonitor(&emergencyLevel);
 	}
 	
 
@@ -26,17 +28,9 @@ AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaCont
 int AutoMoveSequence::action() {
 	while(getRunningState() == SequenceState::running){
 		log.warn() << getRunningState();
-		
-		// ** Sort and shuffle ** //
-// 		sortSeq.start();
-// 		moveMouseCondition.reset();
-// 		wait(5);
-// 		shuffSeq.start();
-		
-		// ** Perform circle movement ** //
-		circleSeq.start();
+		log.info() << "hello world";
 		moveMouseCondition.reset();
-		wait(5);
+		wait(1);
 	}
 }
 

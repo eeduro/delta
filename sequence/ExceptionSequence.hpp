@@ -30,7 +30,10 @@ namespace eeduro {
 				waitForLevel("WaitForLevel", this, safetySys){}
 				
 				int action(){
-					move({ 0, 0, calibration.transportation_height, 0});
+					controlSys.pathPlanner.setInitPos(controlSys.directKin.getOut().getSignal().getValue());
+					controlSys.setPathPlannerInput();
+					move({ tcpReady_x, tcpReady_y, tcpReady_z, tcpReady_phi});
+					
 					controlSys.setMouseInput();
 					safetySys.triggerEvent(properties.doMouseControl);
 					waitForLevel(properties.slMouseControl.getLevelId());
@@ -57,9 +60,11 @@ namespace eeduro {
 				waitForLevel("WaitForLevel", this, safetySys){}
 				
 				int action(){
-// 					controlSys.setPathPlannerInput(); TODO
+					controlSys.pathPlanner.setInitPos(controlSys.directKin.getOut().getSignal().getValue());
+					controlSys.setPathPlannerInput(); 
+					move({ tcpReady_x, tcpReady_y, tcpReady_z, tcpReady_phi});
+					
 					controlSys.setCircleInput();
-					move({ 0, 0, calibration.transportation_height, 0});
 					safetySys.triggerEvent(properties.doAutoMoving);
 					waitForLevel(properties.slAutoMoving.getLevelId());
 				}
@@ -88,10 +93,13 @@ namespace eeduro {
 				int action(){
 					eeros::math::Vector<4> torqueLimit{ q012gearTorqueLimit, q012gearTorqueLimit, q012gearTorqueLimit, q3gearTorqueLimit };
 					controlSys.torqueLimitation.setLimit(-torqueLimit, torqueLimit);
-// 					controlSys.setPathPlannerInput(); TODO
-					controlSys.setCircleInput();
+					
 					AxisVector p = controlSys.directKin.getOut().getSignal().getValue();
 					controlSys.pathPlanner.setInitPos(p);
+					controlSys.circlePlanner.setInitPos(p);
+					
+// 					controlSys.setPathPlannerInput(); TODO
+					controlSys.setCircleInput();
 					
 					log.warn() << p;
 					p[2] = calibration.transportation_height;
@@ -102,7 +110,7 @@ namespace eeduro {
 					safetySys.triggerEvent(properties.stopMoving);
 					waitForLevel(properties.slSystemReady.getLevelId());
 				}
-				
+			
 			private:
 				SafetySystem& safetySys;
 				DeltaSafetyProperties& properties;
@@ -112,6 +120,24 @@ namespace eeduro {
 				Move move;
 				Calibration& calibration;
 				WaitForLevel waitForLevel;
+		};
+		
+		class EmergencyExceptionSequence : public Sequence{
+			public:
+				EmergencyExceptionSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties):
+				Sequence(name, caller, true),
+				safetySys(safetySys),
+				properties(properties),
+				controlSys(controlSys){}
+				
+				int action(){
+					controlSys.disableAxis();
+				}
+
+			private:
+				SafetySystem& safetySys;
+				DeltaSafetyProperties& properties;
+				DeltaControlSystem& controlSys;
 		};
 	}
 }

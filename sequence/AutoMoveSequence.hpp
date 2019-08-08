@@ -13,7 +13,6 @@
 #include "ShuffleSequence.hpp"
 #include "CircleSequence.hpp"
 #include "ExceptionSequence.hpp"
-#include "conditions/BlueButtonCondition.hpp"
 #include "conditions/EmergencyCondition.hpp"
 
 using namespace eeros::sequencer;
@@ -32,16 +31,16 @@ namespace eeduro {
 				CircleSequence circleSeq;
 				Wait wait;
 				
+				EmergencyExceptionSequence emergencyExceptionSequence;
+				EmergencyCondition ec;
+				Monitor emergencyLevel;
+				
 				MouseExceptionSequence mouseExceptionSequence;
 				MoveMouseCondition moveMouseCondition;
 				Monitor moveMouseMonitor;
 				
 				SafetySystem& safetySys;
 				DeltaSafetyProperties& properties;
-				
-				BlueButtonExceptionSequence blueButtonExceptionSequence;
-				BlueButtonCondition blueButtonCondition;
-				Monitor blueButtonMonitor;
 			};
 	}
 }
