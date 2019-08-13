@@ -4,7 +4,7 @@
 		"devHandle": "dummy",
 		"subdevice0": {
 			"type": "DigOut",
-			"channel1": {
+			"channel98": {
 				"signalId": "ledBlue"
 			},
 			"channel49": {
@@ -13,7 +13,7 @@
 			"channel116": {
 				"signalId": "ledGreen"
 			},
-			"channel98": {
+			"channel1": {
 				"signalId": "emag"
 			}
 		},
