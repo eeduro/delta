@@ -221,8 +221,8 @@ DeltaControlSystem::DeltaControlSystem() :
 
 	emag.getIn().connect(emagVal.getOut());
 	
-	posSwitch.connect(velSwitch);
-	posSwitch.connect(accSwitch);
+	posSwitch.combine(velSwitch);
+	posSwitch.combine(accSwitch);
 
 
 	/*
