@@ -2,7 +2,7 @@
 
 using namespace eeduro::delta;
 
-ShuffleSequence::ShuffleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties) :
+ShuffleSequence::ShuffleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, DeltaSafetyProperties &properties, Calibration& calibration) :
 	Sequence(name, caller, true),
 	move("move", this, controlSys),
 	detectSequence("detect sequence", controlSys, this, calibration),

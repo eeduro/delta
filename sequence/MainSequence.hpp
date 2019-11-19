@@ -15,6 +15,7 @@
 #include "ParkSequence.hpp"
 #include "MouseSequence.hpp"
 #include "step/WaitForLevel.hpp"
+#include "ExceptionSequence.hpp"
 
 using namespace eeros::sequencer;
 using namespace eeros::safety;
@@ -40,6 +41,7 @@ namespace eeduro {
 				Wait wait;
 				WaitForLevel waitForLevel;
 				
+				EmergencyExceptionSequence emergencyExceptionSequence;
 				EmergencyCondition ec;
 				Monitor emergencyLevel;
 				

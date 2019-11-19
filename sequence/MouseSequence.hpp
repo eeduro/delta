@@ -5,7 +5,6 @@
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
 
-#include "conditions/EmergencyCondition.hpp"
 #include "../control/DeltaControlSystem.hpp"
 #include "step/Move.hpp"
 #include "MoveBlockSequence.hpp"
@@ -13,6 +12,7 @@
 #include "step/Grab.hpp"
 #include "step/Release.hpp"
 #include "conditions/BlueButtonCondition.hpp"
+#include "conditions/EmergencyCondition.hpp"
 
 using namespace eeros::sequencer;
 using namespace eeros::safety;

@@ -21,7 +21,7 @@ namespace eeduro {
 	namespace delta {
 		class SortSequence : public Sequence {
 			public:
-				SortSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, Calibration& calibration, DeltaSafetyProperties &properties);
+				SortSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, DeltaSafetyProperties &properties, Calibration& calibration);
 				int action();
 
 			private:

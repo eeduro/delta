@@ -27,6 +27,8 @@ MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSys
 	}
 
 int MouseSequence::action() {
+  	controlSys.setMouseInput();                                           // ADDED TODO check
+
 	while(getRunningState() == SequenceState::running){
 		mouseNew = controlSys.mouse.getOut().getSignal().getValue();
 		if(controlSys.mouse.getButtonOut().getSignal().getValue()[0] || controlSys.mouse.getButtonOut().getSignal().getValue()[2]){
