@@ -8,20 +8,12 @@ using namespace eeros::sequencer;
 
 namespace eeduro{
 	namespace delta{
-		class BlueButtonCondition : public Condition{
-			public:
-				BlueButtonCondition()
-					{
-						HAL& hal = HAL::instance();
-						buttonBlue = hal.getLogicInput("buttonBlue", false); 
-					}
-
-				bool validate() {
-					return buttonBlue->get();
-
-				}
-
-				eeros::hal::Input<bool>* buttonBlue;
+		class BlueButtonCondition : public Condition {
+		public:
+			BlueButtonCondition() {buttonBlue = HAL::instance().getLogicInput("buttonBlue", false);}
+			bool validate() {return buttonBlue->get();}
+		private:
+			eeros::hal::Input<bool>* buttonBlue;
 		};
 	}
 }

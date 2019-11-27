@@ -20,7 +20,7 @@ void MotorModel::run() {
 	AxisVector u, M, w, gear;
 	M = torque.getSignal().getValue();
 	w = speed.getSignal().getValue();
-	gear = {i1524, i1524, i1524, i0816};
+	gear = {i1524, i1524, i1524};
 	for(unsigned int i = 0; i < u.size(); i++) {
 		u[i] = RA[i] * M[i] / ( kM[i] * gear[i]) + w[i] * kM[i] * gear[i];
 	}

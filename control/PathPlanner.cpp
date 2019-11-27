@@ -17,7 +17,6 @@ Output<AxisVector>& PathPlanner::getAccOut() {
 }
 
 void PathPlanner::gotoPoint(AxisVector p) {
-
 	TrajectoryGenerator<AxisVector, 3>* t = static_cast<TrajectoryGenerator<AxisVector, 3>*>(&trajectoryGen);
 	t->push(p);
 	lastPoint = p;

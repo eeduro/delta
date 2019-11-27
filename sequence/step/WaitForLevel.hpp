@@ -12,18 +12,16 @@ namespace eeduro{
 	namespace delta{
 		class WaitForLevel : public Step {
 			public:
-				WaitForLevel(std::string name, Sequence* caller, SafetySystem& safetySys) : 
-					Step(name, caller), 
-					safetySys(safetySys){}
-				int operator() (uint32_t level) {this->level = level; return start();}
-				int action(){/*empty*/};
-				bool checkExitCondition(){
-					return safetySys.getCurrentLevel().getLevelId() == level;
+				WaitForLevel(std::string name, Sequence* caller, SafetySystem& safetySys) : Step(name, caller), safetySys(safetySys) { }
+				int operator() (SafetyLevel level) {this->level = &level; return start();}
+				int action() { };
+				bool checkExitCondition() {
+					return safetySys.getCurrentLevel() == *level;
 				}
 			
 			private:
 				SafetySystem& safetySys;
-				uint32_t level;
+				SafetyLevel* level;
 		};
 	}
 }

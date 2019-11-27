@@ -12,11 +12,9 @@
 
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
-#include "SortSequence.hpp"
-#include "ShuffleSequence.hpp"
 #include "ExceptionSequence.hpp"
 #include "conditions/BlueButtonCondition.hpp"
-#include "conditions/EmergencyCondition.hpp"
+#include "conditions/MoveMouseCondition.hpp"
 
 
 using namespace eeros::sequencer;
@@ -26,19 +24,22 @@ namespace eeduro {
 	namespace delta {
 		class CircleSequence : public Sequence {
 			public:
-				CircleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
+				CircleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties);
 				int action();
 				
 			private:
 				Wait wait;
-			
-				DeltaControlSystem& controlSys;
-				DeltaSafetyProperties& properties;
-				SafetySystem& safetySys;
-				
+				Move move;
 				BlueButtonExceptionSequence blueButtonExceptionSequence;
 				BlueButtonCondition blueButtonCondition;
 				Monitor blueButtonMonitor;
+				MouseExceptionSequence mouseExceptionSequence;
+				MoveMouseCondition moveMouseCondition;
+				Monitor moveMouseMonitor;
+			
+				DeltaControlSystem& controlSys;
+				DeltaSafetyProperties& safetyProp;
+				SafetySystem& safetySys;
 			};
 	}
 }

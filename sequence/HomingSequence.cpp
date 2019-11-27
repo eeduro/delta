@@ -2,41 +2,27 @@
 
 using namespace eeduro::delta;
 
-HomingSequence::HomingSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration): 
+HomingSequence::HomingSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties): 
 	Sequence(name, caller, true),
 	controlSys(controlSys),
 	properties(properties),
 	safetySys(safetySys),
 	wait("wait", this),
-	move("move", this, controlSys),
-	calibration(calibration)
-	{}
+	move("move", this, controlSys)
+	{ }
 
-int HomingSequence::action()
-{
-	controlSys.setVoltageForInitializing({2,2,2,7});
-					
+int HomingSequence::action() {
+	controlSys.voltageSetPoint.setValue({3, 3, 3});	// choose fixed voltage
+	controlSys.voltageSwitch.switchToInput(1);
 	wait(2.5);
-
 	controlSys.enc1.callInputFeature<>("setFqdPos", q012homingOffset);
 	controlSys.enc2.callInputFeature<>("setFqdPos", q012homingOffset);
 	controlSys.enc3.callInputFeature<>("setFqdPos", q012homingOffset);
-	controlSys.enc4.callInputFeature<>("setFqdPos", q3homingOffset);
-
 	wait(0.1);
 	controlSys.pathPlanner.setInitPos(controlSys.directKin.getOut().getSignal().getValue());
-
-	wait(0.1);
-
-	controlSys.enableAxis();
 	controlSys.setPathPlannerInput();
-	
-	AxisVector p = controlSys.pathPlanner.getLastPoint();
-	p[0] = 0;
-	p[1] = 0;
-	p[2] = calibration.transportation_height;
-	
-	move(p);
-	
+	wait(0.1);
+	controlSys.voltageSwitch.switchToInput(0);	// choose controller setpoint
+	move({0, 0, tcpReady_z});
 	safetySys.triggerEvent(properties.homingDone);
 }

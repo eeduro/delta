@@ -2,25 +2,33 @@
 
 using namespace eeduro::delta;
 
-CircleSequence::CircleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration):
-Sequence(name, caller, true),
-	wait("wait", this),
+CircleSequence::CircleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& safetyProp):
+	Sequence(name, caller, true),
 	controlSys(controlSys),
 	safetySys(safetySys),
-	properties(properties),
+	safetyProp(safetyProp),
+	wait("Wait in circle sequence", this),
+	move("Move", this, controlSys),
+	moveMouseCondition(controlSys),
+	mouseExceptionSequence("Mouse Exception Sequence", this,  safetySys, safetyProp),
+	moveMouseMonitor("MouseMoveMonitor", this, moveMouseCondition, SequenceProp::abort, &mouseExceptionSequence),
 	blueButtonCondition(),
-	blueButtonExceptionSequence("Blue button exception sequence", this, controlSys, safetySys, properties, calibration),
-	blueButtonMonitor("BlueButtonMonitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSequence)
-	{ 
-		controlSys.circlePlanner.setInitPos(controlSys.pathPlanner.getLastPoint());
-		
+	blueButtonExceptionSequence("Blue button exception sequence", this, controlSys, safetySys, safetyProp),
+	blueButtonMonitor("BlueButtonMonitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSequence) { 
 		addMonitor(&blueButtonMonitor);
+		addMonitor(&moveMouseMonitor);
 	}
 
 
 int CircleSequence::action() {
-	while(getRunningState() == SequenceState::running){
-// 		log.warn() << getRunningState();
-	  	wait(2);
+	moveMouseCondition.reset();
+	controlSys.pathPlanner.setInitPos(controlSys.directKin.getOut().getSignal().getValue());
+	controlSys.setPathPlannerInput();
+	move({circleRadius, 0, tcpReady_z});
+	controlSys.circlePlanner.setInitPos({circleRadius, 0, tcpReady_z});
+	controlSys.setCircleInput();
+
+	while (getRunningState() == SequenceState::running) {
+		wait(0.2);
 	}
 }

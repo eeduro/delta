@@ -2,29 +2,17 @@
 
 using namespace eeduro::delta;
 
-ParkSequence::ParkSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration): 
+ParkSequence::ParkSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& safetyProp): 
 	Sequence(name, caller, true),
 	controlSys(controlSys),
-	properties(properties),
+	safetyProp(safetyProp),
 	safetySys(safetySys),
-	move("park move",this, controlSys),
-	release("park release", this, controlSys),
-	wait("wait", this),
-	calibration(calibration){
-	}
+	move("park move",this, controlSys)
+	{ }
 
-int ParkSequence::action()
-{	
-	release();
-	
-	AxisVector p = {0, 0, calibration.transportation_height, 0};
-	move(p);
-	
-	p[2] = calibration.position[0].zblockmin[2];
-	move(p);
-	wait(2);
-	
-	controlSys.disableAxis();
-	
-	safetySys.triggerEvent(properties.parkingDone);
+int ParkSequence::action() {	
+	move({0, 0, -0.06});
+	controlSys.voltageSetPoint.setValue({0, 0, 0});	
+	controlSys.voltageSwitch.switchToInput(1);
+	safetySys.triggerEvent(safetyProp.parkingDone);
 }

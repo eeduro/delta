@@ -2,7 +2,6 @@
 
 #include <eeros/core/Executor.hpp>
 #include <eeros/logger/Logger.hpp>
-
 #include <eeros/control/Sum.hpp>
 #include <eeros/control/D.hpp>
 #include <eeros/control/Gain.hpp>
@@ -25,9 +24,11 @@
 #include "MotorModel.hpp"
 #include "constants.hpp"
 #include "PathPlanner.hpp"
-#include "CircleInput.hpp"
+#include "CirclePlaner.hpp"
+#include "ReduceVector.hpp"
 
 using namespace eeros::control;
+using namespace eeros::logger;
 
 namespace eeduro{
 	namespace delta{
@@ -44,20 +45,9 @@ namespace eeduro{
 				* Methods for the sequencer
 				* ###
 				*/
-				void enableAxis();
-				void disableAxis();
-				void setVoltageForInitializing(AxisVector u);
-				bool switchToPosControl();
-				bool axisHomed();
-				AxisVector getTcpPos();
-				AxisVector getAxisPos();
-				void goToPos(double x, double y, double z, double phi);
-				bool allAxisStopped(double maxSpeed = 0.001);
 				void setMouseInput();
 				void setCircleInput();
 				void setPathPlannerInput();
-
-				bool homed;
 
 				/*
 				* ###
@@ -71,23 +61,22 @@ namespace eeduro{
 				Jacobian jacobian;
 
 				MouseInput mouse;
+				ReduceVector redVect;
 				PathPlanner pathPlanner;
-				CircleInput circlePlanner;
+				CirclePlaner circlePlanner;
 
 				Switch<3,AxisVector> posSwitch;
 
 				PeripheralInput<double> enc1;
 				PeripheralInput<double> enc2;
 				PeripheralInput<double> enc3;
-				PeripheralInput<double> enc4;
 
 				PeripheralOutput<double> mot1;
 				PeripheralOutput<double> mot2;
 				PeripheralOutput<double> mot3;
-				PeripheralOutput<double> mot4;
 
-				Mux<4, double, AxisVector> muxEnc;
-				DeMux<4, double, AxisVector> demuxMot;
+				Mux<3, double, AxisVector> muxEnc;
+				DeMux<3, double, AxisVector> demuxMot;
 
 				eeros::control::D<AxisVector> posDiff;
 
@@ -104,16 +93,12 @@ namespace eeduro{
 				Jacobi jacobi;
 
 				Saturation<AxisVector> forceLimitation;
-
 				Saturation<AxisVector> torqueLimitation;
 
 				MotorModel motorModel;
 
 				Switch<2, AxisVector> voltageSwitch;
 				Constant<AxisVector> voltageSetPoint;
-
-				PeripheralOutput<bool> emag;
-				Constant<bool> emagVal;  
 
 				DirectKinematic directKin;
 				
@@ -124,6 +109,7 @@ namespace eeduro{
 				Switch<3, AxisVector> velSwitch;
 				
 				TimeDomain timedomain;
+				Logger log;
 		};
 	} 
 }

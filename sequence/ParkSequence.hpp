@@ -1,16 +1,11 @@
 #pragma once
 
 #include <vector>
-
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
-#include <eeros/sequencer/Wait.hpp>
-
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
-#include "../Calibration.hpp"
 #include "step/Move.hpp"
-#include "step/Release.hpp"
 
 using namespace eeros::sequencer;
 using namespace eeros::safety;
@@ -19,18 +14,14 @@ namespace eeduro{
 	namespace delta{
 		class ParkSequence : public Sequence{
 			public:
-				ParkSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties, Calibration& calibration);
+				ParkSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties);
 				int action();
 
 			private:
 				DeltaControlSystem& controlSys;
 				SafetySystem& safetySys;
-				DeltaSafetyProperties& properties;
-				Calibration& calibration;
-				
-				Release release;
+				DeltaSafetyProperties& safetyProp;
 				Move move;
-				Wait wait;
 		};
 	}
 }

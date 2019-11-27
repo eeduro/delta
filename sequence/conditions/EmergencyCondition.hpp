@@ -10,18 +10,15 @@ using namespace eeros::sequencer;
 namespace eeduro{
 	namespace delta{
 		class EmergencyCondition : public Condition{
-			public:
-				EmergencyCondition(SafetySystem& safetySys, DeltaSafetyProperties& properties) : 
-					safetySys(safetySys),properties(properties)
-					{ /*empty*/ }
+		public:
+			EmergencyCondition(SafetySystem& safetySys, DeltaSafetyProperties& safetyProp) : safetySys(safetySys), safetyProp(safetyProp) {  }
+			bool validate() {
+				return safetySys.getCurrentLevel() == safetyProp.slEmergency;
+			}
 
-				bool validate() {
-					return safetySys.getCurrentLevel() == properties.slEmergency;
-
-				}
-
-				SafetySystem& safetySys;
-				DeltaSafetyProperties& properties;
+		private:
+			SafetySystem& safetySys;
+			DeltaSafetyProperties& safetyProp;
 		};
 	}
 }

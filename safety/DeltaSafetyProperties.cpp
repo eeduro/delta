@@ -32,8 +32,8 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 	*/
 	slOff("Off"),
 	slEmergency("Emergency"),
-	slControlStopping("Stop control"),
-	slControlStarting("Start control"),
+	slControlStopping("Stop control system"),
+	slControlStarting("Start control system"),
 	slSystemOn("System on"),
 	slPoweringUp("Powering up"),
 	slHoming("Homing"),
@@ -53,8 +53,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* ###
 		*/
 		greenLed = hal.getLogicOutput("ledGreen");
-		errorLed = hal.getLogicOutput("ledRed");
-		
+		errorLed = hal.getLogicOutput("ledRed");	
 		criticalOutputs = { greenLed , errorLed};
 		
 		/*
@@ -63,7 +62,6 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* ###
 		*/
 		emergencyStop = hal.getLogicInput("buttonRed");
-		
 		criticalInputs = { emergencyStop };	  
 	  
 		/*
@@ -91,28 +89,21 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 		* Add events to the levels
 		* ###
 		*/
-
 		slControlStarting.addEvent(controlStartingDone, slSystemOn, kPrivateEvent);
 		slSystemOn.addEvent(doPoweringUp, slPoweringUp, kPublicEvent);
 		slPoweringUp.addEvent(doHoming, slHoming, kPublicEvent);
 		slHoming.addEvent(homingDone, slHomed, kPublicEvent);
 		slHomed.addEvent(doSystemReady, slSystemReady, kPublicEvent);
 		slSystemReady.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
-		slSystemReady.addEvent(doMouseControl, slMouseControl, kPublicEvent);
 		slSystemReady.addEvent(doParking, slParking, kPublicEvent);
 		slAutoMoving.addEvent(doMouseControl, slMouseControl, kPublicEvent);
-		slMouseControl.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
-		
+		slMouseControl.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);	
 		slEmergency.addEvent(doControlStart, slControlStarting, kPublicEvent);
-		slEmergency.addEvent(doParking, slParking, kPublicEvent);
-		
 		slAutoMoving.addEvent(stopMoving, slSystemReady, kPublicEvent);
 		slMouseControl.addEvent(stopMoving, slSystemReady, kPublicEvent);
 		slParking.addEvent(parkingDone, slParked, kPublicEvent);
 		slParked.addEvent(doControlStop, slControlStopping, kPublicEvent);
 		slControlStopping.addEvent(controlStoppingDone, slOff, kPublicEvent);
-		
-		slSystemOn.addEvent(controlStoppingDone, slOff, eeros::safety::kPrivateEvent);
 		
 		addEventToLevelAndAbove(slSystemOn, doEmergency, slEmergency, kPublicEvent);
 		
@@ -164,37 +155,19 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) :
 			Executor::stop();
 		});
 
-
-		slEmergency.setLevelAction([&](SafetyContext*privateContext){
-			controlSys.voltageSetPoint.setValue({0.0,0.0,0.0,0.0});
-			controlSys.emagVal.setValue(false);
-			controlSys.voltageSwitch.switchToInput(1);
-			controlSys.posSwitch.switchToInput(1);
-// 			controlSys.stop();
-		});
-
-
-		slControlStarting.setLevelAction([&](SafetyContext*privateContext){
-			controlSys.start();
-			controlSys.torqueLimitation.setLimit({-q012gearTorqueLimit,-q012gearTorqueLimit,-q012gearTorqueLimit,-q3gearTorqueLimit},{q012gearTorqueLimit,q012gearTorqueLimit,q012gearTorqueLimit,q3gearTorqueLimit});
-			privateContext->triggerEvent(controlStartingDone);
-		});
-		
-		slControlStopping.setLevelAction([&](SafetyContext*privateContext){
+		slControlStopping.setLevelAction([&](SafetyContext*privateContext) {
 			controlSys.stop();
-			auto& sequencer = Sequencer::instance();
-			sequencer.abort();
-
+			Sequencer::instance().abort();
 			privateContext->triggerEvent(controlStoppingDone);
 		});	
 		
-		slSystemOn.setLevelAction([&](SafetyContext*privateContext){
-			if(slSystemOn.getNofActivations() >= 3000){
-				privateContext->triggerEvent(controlStoppingDone);
-			}
+		slControlStarting.setLevelAction([&](SafetyContext*privateContext) {
+			controlSys.start();
+			AxisVector torqueLimit{ q012gearTorqueLimit, q012gearTorqueLimit, q012gearTorqueLimit};
+			controlSys.torqueLimitation.setLimit(-torqueLimit, torqueLimit);
+			privateContext->triggerEvent(controlStartingDone);
 		});
-
-
+		
 		/*
 		* ###
 		* Define entry level

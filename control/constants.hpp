@@ -6,7 +6,7 @@ namespace eeduro {
 		constexpr double pi = 3.14159265359;
 
 		// General constants
-		constexpr unsigned int nofAxis = 4;
+		constexpr unsigned int nofAxis = 3;
 
 		// Electrical and mechanical parameters
 		constexpr double i1524 = 76.0;
@@ -26,23 +26,18 @@ namespace eeduro {
 		constexpr double kd = 2 * D * w0;
 
 		constexpr double q012InitVoltage = 4.5; //[V]
-		constexpr double q3InitVoltage = 5; //[V]
 
 		constexpr double q012SafeMin = -1.74 * i1524;
 		constexpr double q012SafeMax = 0.4 * i1524;
-		constexpr double q3SafeMin = -2.958 * i0816;
-		constexpr double q3SafeMax = 2.958 * i0816;
 
 		constexpr double tcpReady_x = 0;
 		constexpr double tcpReady_y = 0;
 		constexpr double tcpReady_z = -0.01;
-		constexpr double tcpReady_phi = 1.0;
 
 		constexpr double q012homingOffset = 30.6 * 3.14159 / 180.0;
-		constexpr double q3homingOffset = 2.967057222 * i0816 * 3.14159 / 180.0 / 2;
 
 		constexpr double q012gearTorqueLimit = 0.3;
-		constexpr double q3gearTorqueLimit = 0.035;
-		
+
+		constexpr double circleRadius = 0.05;
 	}
 }
