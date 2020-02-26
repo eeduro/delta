@@ -4,7 +4,6 @@ DeltaControlSystem::DeltaControlSystem() :
 	mouse("/dev/input/event1"),
 	pathPlanner({1, 1, 1}, {10, 10, 10}, dt),
 	circlePlanner(circleRadius, 3.1415 / 2),
-	i(i1524, i1524, i1524),
 	kM(kM1524, kM1524, kM1524),
 	RA(RA1524, RA1524, RA1524),
 	posSwitch(0),

@@ -54,7 +54,6 @@ namespace eeduro{
 				* Components of the Controlsystem
 				* ###
 				*/
-				AxisVector i;
 				AxisVector kM;
 				AxisVector RA;
 				Kinematic kinematic;

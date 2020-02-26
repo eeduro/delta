@@ -9,8 +9,7 @@ namespace eeduro {
 		constexpr unsigned int nofAxis = 3;
 
 		// Electrical and mechanical parameters
-		constexpr double i1524 = 76.0;
-		constexpr double i0816 = 319333.0/2673.0;	// gear ratio for the 4th axis
+		constexpr double i1524 = 76.0;	// gear ratio
 		constexpr double kM1524 = 11.4e-3; // [NM/A]
 		constexpr double kM0816 = 8.98e-3; // [Nm/A]
 		constexpr double RA1524 = 19.8; // [Ohm]
@@ -25,16 +24,13 @@ namespace eeduro {
 		constexpr double kp = w0 / (2 * D);
 		constexpr double kd = 2 * D * w0;
 
-		constexpr double q012InitVoltage = 4.5; //[V]
-
-		constexpr double q012SafeMin = -1.74 * i1524;
-		constexpr double q012SafeMax = 0.4 * i1524;
+		constexpr double q012InitVoltage = 3; //[V]
 
 		constexpr double tcpReady_x = 0;
 		constexpr double tcpReady_y = 0;
 		constexpr double tcpReady_z = -0.01;
 
-		constexpr double q012homingOffset = 30.6 * 3.14159 / 180.0;
+		constexpr double q012homingOffset = 0.2736;
 
 		constexpr double q012gearTorqueLimit = 0.3;
 

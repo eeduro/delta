@@ -11,7 +11,7 @@ MainSequence::MainSequence(std::string name, Sequencer& sequencer, DeltaControlS
 	circleSeq("Circle sequence", this, controlSys, safetySys, safetyProp),
 	parkSeq("Park sequence", this, controlSys, safetySys, safetyProp),
 	mouseSeq("Mouse sequence", this, controlSys, safetySys, safetyProp),
-	wait("Wait in main sequence", this),
+	wait("Wait in main", this),
 	waitForLevel("Wait for safety level", this, safetySys),
 	emergencyCondition(safetySys, safetyProp),
 	emergencyExceptionSeq("Emergency exception sequence", this, controlSys, safetySys, safetyProp), 

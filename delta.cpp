@@ -29,11 +29,11 @@ void signalHandler(int signum){
 }
 
 int main(int argc, char **argv) {
-	
+
 	StreamLogWriter w(std::cout);
 	Logger::setDefaultWriter(&w);
 	Logger log;
-// 	w.show();
+	w.show();
 	log.info() << "Start Delta application";
 	
 	log.info() << "Initializing hardware";

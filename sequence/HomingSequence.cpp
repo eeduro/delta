@@ -12,7 +12,7 @@ HomingSequence::HomingSequence(std::string name, Sequence* caller, DeltaControlS
 	{ }
 
 int HomingSequence::action() {
-	controlSys.voltageSetPoint.setValue({3, 3, 3});	// choose fixed voltage
+	controlSys.voltageSetPoint.setValue({q012InitVoltage, q012InitVoltage, q012InitVoltage});	// choose fixed voltage
 	controlSys.voltageSwitch.switchToInput(1);
 	wait(2.5);
 	controlSys.enc1.callInputFeature<>("setFqdPos", q012homingOffset);
