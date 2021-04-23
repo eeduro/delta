@@ -15,22 +15,23 @@ using namespace eeros::sequencer;
 using namespace eeros::safety;
 
 namespace eeduro {
-	namespace delta {
-		class MouseSequence : public Sequence {
-			public:
-				MouseSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties);
-				int action();
+namespace delta {
+class MouseSequence : public Sequence {
+ public:
+  MouseSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp);
+  int action();
 
-			private:
-				DeltaControlSystem& controlSys;
-				DeltaSafetyProperties& safetyProp;
-				SafetySystem& safetySys;
-				AxisVector mousePosPrev;
-				Wait wait;
-				MouseTimeOutExceptionSequence mouseTimeoutSequence;
-				BlueButtonExceptionSequence blueButtonExceptionSequence;
-				BlueButtonCondition blueButtonCondition;
-				Monitor blueButtonMonitor;
-		};
-	}
+ private:
+  DeltaControlSystem& controlSys;
+  DeltaSafetyProperties& safetyProp;
+  SafetySystem& safetySys;
+  AxisVector mousePosPrev;
+  Wait wait;
+  MouseTimeOutExceptionSequence mouseTimeoutSequence;
+  BlueButtonExceptionSequence blueButtonExceptionSequence;
+  BlueButtonCondition blueButtonCondition;
+  Monitor blueButtonMonitor;
+};
+
+}
 }

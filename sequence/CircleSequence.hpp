@@ -21,26 +21,29 @@ using namespace eeros::sequencer;
 using namespace eeros::safety;
 
 namespace eeduro {
-	namespace delta {
-		class CircleSequence : public Sequence {
-			public:
-				CircleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties);
-				int action();
-				
-			private:
-				Wait wait;
-				Move move;
-				BlueButtonExceptionSequence blueButtonExceptionSequence;
-				BlueButtonCondition blueButtonCondition;
-				Monitor blueButtonMonitor;
-				MouseExceptionSequence mouseExceptionSequence;
-				MoveMouseCondition moveMouseCondition;
-				Monitor moveMouseMonitor;
-			
-				DeltaControlSystem& controlSys;
-				DeltaSafetyProperties& safetyProp;
-				SafetySystem& safetySys;
-			};
-	}
+namespace delta {
+  
+class CircleSequence : public Sequence {
+ public:
+  CircleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties);
+  int action();
+  void resetMousePos();
+  
+ private:
+  Wait wait;
+  Move move;
+  BlueButtonExceptionSequence blueButtonExceptionSequence;
+  BlueButtonCondition blueButtonCondition;
+  Monitor blueButtonMonitor;
+  MouseExceptionSequence mouseExceptionSequence;
+  MoveMouseCondition moveMouseCondition;
+  Monitor moveMouseMonitor;
+
+  DeltaControlSystem& controlSys;
+  DeltaSafetyProperties& safetyProp;
+  SafetySystem& safetySys;
+};
+
+}
 }
 

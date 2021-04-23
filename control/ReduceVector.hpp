@@ -12,15 +12,17 @@ using namespace eeros::control;
 using namespace eeduro::delta;
 
 namespace eeduro {
-	namespace delta {
-		class ReduceVector : public Block1i1o<Vector4, AxisVector> {
-		public:
-			ReduceVector() { }
-			virtual void run() { 
-				out.getSignal().setValue(in.getSignal().getValue().getSubMatrix<3, 1>(0, 0));
-				out.getSignal().setTimestamp(in.getSignal().getTimestamp());
-			}
-		};
-	}
+namespace delta {
+  
+class ReduceVector : public Block1i1o<Vector4, AxisVector> {
+ public:
+  ReduceVector() { }
+  virtual void run() { 
+    out.getSignal().setValue(in.getSignal().getValue().getSubMatrix<3, 1>(0, 0));
+    out.getSignal().setTimestamp(in.getSignal().getTimestamp());
+  }
+};
+
+}
 }
 

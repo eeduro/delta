@@ -10,18 +10,20 @@
 using namespace eeros::sequencer;
 using namespace eeros::safety;
 
-namespace eeduro{
-	namespace delta{
-		class ParkSequence : public Sequence{
-			public:
-				ParkSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties);
-				int action();
+namespace eeduro {
+namespace delta {
+  
+class ParkSequence : public Sequence{
+ public:
+  ParkSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp);
+  int action();
 
-			private:
-				DeltaControlSystem& controlSys;
-				SafetySystem& safetySys;
-				DeltaSafetyProperties& safetyProp;
-				Move move;
-		};
-	}
+ private:
+  DeltaControlSystem& controlSys;
+  SafetySystem& safetySys;
+  DeltaSafetyProperties& safetyProp;
+  Move move;
+};
+
+}
 }

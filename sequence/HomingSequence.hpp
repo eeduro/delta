@@ -14,19 +14,21 @@
 using namespace eeros::sequencer;
 using namespace eeros::safety;
 
-namespace eeduro{
-	namespace delta{
-		class HomingSequence : public Sequence{
-			public:
-				HomingSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties);
-				int action();
+namespace eeduro {
+namespace delta {
+  
+class HomingSequence : public Sequence {
+ public:
+  HomingSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp);
+  int action();
 
-			private:
-				DeltaControlSystem& controlSys;
-				SafetySystem& safetySys;
-				DeltaSafetyProperties& properties;
-				Move move;
-				Wait wait;
-		};
-	}
+ private:
+  DeltaControlSystem& controlSys;
+  SafetySystem& safetySys;
+  DeltaSafetyProperties& safetyProp;
+  Move move;
+  Wait wait;
+};
+
+}
 }

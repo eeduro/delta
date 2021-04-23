@@ -12,16 +12,18 @@ using namespace eeros::control;
 using namespace eeduro::delta;
 
 namespace eeduro {
-	namespace delta {
-		class DirectKinematic : public Block1i1o<AxisVector> {
-			public:
-				DirectKinematic(Kinematic& kin);
-	
-				virtual void run();
-	      
-			private:
-				Kinematic& kinematic;
-		};
-	}
+namespace delta {
+  
+class DirectKinematic : public Block1i1o<AxisVector> {
+ public:
+  DirectKinematic(Kinematic& kin);
+
+  virtual void run();
+  
+ private:
+  Kinematic& kinematic;
+};
+
+}
 }
 

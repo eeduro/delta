@@ -6,25 +6,28 @@
 
 using namespace eeros::sequencer;
 
-namespace eeduro{
-	namespace delta{
-		class MoveMouseCondition : public Condition {
-		public:
-			MoveMouseCondition(DeltaControlSystem& controlSys) : controlSys(controlSys) { }
-			bool validate() {
-				auto pos = controlSys.redVect.getOut().getSignal().getValue();
-				if (mousePosPrev != pos) {
-					mousePosPrev = pos;
-					return true; 
-				}
-				return false;
-			}
-			void reset() {
-				mousePosPrev = controlSys.redVect.getOut().getSignal().getValue();
-			}
-		private:
-			DeltaControlSystem& controlSys;
-			AxisVector mousePosPrev;
-		};
-	}
+namespace eeduro {
+namespace delta {
+  
+class MoveMouseCondition : public Condition {
+ public:
+  MoveMouseCondition(DeltaControlSystem& cs) : controlSys(cs) { }
+  bool validate() {
+    auto pos = controlSys.redVect.getOut().getSignal().getValue();
+    if (mousePosPrev != pos) {
+      mousePosPrev = pos;
+      return true; 
+    }
+    return false;
+  }
+  void reset() {
+    mousePosPrev = controlSys.redVect.getOut().getSignal().getValue();
+  }
+  
+ private:
+  DeltaControlSystem& controlSys;
+  AxisVector mousePosPrev;
+};
+
+}
 }
