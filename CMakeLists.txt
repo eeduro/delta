@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.5.1)
 
-project(delta)
+project(delta-ntb)
 
 set(CMAKE_CXX_STANDARD 14)
 
@@ -32,8 +32,8 @@ include_directories(${EEROS_INCLUDE_DIR};${EEROS_LIBUCL_INCLUDE_DIR})
 link_directories(${EEROS_LIB_DIR};${EEROS_LIBUCL_LINK_DIR})
 
 file(GLOB_RECURSE SRC_FILES ${PROJECT_SOURCE_DIR}/*.cpp)
-add_executable(delta ${SRC_FILES})
-target_link_libraries(delta eeros ucl ${CMAKE_DL_LIBS})
+add_executable(delta-ntb ${SRC_FILES})
+target_link_libraries(delta-ntb eeros ucl ${CMAKE_DL_LIBS})
 
 
 

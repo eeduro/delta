@@ -14,6 +14,7 @@
 #include "control/DeltaControlSystem.hpp"
 #include "safety/DeltaSafetyProperties.hpp"
 #include "sequence/MainSequence.hpp"
+#include "Calibration.hpp"
 
 using namespace eeros;
 using namespace eeros::hal;
@@ -48,6 +49,12 @@ int main(int argc, char **argv) {
   DeltaSafetyProperties safetyProp(controlSys);
   SafetySystem safetySys(safetyProp, dt);
   controlSys.timedomain.registerSafetyEvent(safetySys, safetyProp.doEmergency);
+  
+  Calibration calibration{};
+  calibration.loadDefaults();
+  if (!calibration.load()) {
+    log.warn() << "could not load calibration";
+  }
   
   auto& seq = Sequencer::instance();
   MainSequence mainSequence("Main sequence", seq, controlSys, safetySys, safetyProp);

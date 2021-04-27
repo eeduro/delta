@@ -2,12 +2,10 @@
 
 #include <eeros/sequencer/Step.hpp>
 #include <eeros/sequencer/Sequencer.hpp>
-#include <eeros/logger/Logger.hpp>
 
 #include "../../control/DeltaControlSystem.hpp"
 
 using namespace eeros::sequencer;
-using namespace eeros::logger;
 
 namespace eeduro {
 namespace delta {
@@ -15,7 +13,7 @@ namespace delta {
 class Move : public Step {
  public:
   Move(std::string name, Sequence* caller, DeltaControlSystem& cs) : Step(name, caller), controlSys(cs) {
-    this->position = {0,0,0};
+    this->position = {0,0,0,0};
   }
   int operator() (AxisVector position) {this->position = position; return start();}
   int action() {controlSys.pathPlanner.move(position); return 0;}

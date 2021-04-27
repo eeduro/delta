@@ -15,6 +15,7 @@
 #include <eeros/control/Mux.hpp>
 #include <eeros/control/DeMux.hpp>
 #include <eeros/control/PathPlannerConstAcc.hpp>
+#include <eeros/control/Saturation.hpp>
 
 #include "types.hpp"
 #include "Kinematic.hpp"
@@ -24,7 +25,6 @@
 #include "Inertia.hpp"
 #include "MotorModel.hpp"
 #include "constants.hpp"
-// #include "PathPlanner.hpp"
 #include "CirclePlaner.hpp"
 #include "ReduceVector.hpp"
 
