@@ -13,7 +13,7 @@ namespace delta {
 class Grab : public Step {
  public:
   Grab(std::string name, Sequence* caller, DeltaControlSystem& cs) : Step(name, caller), controlSys(cs) { }
-  int action() {controlSys.emagVal.setValue(true);}
+  int action() {controlSys.emagVal.setValue(true); return(0);}
   
  private:
   DeltaControlSystem &controlSys; 

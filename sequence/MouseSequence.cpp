@@ -22,16 +22,16 @@ MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSys
 
 int MouseSequence::action() {
   controlSys.setMouseInput();
-  auto pos = controlSys.circlePlanner.getOut().getSignal().getValue();
-  controlSys.mouse.setInitPos(pos[0], pos[1], pos[2], 0);
-  mousePosPrev = controlSys.redVect.getOut().getSignal().getValue();
+//   auto pos = controlSys.circlePlanner.getOut().getSignal().getValue();
+//   controlSys.mouse.setInitPos(pos[0], pos[1], pos[2], 0);
+//   mousePosPrev = controlSys.redVect.getOut().getSignal().getValue();
 
   while (Sequencer::running && safetySys.getCurrentLevel() == safetyProp.slMouseControl) {
-    auto pos = controlSys.redVect.getOut().getSignal().getValue();	
-    if (pos != mousePosPrev) {
-      resetTimeout();
-      mousePosPrev = pos;
-    }
+//     auto pos = controlSys.redVect.getOut().getSignal().getValue();	
+//     if (pos != mousePosPrev) {
+//       resetTimeout();
+//       mousePosPrev = pos;
+//     }
     wait(0.1);
   }
   return(0);

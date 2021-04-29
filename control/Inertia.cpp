@@ -13,9 +13,14 @@ Inertia::Inertia(Jacobian &jacobi) : jacobi(jacobi) {
 }
 
 void Inertia::run() {
-  Vector3 a = accelerationIn.getSignal().getValue();
+  Vector3 q012, xyz;
   
-  if (jacobi.calculate(jointPosIn.getSignal().getValue(), tcpPosIn.getSignal().getValue())) {
+  q012 = jointPosIn.getSignal().getValue().getSubMatrix<3,1>(0, 0);
+  xyz = tcpPosIn.getSignal().getValue().getSubMatrix<3,1>(0, 0);
+  Vector3 a = accelerationIn.getSignal().getValue().getSubMatrix<3,1>(0, 0);
+  double qdd = accelerationIn.getSignal().getValue()[3];
+  
+  if (jacobi.calculate(q012, xyz)) {
     Matrix<3,3> jacobian = jacobi.getJacobian();
     if (jacobian.isInvertible()) {
       Matrix<3,3> inverseJacobian = !jacobian;
@@ -23,8 +28,9 @@ void Inertia::run() {
 
       Matrix<3,3> M = tcpMass + inverseJacobianTransposed * motorInertia * inverseJacobian;
       Vector3 F = M * a;
+      double tau = jred * qdd; // magnet axis
 
-      forceOut.getSignal().setValue(AxisVector(F[0], F[1], F[2]));
+      forceOut.getSignal().setValue(Vector4(F[0], F[1], F[2], tau));
       forceOut.getSignal().setTimestamp(accelerationIn.getSignal().getTimestamp());
       
       return;

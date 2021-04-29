@@ -115,8 +115,6 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys)
   
   slControlStarting.setLevelAction([&](SafetyContext*privateContext) {
     controlSys.start();
-    AxisVector torqueLimit{ q012gearTorqueLimit, q012gearTorqueLimit, q012gearTorqueLimit};
-    controlSys.torqueLimitation.setLimit(-torqueLimit, torqueLimit);
     privateContext->triggerEvent(controlStartingDone);
   });
   

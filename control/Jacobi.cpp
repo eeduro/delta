@@ -5,16 +5,26 @@ using namespace eeduro::delta;
 Jacobi::Jacobi(Jacobian& j) : jacobi(j) { }
 
 void Jacobi::run() {
-  AxisVector t012;
+  Vector3 q012, xyz, f, t012;
+  AxisVector t0123;
   
-  if(jacobi.calculate(jointPosIn.getSignal().getValue(), tcpPosIn.getSignal().getValue())) {
-    t012 = jacobi.getDrivetorque(forceIn.getSignal().getValue());
+  q012 = jointPosIn.getSignal().getValue().getSubMatrix<3, 1>(0, 0);
+  xyz = tcpPosIn.getSignal().getValue().getSubMatrix<3, 1>(0, 0);
+  f = forceIn.getSignal().getValue().getSubMatrix<3, 1>(0, 0);
+  
+  if(jacobi.calculate(q012, xyz)) {
+    t012 = jacobi.getDrivetorque(f);
   }
   else {
     t012 = 0;
   }
   
-  torqueOut.getSignal().setValue(t012);
+  t0123[0] = t012[0];
+  t0123[1] = t012[1];
+  t0123[2] = t012[2];
+  t0123[3] = forceIn.getSignal().getValue()[3];
+  
+  torqueOut.getSignal().setValue(t0123);
   torqueOut.getSignal().setTimestamp(forceIn.getSignal().getTimestamp());
 }
 

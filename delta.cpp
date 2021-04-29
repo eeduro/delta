@@ -57,7 +57,7 @@ int main(int argc, char **argv) {
   }
   
   auto& seq = Sequencer::instance();
-  MainSequence mainSequence("Main sequence", seq, controlSys, safetySys, safetyProp);
+  MainSequence mainSequence("Main sequence", seq, controlSys, safetySys, safetyProp, calibration);
   mainSequence();
   
   auto &executor = Executor::instance();

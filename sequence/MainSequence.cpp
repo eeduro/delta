@@ -2,14 +2,15 @@
 
 using namespace eeduro::delta;
 
-MainSequence::MainSequence(std::string name, Sequencer& seq, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp)
+MainSequence::MainSequence(std::string name, Sequencer& seq, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp, Calibration& cal)
     : Sequence(name, seq),
-      safetyProp(sp),
-      safetySys(ss),
       controlSys(cs),
+      safetySys(ss),
+      safetyProp(sp),
       homingSeq("Homing sequence", this, cs, ss, sp),
-      circleSeq("Circle sequence", this, cs, ss, sp),
+      automoveSeq("AutoMove sequence", this, cs, ss, sp, cal),
       parkSeq("Park sequence", this, cs, ss, sp),
+      calibrateSeq("Calibrate sequence", this, cs, cal),
       mouseSeq("Mouse sequence", this, cs, ss, sp),
       wait("Wait in main", this),
       emergencyCondition(ss, sp),
@@ -58,8 +59,7 @@ int MainSequence::action() {
       bluePrev = blue;
     }
     else if(safetySys.getCurrentLevel() == safetyProp.slAutoMoving) {
-      circleSeq.resetMousePos();
-      circleSeq();
+      automoveSeq();
     }
     else if(safetySys.getCurrentLevel() == safetyProp.slMouseControl) {
       mouseSeq();

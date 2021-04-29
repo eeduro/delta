@@ -9,7 +9,8 @@
 
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
-#include "CircleSequence.hpp"
+#include "CalibrateSequence.hpp"
+#include "AutoMoveSequence.hpp"
 #include "HomingSequence.hpp"
 #include "ParkSequence.hpp"
 #include "MouseSequence.hpp"
@@ -23,13 +24,14 @@ namespace delta {
   
 class MainSequence : public Sequence {
  public:
-  MainSequence(std::string name, Sequencer& seq, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp);
+  MainSequence(std::string name, Sequencer& seq, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp, Calibration& cal);
   int action();
   
  private:
   HomingSequence homingSeq;
-  CircleSequence circleSeq;
+  AutoMoveSequence automoveSeq;
   ParkSequence parkSeq;
+  CalibrateSequence calibrateSeq;
   MouseSequence mouseSeq;
   Wait wait;
   

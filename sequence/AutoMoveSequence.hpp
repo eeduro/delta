@@ -7,15 +7,13 @@
 #include <eeros/sequencer/Monitor.hpp>
 #include <eeros/sequencer/Wait.hpp>
 
-#include <eeros/sequencer/Sequence.hpp>
-#include <eeros/safety/SafetySystem.hpp>
-
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
+#include "SortSequence.hpp"
+#include "ShuffleSequence.hpp"
 #include "ExceptionSequence.hpp"
 #include "conditions/BlueButtonCondition.hpp"
-#include "conditions/MoveMouseCondition.hpp"
-
+#include "conditions/EmergencyCondition.hpp"
 
 using namespace eeros::sequencer;
 using namespace eeros::safety;
@@ -23,25 +21,25 @@ using namespace eeros::safety;
 namespace eeduro {
 namespace delta {
   
-class CircleSequence : public Sequence {
+class AutoMoveSequence : public Sequence {
  public:
-  CircleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties);
+  AutoMoveSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp, Calibration& cal);
   int action();
-  void resetMousePos();
   
  private:
+  SortSequence sortSeq;
+  ShuffleSequence shuffSeq;
   Wait wait;
-  Move move;
-  BlueButtonExceptionSequence blueButtonExceptionSequence;
-  BlueButtonCondition blueButtonCondition;
-  Monitor blueButtonMonitor;
-  MouseExceptionSequence mouseExceptionSequence;
+  MouseExceptionSequence mouseExceptionSeq;
   MoveMouseCondition moveMouseCondition;
   Monitor moveMouseMonitor;
-
+  BlueButtonExceptionSequence blueButtonExceptionSeq;
+  BlueButtonCondition blueButtonCondition;
+  Monitor blueButtonMonitor;
+  
   DeltaControlSystem& controlSys;
-  DeltaSafetyProperties& safetyProp;
   SafetySystem& safetySys;
+  DeltaSafetyProperties& safetyProp;
 };
 
 }

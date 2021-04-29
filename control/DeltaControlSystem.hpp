@@ -25,8 +25,6 @@
 #include "Inertia.hpp"
 #include "MotorModel.hpp"
 #include "constants.hpp"
-#include "CirclePlaner.hpp"
-#include "ReduceVector.hpp"
 
 using namespace eeros::control;
 using namespace eeros::logger;
@@ -45,7 +43,6 @@ class DeltaControlSystem {
    * Methods for the sequencer
    */
   void setMouseInput();
-  void setCircleInput();
   void setPathPlannerInput();
 
   /*
@@ -57,22 +54,22 @@ class DeltaControlSystem {
   Jacobian jacobian;
 
   MouseInput mouse;
-  ReduceVector redVect;
   PathPlannerConstAcc<AxisVector> pathPlanner;
-  CirclePlaner circlePlanner;
 
-  Switch<3,AxisVector> posSwitch;
+  Switch<2,AxisVector> posSwitch;
 
   PeripheralInput<double> enc1;
   PeripheralInput<double> enc2;
   PeripheralInput<double> enc3;
+  PeripheralInput<double> enc4;
 
   PeripheralOutput<double> mot1;
   PeripheralOutput<double> mot2;
   PeripheralOutput<double> mot3;
+  PeripheralOutput<double> mot4;
 
-  Mux<3, double, AxisVector> muxEnc;
-  DeMux<3, double, AxisVector> demuxMot;
+  Mux<4, double, AxisVector> muxEnc;
+  DeMux<4, double, AxisVector> demuxMot;
 
   control::D<AxisVector> posDiff;
 
@@ -84,11 +81,13 @@ class DeltaControlSystem {
   Gain<AxisVector> speedController;
 
   Sum<2,AxisVector> accSum;
-
+  Saturation<AxisVector> accLimitation;
+  
   Inertia inertia;
-  Jacobi jacobi;
-
   Saturation<AxisVector> forceLimitation;
+  Constant<AxisVector> forceSetPoint;
+  Sum<2, AxisVector> forceSum;
+  Jacobi jacobi;
   Saturation<AxisVector> torqueLimitation;
 
   MotorModel motorModel;
@@ -96,13 +95,16 @@ class DeltaControlSystem {
   Switch<2, AxisVector> voltageSwitch;
   Constant<AxisVector> voltageSetPoint;
 
+  PeripheralOutput<bool> emag;
+  Constant<bool> emagVal;
+  
   DirectKinematic directKin;
   
   Constant<AxisVector> accSetPoint;
   Constant<AxisVector> velSetPoint;
   
-  Switch<3, AxisVector> accSwitch;
-  Switch<3, AxisVector> velSwitch;
+  Switch<2, AxisVector> accSwitch;
+  Switch<2, AxisVector> velSwitch;
   
   TimeDomain timedomain;
   Logger log;

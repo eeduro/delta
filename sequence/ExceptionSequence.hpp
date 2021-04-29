@@ -56,11 +56,9 @@ class BlueButtonExceptionSequence : public Sequence {
         move("Move", this, cs) { }
   
   int action(){
-    AxisVector torqueLimit{ q012gearTorqueLimit, q012gearTorqueLimit, q012gearTorqueLimit};
-    controlSys.torqueLimitation.setLimit(-torqueLimit, torqueLimit);
     controlSys.pathPlanner.setStart(controlSys.directKin.getOut().getSignal().getValue());
     controlSys.setPathPlannerInput();
-    move({0, 0, tcpReady_z});
+    move({0, 0, tcpReady_z, 0});
     safetySys.triggerEvent(safetyProp.stopMoving);
     return(0);
   }
@@ -81,7 +79,7 @@ class EmergencyExceptionSequence : public Sequence{
         safetyProp(sp) { }
     
   int action(){
-    controlSys.voltageSetPoint.setValue({0, 0, 0});
+    controlSys.voltageSetPoint.setValue({0, 0, 0, 0});
     controlSys.voltageSwitch.switchToInput(1);
     HAL::instance().getLogicOutput("ledBlue", false)->set(false);
     while ((Sequencer::running) && !HAL::instance().getLogicInput("buttonGreen", false)->get());

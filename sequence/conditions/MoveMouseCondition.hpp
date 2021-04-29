@@ -13,15 +13,15 @@ class MoveMouseCondition : public Condition {
  public:
   MoveMouseCondition(DeltaControlSystem& cs) : controlSys(cs) { }
   bool validate() {
-    auto pos = controlSys.redVect.getOut().getSignal().getValue();
-    if (mousePosPrev != pos) {
-      mousePosPrev = pos;
-      return true; 
-    }
+//     auto pos = controlSys.redVect.getOut().getSignal().getValue();
+//     if (mousePosPrev != pos) {
+//       mousePosPrev = pos;
+//       return true; 
+//     }
     return false;
   }
   void reset() {
-    mousePosPrev = controlSys.redVect.getOut().getSignal().getValue();
+//     mousePosPrev = controlSys.redVect.getOut().getSignal().getValue();
   }
   
  private:

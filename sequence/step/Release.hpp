@@ -13,7 +13,7 @@ namespace delta {
 class Release : public Step {
  public:
   Release(std::string name, Sequence* caller, DeltaControlSystem& cs) : Step(name, caller), controlSys(cs) { }
-  int action() {controlSys.emagVal.setValue(false);}
+  int action() {controlSys.emagVal.setValue(false); return(0);}
   
  private:
   DeltaControlSystem &controlSys;
