@@ -2,7 +2,7 @@
 
 using namespace eeduro::delta;
 
-Calibration::Calibration() : Calibration("/opt/eeros/etc/delta-sort.conf") { }
+Calibration::Calibration() : Calibration("/home/ost/bin/delta-sort.conf") { }
 
 Calibration::Calibration(const char *path) : FileConfig(path) {
   add("p0x", position[0].x);			// x ccordinate of position 0 

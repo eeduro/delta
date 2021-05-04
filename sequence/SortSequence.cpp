@@ -1,12 +1,13 @@
 #include "SortSequence.hpp"
+#include "../control/types.hpp"
 
 using namespace eeduro::delta;
 
 SortSequence::SortSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, Calibration& cal)
     : Sequence(name, caller, true),
       move("Move in sort", this, cs),
-      detectSeq("Detect sequence", this, cs, cal),
-      moveBlockSeq("Move block sequence", this, cs, cal),
+      detectSeq("Detect sequence in sort", this, cs, cal),
+      moveBlockSeq("Move block sequence in sort", this, cs, cal),
       controlSys(cs),
       calibration(cal) { }
 

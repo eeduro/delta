@@ -20,7 +20,7 @@ int MoveBlockSequence::operator()(int block, int from, int to) {
 int MoveBlockSequence::action() {
   log.warn() << "move block " << block << " from position " << from << " to " << to;
 
-  auto p = controlSys.directKin.getOut().getSignal().getValue();// = controlSys.pathPlanner.getLastPoint();
+  auto p = controlSys.pathPlanner.getPosOut().getSignal().getValue();
   p[2] = calibration.transportation_height;
   move(p);
   

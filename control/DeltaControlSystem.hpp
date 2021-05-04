@@ -18,6 +18,7 @@
 #include <eeros/control/Saturation.hpp>
 
 #include "types.hpp"
+#include "MouseScale.hpp"
 #include "Kinematic.hpp"
 #include "Jacobian.hpp"
 #include "DirectKinematic.hpp"
@@ -54,6 +55,7 @@ class DeltaControlSystem {
   Jacobian jacobian;
 
   MouseInput mouse;
+  MouseScale mouseScale;
   PathPlannerConstAcc<AxisVector> pathPlanner;
 
   Switch<2,AxisVector> posSwitch;

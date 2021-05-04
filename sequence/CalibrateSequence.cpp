@@ -23,50 +23,6 @@ int CalibrateSequence::action() {
   controlSys.voltageSwitch.switchToInput(1);	// choose fix voltage setpoint
   wait(3);
   
-  /*test for z measurement*/
-//	logAndWaitForButton({0});
-  /*
-  log.trace() << "move TCP to the top left corner and press the blue button";
-  waitForBlueButton();
-  log.trace() << "press the blue button, then slowly move the TCP to the top right corner, and press the blue button again";
-  waitForBlueButton();
-  logAndWaitForButton({0});
-  
-  log.trace() << "move TCP to the mid left side and press the blue button";
-  waitForBlueButton();
-  log.trace() << "press the blue button, then slowly move the TCP to the mid right side, and press the blue button again";
-  waitForBlueButton();
-  logAndWaitForButton({0});
-  
-  log.trace() << "move TCP to the bottom left corner and press the blue button";
-  waitForBlueButton();
-  log.trace() << "press the blue button, then slowly move the TCP to the bottom right corner, and press the blue button again";
-  waitForBlueButton();
-  logAndWaitForButton({0});
-  
-  log.trace() << "move TCP to the bottom left corner and press the blue button";
-  waitForBlueButton();
-  log.trace() << "press the blue button, then slowly move the TCP to the top left corner, and press the blue button again";
-  waitForBlueButton();
-  logAndWaitForButton({0});
-  
-  log.trace() << "move TCP to the mid bottom side and press the blue button";
-  waitForBlueButton();
-  log.trace() << "press the blue button, then slowly move the TCP to the mid top side, and press the blue button again";
-  waitForBlueButton();
-  logAndWaitForButton({0});
-  
-  log.trace() << "move TCP to the bottom right corner and press the blue button";
-  waitForBlueButton();
-  log.trace() << "press the blue button, then slowly move the TCP to the top right corner, and press the blue button again";
-  waitForBlueButton();
-  logAndWaitForButton({0});
-  
-  log.trace() << "z measurement done, press blue button to continue";
-  waitForBlueButton();*/
-  
-  /*test for controlsys*/
-  
   for (int i = 0; i < 4; i++) {		// i = blocks
     for (int j = 0; j < 4; j++) {	// j = positions
       double minx = 100.0;
@@ -104,69 +60,14 @@ int CalibrateSequence::action() {
       wait(2);
     }
   }
-  
 
   for (int i = 0; i < 4; i++) {
     calibration.position[i].level12 = (calibration.position[i].zblockmin[1] + calibration.position[i].zblockmax[2]) / 2;
     calibration.position[i].level23 = (calibration.position[i].zblockmin[2] + calibration.position[i].zblockmax[3]) / 2;
     calibration.position[i].level30 = (calibration.position[i].zblockmin[3] + calibration.position[i].zblockmax[0]) / 2;
   }
-
-  /*for (int i = 0; i < 4; i++) {
-    double z0min = calibration.position[i].zblockmin[0];
-    double z0max = calibration.position[i].zblockmax[0];
-    double z1min = calibration.position[i].zblockmin[1];
-    double z1max = calibration.position[i].zblockmax[1];
-    double z2min = calibration.position[i].zblockmin[2];
-    double z2max = calibration.position[i].zblockmax[2];
-    double z3min = calibration.position[i].zblockmin[3];
-    double z3max = calibration.position[i].zblockmax[3];
-    
-    if (z0max >= z3min) {
-      log.error() << "[position " << i << "] invalid calibration zblock0 max >= zblock3 min";
-      log.warn() << "[position " << i << "] z0: " << z0max << ", z3: " << z3min;
-      good = false;
-    }
-    if (z3max >= z2min) {
-      log.error() << "[position " << i << "] invalid calibration zblock3 max >= zblock2 min";
-      log.warn() << "[position " << i << "] z3: " << z3max << ", z2: " << z2min;
-      good = false;
-    }
-    if (z2max >= z1min) {
-      log.error() << "[position " << i << "] invalid calibration zblock2 max >= zblock1 min";
-      log.warn() << "[position " << i << "] z2: " << z2max << ", z1: " << z1min;
-      good = false;
-    }
-    
-    if (z1min <= calibration.position[i].level12) {
-      log.error() << "[position " << i << "] invalid calibration zblock1 min <= level12";
-      good = false;
-    }
-    if (z2max >= calibration.position[i].level12) {
-      log.error() << "[position " << i << "] invalid calibration zblock2 max >= level12";
-      good = false;
-    }
-    
-    if (z2min <= calibration.position[i].level23) {
-      log.error() << "[position " << i << "] invalid calibration zblock2 min <= level23";
-      good = false;
-    }
-    if (z3max >= calibration.position[i].level23) {
-      log.error() << "[position " << i << "] invalid calibration zblock3 max >= level23";
-      good = false;
-    }
-    
-    if (z3min <= calibration.position[i].level30) {
-      log.error() << "[position " << i << "] invalid calibration zblock3 min <= level30";
-      good = false;
-    }
-    if (z0max >= calibration.position[i].level30) {
-      log.error() << "[position " << i << "] invalid calibration zblock0 max >= level30";
-      good = false;
-    }
-  }*/
   
-  if (calibration.save("/opt/eeros/etc/delta-sort.conf")) {
+  if (calibration.save("/home/ost/bin/delta-sort.conf")) {
     log.info() << "calibration saved";
     for (int i = 0; i < 4; i++) {
       log.info() << "p" << i << "l12 = " << calibration.position[i].level12;

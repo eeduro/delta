@@ -11,10 +11,10 @@ MainSequence::MainSequence(std::string name, Sequencer& seq, DeltaControlSystem&
       automoveSeq("AutoMove sequence", this, cs, ss, sp, cal),
       parkSeq("Park sequence", this, cs, ss, sp),
       calibrateSeq("Calibrate sequence", this, cs, cal),
-      mouseSeq("Mouse sequence", this, cs, ss, sp),
+      mouseSeq("Mouse sequence in main", this, cs, ss, sp),
       wait("Wait in main", this),
       emergencyCondition(ss, sp),
-      emergencyExceptionSeq("Emergency exception sequence", this, cs, ss, sp), 
+      emergencyExceptionSeq("Emergency exception sequence in main", this, cs, ss, sp), 
       emergencyMonitor("Emergency level monitor", this, emergencyCondition, eeros::sequencer::SequenceProp::restart, &emergencyExceptionSeq) {
     HAL& hal = HAL::instance();
     buttonGreen = hal.getLogicInput("buttonGreen", false);
@@ -46,7 +46,8 @@ int MainSequence::action() {
       
       if(buttonGreen->get()) {
         blueButtonCounter = 0;
-        safetySys.triggerEvent(safetyProp.doAutoMoving);     // go to auto moving
+        if(buttonBlue->get()) calibrateSeq();
+				else safetySys.triggerEvent(safetyProp.doAutoMoving);     // go to auto moving
       }
       auto blue = buttonBlue->get();
       if(blue && blue != bluePrev) {
@@ -59,6 +60,7 @@ int MainSequence::action() {
       bluePrev = blue;
     }
     else if(safetySys.getCurrentLevel() == safetyProp.slAutoMoving) {
+      automoveSeq.resetMousePos();
       automoveSeq();
     }
     else if(safetySys.getCurrentLevel() == safetyProp.slMouseControl) {
@@ -70,7 +72,7 @@ int MainSequence::action() {
     else if(safetySys.getCurrentLevel() == safetyProp.slParked) {
       safetySys.triggerEvent(safetyProp.doControlStop);
     }
-    wait(0.2);
+    wait(2.2);
   }
   return(0);
 }

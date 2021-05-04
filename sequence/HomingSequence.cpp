@@ -1,4 +1,6 @@
 #include "HomingSequence.hpp"
+#include "../control/types.hpp"
+#include "../control/constants.hpp"
 
 using namespace eeduro::delta;
 

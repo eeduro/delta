@@ -10,11 +10,13 @@ MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSys
       safetySys(ss),
       safetyProp(sp),
       wait("Wait in mouse move sequence", this),
+      grab("grab with mouse", this, cs),
+      release("release with mouse", this, cs),
       mouseTimeoutSequence("Mouse timeOut exception sequence", this, ss, sp),
       blueButtonCondition(),
       blueButtonExceptionSequence("Blue button exception sequence in mouse", this, cs, ss, sp),
       blueButtonMonitor("Blue button monitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSequence) {
-    setTimeoutTime(2.0);
+    setTimeoutTime(5.0);
     setTimeoutExceptionSequence(mouseTimeoutSequence);
     setTimeoutBehavior(SequenceProp::abort);
     addMonitor(&blueButtonMonitor);
@@ -22,17 +24,21 @@ MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSys
 
 int MouseSequence::action() {
   controlSys.setMouseInput();
-//   auto pos = controlSys.circlePlanner.getOut().getSignal().getValue();
-//   controlSys.mouse.setInitPos(pos[0], pos[1], pos[2], 0);
-//   mousePosPrev = controlSys.redVect.getOut().getSignal().getValue();
+  auto pos = controlSys.pathPlanner.getPosOut().getSignal().getValue();
+  controlSys.mouse.setInitPos(pos[0], pos[1], pos[2], 0);
+  mousePosPrev = controlSys.mouse.getOut().getSignal().getValue();
+  mouseButtonPrev = controlSys.mouse.getButtonOut().getSignal().getValue();
 
   while (Sequencer::running && safetySys.getCurrentLevel() == safetyProp.slMouseControl) {
-//     auto pos = controlSys.redVect.getOut().getSignal().getValue();	
-//     if (pos != mousePosPrev) {
-//       resetTimeout();
-//       mousePosPrev = pos;
-//     }
-    wait(0.1);
+    auto pos = controlSys.mouse.getOut().getSignal().getValue();	
+    auto button = controlSys.mouse.getButtonOut().getSignal().getValue();
+    if (pos != mousePosPrev || button != mouseButtonPrev) {
+      resetTimeout();
+      mousePosPrev = pos;
+      mouseButtonPrev = button;
+    }
+    if (button[0] == 1) grab(); else release();
+    wait(0.2);
   }
   return(0);
 }

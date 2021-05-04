@@ -1,14 +1,15 @@
+#include <eeros/sequencer/Sequencer.hpp>
 #include "AutoMoveSequence.hpp"
 
 using namespace eeduro::delta;
 
 AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp, Calibration& cal):
   Sequence(name, caller, true),
-  sortSeq("Sort sequence", this, cs, cal),
-  shuffSeq("Shuffle sequence", this, cs, cal),
+  sortSeq("Sort sequence in auto", this, cs, cal),
+  shuffSeq("Shuffle sequence in auto", this, cs, cal),
   wait("Wait in auto move", this),
   moveMouseCondition(cs),
-  mouseExceptionSeq("Mouse exception sequence", this,  ss, sp),
+  mouseExceptionSeq("Mouse exception sequence in auto", this,  ss, sp),
   moveMouseMonitor("Mouse move monitor", this, moveMouseCondition, SequenceProp::abort, &mouseExceptionSeq),
   controlSys(cs),
   safetySys(ss),
@@ -25,9 +26,9 @@ AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaCont
 int AutoMoveSequence::action() {
   moveMouseCondition.reset();
   controlSys.setPathPlannerInput();
-  while(Sequencer::running) {
+  while(Sequencer::running && safetySys.getCurrentLevel() == safetyProp.slAutoMoving) {
     auto res = sortSeq();
-    moveMouseCondition.reset();
+//     moveMouseCondition.reset();
     wait(5);
     if (res == 0) shuffSeq();
     wait(5);
@@ -35,4 +36,7 @@ int AutoMoveSequence::action() {
   return(0);
 }
 
+void AutoMoveSequence::resetMousePos() {
+  moveMouseCondition.reset();
+}
 

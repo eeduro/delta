@@ -46,6 +46,7 @@ DeltaControlSystem::DeltaControlSystem()
    */
   pathPlanner.setName("Pathplanner");
   mouse.setName("Mouse input");
+  mouseScale.setName("Mouse scaling");
   posSwitch.setName("Position Switch");
   velSwitch.setName("Velocity Switch");
   accSwitch.setName("Acceleration Switch");
@@ -105,6 +106,7 @@ DeltaControlSystem::DeltaControlSystem()
 
   mouse.getOut().getSignal().setName("mousePosition");
   mouse.getButtonOut().getSignal().setName("mouseButtons");
+  mouseScale.getOut().getSignal().setName("mousePosition scaled");  
 
   posSwitch.getOut().getSignal().setName("xDes");
   velSwitch.getOut().getSignal().setName("dxDes");
@@ -168,8 +170,9 @@ DeltaControlSystem::DeltaControlSystem()
   muxEnc.getIn(2).connect(enc3.getOut());
   muxEnc.getIn(3).connect(enc4.getOut());
   
+  mouseScale.getIn().connect(mouse.getOut());
   posSwitch.getIn(0).connect(pathPlanner.getPosOut());
-  posSwitch.getIn(1).connect(mouse.getOut());
+  posSwitch.getIn(1).connect(mouseScale.getOut());
   
   velSwitch.getIn(0).connect(pathPlanner.getVelOut());
   velSwitch.getIn(1).connect(velSetPoint.getOut());
@@ -230,6 +233,7 @@ DeltaControlSystem::DeltaControlSystem()
    * add all blocks to the timedomain
    */
   timedomain.addBlock(mouse);
+  timedomain.addBlock(mouseScale);
   timedomain.addBlock(pathPlanner);
   timedomain.addBlock(posSwitch);
   
