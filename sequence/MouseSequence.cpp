@@ -14,7 +14,7 @@ MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSys
       blueButtonCondition(),
       blueButtonExceptionSequence("Blue button exception sequence in mouse", this, cs, ss, sp),
       blueButtonMonitor("Blue button monitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSequence) {
-    setTimeoutTime(2.0);
+    setTimeoutTime(5.0);
     setTimeoutExceptionSequence(mouseTimeoutSequence);
     setTimeoutBehavior(SequenceProp::abort);
     addMonitor(&blueButtonMonitor);
