@@ -7,13 +7,13 @@ MainSequence::MainSequence(std::string name, Sequencer& seq, DeltaControlSystem&
       safetyProp(sp),
       safetySys(ss),
       controlSys(cs),
-      homingSeq("Homing sequence", this, cs, ss, sp),
-      circleSeq("Circle sequence", this, cs, ss, sp),
-      parkSeq("Park sequence", this, cs, ss, sp),
-      mouseSeq("Mouse sequence", this, cs, ss, sp),
-      wait("Wait in main", this),
+      homingSeq("Homing", this, cs, ss, sp),
+      circleSeq("Circle", this, cs, ss, sp),
+      parkSeq("Park", this, cs, ss, sp),
+      mouseSeq("Mouse", this, cs, ss, sp),
+      wait("Wait", this),
       emergencyCondition(ss, sp),
-      emergencyExceptionSeq("Emergency exception sequence", this, cs, ss, sp), 
+      emergencyExceptionSeq("Emergency exception", this, cs, ss, sp), 
       emergencyMonitor("Emergency level monitor", this, emergencyCondition, eeros::sequencer::SequenceProp::restart, &emergencyExceptionSeq) {
     HAL& hal = HAL::instance();
     buttonGreen = hal.getLogicInput("buttonGreen", false);
@@ -26,7 +26,7 @@ int MainSequence::action() {
   bool bluePrev;
   ledBlue->set(false);
   
-  while(Sequencer::running) {
+  while(state == SequenceState::running) {
     if(safetySys.getCurrentLevel() == safetyProp.slSystemOn) {
       safetySys.triggerEvent(safetyProp.doPoweringUp);
     }
@@ -45,6 +45,7 @@ int MainSequence::action() {
       
       if(buttonGreen->get()) {
         blueButtonCounter = 0;
+//        addMonitor(&emergencyMonitor);
         safetySys.triggerEvent(safetyProp.doAutoMoving);     // go to auto moving
       }
       auto blue = buttonBlue->get();

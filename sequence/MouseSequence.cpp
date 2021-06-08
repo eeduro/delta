@@ -9,10 +9,10 @@ MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSys
       controlSys(cs),
       safetySys(ss),
       safetyProp(sp),
-      wait("Wait in mouse move sequence", this),
-      mouseTimeoutSequence("Mouse timeOut exception sequence", this, ss, sp),
+      wait("Wait", this),
+      mouseTimeoutSequence("Mouse timeOut exception", this, ss, sp),
       blueButtonCondition(),
-      blueButtonExceptionSequence("Blue button exception sequence in mouse", this, cs, ss, sp),
+      blueButtonExceptionSequence("Blue button exception in mouse", this, cs, ss, sp),
       blueButtonMonitor("Blue button monitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSequence) {
     setTimeoutTime(5.0);
     setTimeoutExceptionSequence(mouseTimeoutSequence);
@@ -26,7 +26,7 @@ int MouseSequence::action() {
   controlSys.mouse.setInitPos(pos[0], pos[1], pos[2], 0);
   mousePosPrev = controlSys.redVect.getOut().getSignal().getValue();
 
-  while (Sequencer::running && safetySys.getCurrentLevel() == safetyProp.slMouseControl) {
+  while (state == SequenceState::running && safetySys.getCurrentLevel() == safetyProp.slMouseControl) {
     auto pos = controlSys.redVect.getOut().getSignal().getValue();	
     if (pos != mousePosPrev) {
       resetTimeout();

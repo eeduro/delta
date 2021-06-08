@@ -50,7 +50,7 @@ int main(int argc, char **argv) {
   controlSys.timedomain.registerSafetyEvent(safetySys, safetyProp.doEmergency);
   
   auto& seq = Sequencer::instance();
-  MainSequence mainSequence("Main sequence", seq, controlSys, safetySys, safetyProp);
+  MainSequence mainSequence("Main", seq, controlSys, safetySys, safetyProp);
   mainSequence();
   
   auto &executor = Executor::instance();
