@@ -4,9 +4,9 @@ using namespace eeduro::delta;
 
 ShuffleSequence::ShuffleSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, Calibration& cal) :
   Sequence(name, caller, true),
-  move("Move in shuffle", this, cs),
-  detectSeq("Detect sequence in shuffle", this, cs, cal),
-  moveBlockSeq("Move block sequence in shuffle", this, cs, cal),
+  move("Move", this, cs),
+  detectSeq("Detect in shuffle", this, cs, cal),
+  moveBlockSeq("Move block in shuffle", this, cs, cal),
   controlSys(cs),
   calibration(cal) { }
 

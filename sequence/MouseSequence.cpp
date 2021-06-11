@@ -9,12 +9,12 @@ MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSys
       controlSys(cs),
       safetySys(ss),
       safetyProp(sp),
-      wait("Wait in mouse move sequence", this),
-      grab("grab with mouse", this, cs),
-      release("release with mouse", this, cs),
-      mouseTimeoutSequence("Mouse timeOut exception sequence", this, ss, sp),
+      wait("Wait", this),
+      grab("grab", this, cs),
+      release("release", this, cs),
+      mouseTimeoutSequence("Mouse timeOut exception", this, ss, sp),
       blueButtonCondition(),
-      blueButtonExceptionSequence("Blue button exception sequence in mouse", this, cs, ss, sp),
+      blueButtonExceptionSequence("Blue button exception in mouse", this, cs, ss, sp),
       blueButtonMonitor("Blue button monitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSequence) {
     setTimeoutTime(5.0);
     setTimeoutExceptionSequence(mouseTimeoutSequence);

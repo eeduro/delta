@@ -5,17 +5,17 @@ using namespace eeduro::delta;
 
 AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp, Calibration& cal):
   Sequence(name, caller, true),
-  sortSeq("Sort sequence in auto", this, cs, cal),
-  shuffSeq("Shuffle sequence in auto", this, cs, cal),
-  wait("Wait in auto move", this),
+  sortSeq("Sort", this, cs, cal),
+  shuffSeq("Shuffle", this, cs, cal),
+  wait("Wait", this),
   moveMouseCondition(cs),
-  mouseExceptionSeq("Mouse exception sequence in auto", this,  ss, sp),
+  mouseExceptionSeq("Mouse exception in AutoMove", this,  ss, sp),
   moveMouseMonitor("Mouse move monitor", this, moveMouseCondition, SequenceProp::abort, &mouseExceptionSeq),
   controlSys(cs),
   safetySys(ss),
   safetyProp(sp),
   blueButtonCondition(),
-  blueButtonExceptionSeq("Blue button exception sequence in auto move", this, cs, ss, sp),
+  blueButtonExceptionSeq("Blue button exception in AutoMove", this, cs, ss, sp),
   blueButtonMonitor("Blue button monitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSeq) { 
     addMonitor(&moveMouseMonitor);
     addMonitor(&blueButtonMonitor);
@@ -26,7 +26,7 @@ AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaCont
 int AutoMoveSequence::action() {
   moveMouseCondition.reset();
   controlSys.setPathPlannerInput();
-  while(Sequencer::running && safetySys.getCurrentLevel() == safetyProp.slAutoMoving) {
+  while(state == SequenceState::running && safetySys.getCurrentLevel() == safetyProp.slAutoMoving) {
     auto res = sortSeq();
 //     moveMouseCondition.reset();
     wait(5);

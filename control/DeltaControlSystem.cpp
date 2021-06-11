@@ -299,8 +299,6 @@ void DeltaControlSystem::stop() {
 }
 
 void DeltaControlSystem::setMouseInput() {
-//	mouse.setInitPos(directKin.getOut().getSignal().getValue());
-//  pathPlanner.setInitPos(directKin.getOut().getSignal().getValue());   // disable pathplanner by setting the desired position to the current position
   posSwitch.switchToInput(1);                                          // set input to mouseinput, also switches the velSwitch and accSwitch
   voltageSwitch.switchToInput(0);
 }

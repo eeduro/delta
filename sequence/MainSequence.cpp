@@ -7,14 +7,14 @@ MainSequence::MainSequence(std::string name, Sequencer& seq, DeltaControlSystem&
       controlSys(cs),
       safetySys(ss),
       safetyProp(sp),
-      homingSeq("Homing sequence", this, cs, ss, sp),
-      automoveSeq("AutoMove sequence", this, cs, ss, sp, cal),
-      parkSeq("Park sequence", this, cs, ss, sp),
-      calibrateSeq("Calibrate sequence", this, cs, cal),
-      mouseSeq("Mouse sequence in main", this, cs, ss, sp),
-      wait("Wait in main", this),
+      homingSeq("Homing", this, cs, ss, sp),
+      automoveSeq("AutoMove", this, cs, ss, sp, cal),
+      parkSeq("Park", this, cs, ss, sp),
+      calibrateSeq("Calibrate", this, cs, cal),
+      mouseSeq("Mouse sequence", this, cs, ss, sp),
+      wait("Wait", this),
       emergencyCondition(ss, sp),
-      emergencyExceptionSeq("Emergency exception sequence in main", this, cs, ss, sp), 
+      emergencyExceptionSeq("Emergency exception in main", this, cs, ss, sp), 
       emergencyMonitor("Emergency level monitor", this, emergencyCondition, eeros::sequencer::SequenceProp::restart, &emergencyExceptionSeq) {
     HAL& hal = HAL::instance();
     buttonGreen = hal.getLogicInput("buttonGreen", false);
@@ -27,7 +27,7 @@ int MainSequence::action() {
   bool bluePrev;
   ledBlue->set(false);
   
-  while(Sequencer::running) {
+  while(state == SequenceState::running) {
     if(safetySys.getCurrentLevel() == safetyProp.slSystemOn) {
       safetySys.triggerEvent(safetyProp.doPoweringUp);
     }
@@ -72,7 +72,7 @@ int MainSequence::action() {
     else if(safetySys.getCurrentLevel() == safetyProp.slParked) {
       safetySys.triggerEvent(safetyProp.doControlStop);
     }
-    wait(2.2);
+    wait(0.2);
   }
   return(0);
 }

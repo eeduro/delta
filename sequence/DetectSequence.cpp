@@ -6,8 +6,8 @@ DetectSequence::DetectSequence(std::string name, Sequence* caller, DeltaControlS
   Sequence(name, caller, true),
   controlSys(cs),
   calibration(cal),
-  move("Move in detect", this, cs),
-  wait("Wait in detect", this) { }
+  move("Move", this, cs),
+  wait("Wait", this) { }
 
 int DetectSequence::operator()(int pos) {
   this-> position = pos;

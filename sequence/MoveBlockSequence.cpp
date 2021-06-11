@@ -5,7 +5,7 @@ using namespace eeduro::delta;
 MoveBlockSequence::MoveBlockSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, Calibration& cal)
     : Sequence(name, caller, true),
       controlSys(cs),
-      move("Move in block", this, cs),
+      move("Move", this, cs),
       grab("Grab", this, cs),
       calibration(cal),
       release("Release", this, cs) { }

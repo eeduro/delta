@@ -5,9 +5,9 @@ using namespace eeduro::delta;
 
 SortSequence::SortSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, Calibration& cal)
     : Sequence(name, caller, true),
-      move("Move in sort", this, cs),
-      detectSeq("Detect sequence in sort", this, cs, cal),
-      moveBlockSeq("Move block sequence in sort", this, cs, cal),
+      move("Move", this, cs),
+      detectSeq("Detect in sort", this, cs, cal),
+      moveBlockSeq("Move block in sort", this, cs, cal),
       controlSys(cs),
       calibration(cal) { }
 

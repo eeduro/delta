@@ -7,7 +7,7 @@ ParkSequence::ParkSequence(std::string name, Sequence* caller, DeltaControlSyste
       controlSys(cs),
       safetyProp(sp),
       safetySys(ss),
-      move("Move in park",this, cs) { }
+      move("Move",this, cs) { }
 
 int ParkSequence::action() {	
 //   move({0, 0, -0.06});

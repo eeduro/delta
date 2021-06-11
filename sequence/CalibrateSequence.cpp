@@ -6,7 +6,7 @@ CalibrateSequence::CalibrateSequence(std::string name, eeros::sequencer::Sequenc
   Sequence(name, caller, true),
   controlSys(cs),
   calibration(cal),
-  wait("Wait in calibrate", this) {
+  wait("Wait", this) {
     HAL& hal = HAL::instance();
     buttonBlue = hal.getLogicInput("buttonBlue", false);
     ledBlue = hal.getLogicOutput("ledBlue", false);
