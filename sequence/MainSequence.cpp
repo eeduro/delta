@@ -4,9 +4,9 @@ using namespace eeduro::delta;
 
 MainSequence::MainSequence(std::string name, Sequencer& seq, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp)
     : Sequence(name, seq),
-      safetyProp(sp),
-      safetySys(ss),
       controlSys(cs),
+      safetySys(ss),
+      safetyProp(sp),
       homingSeq("Homing", this, cs, ss, sp),
       circleSeq("Circle", this, cs, ss, sp),
       parkSeq("Park", this, cs, ss, sp),
