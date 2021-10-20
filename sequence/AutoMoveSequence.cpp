@@ -24,7 +24,6 @@ AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaCont
 
 
 int AutoMoveSequence::action() {
-  moveMouseCondition.reset();
   controlSys.setPathPlannerInput();
   while(state == SequenceState::running && safetySys.getCurrentLevel() == safetyProp.slAutoMoving) {
     auto res = sortSeq();
@@ -36,7 +35,8 @@ int AutoMoveSequence::action() {
   return(0);
 }
 
-void AutoMoveSequence::resetMousePos() {
+void AutoMoveSequence::resetConditions() {
   moveMouseCondition.reset();
+  blueButtonCondition.reset();
 }
 

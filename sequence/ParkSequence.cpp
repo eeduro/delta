@@ -9,10 +9,11 @@ ParkSequence::ParkSequence(std::string name, Sequence* caller, DeltaControlSyste
       safetySys(ss),
       move("Move",this, cs) { }
 
-int ParkSequence::action() {	
-//   move({0, 0, -0.06});
-//   controlSys.voltageSetPoint.setValue({0, 0, 0});	
-//   controlSys.voltageSwitch.switchToInput(1);
-//   safetySys.triggerEvent(safetyProp.parkingDone);
+int ParkSequence::action() {
+  controlSys.setPathPlannerInput();
+  move({0, 0, -0.045, 0});
+  controlSys.voltageSetPoint.setValue({0, 0, 0, 0});	
+  controlSys.voltageSwitch.switchToInput(1);
+  safetySys.triggerEvent(safetyProp.parkingDone);
   return(0);
 }

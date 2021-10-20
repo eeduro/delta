@@ -25,7 +25,7 @@ class AutoMoveSequence : public Sequence {
  public:
   AutoMoveSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp, Calibration& cal);
   int action();
-  void resetMousePos();
+  void resetConditions();
   
  private:
   SortSequence sortSeq;

@@ -22,6 +22,7 @@ class MouseSequence : public Sequence {
  public:
   MouseSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp);
   int action();
+  void resetConditions();
 
  private:
   DeltaControlSystem& controlSys;

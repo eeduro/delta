@@ -47,7 +47,7 @@ int MainSequence::action() {
       if(buttonGreen->get()) {
         blueButtonCounter = 0;
         if(buttonBlue->get()) calibrateSeq();
-				else safetySys.triggerEvent(safetyProp.doAutoMoving);     // go to auto moving
+        else safetySys.triggerEvent(safetyProp.doAutoMoving);     // go to auto moving
       }
       auto blue = buttonBlue->get();
       if(blue && blue != bluePrev) {
@@ -60,10 +60,11 @@ int MainSequence::action() {
       bluePrev = blue;
     }
     else if(safetySys.getCurrentLevel() == safetyProp.slAutoMoving) {
-      automoveSeq.resetMousePos();
+      automoveSeq.resetConditions();
       automoveSeq();
     }
     else if(safetySys.getCurrentLevel() == safetyProp.slMouseControl) {
+      mouseSeq.resetConditions();
       mouseSeq();
     }
     else if(safetySys.getCurrentLevel() == safetyProp.slParking) {

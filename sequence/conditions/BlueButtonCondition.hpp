@@ -12,11 +12,20 @@ namespace delta {
 class BlueButtonCondition : public Condition {
  public:
   BlueButtonCondition() {buttonBlue = HAL::instance().getLogicInput("buttonBlue", false);}
-  bool validate() {return buttonBlue->get();}
+  bool validate() {
+    if (!state) {
+      state = buttonBlue->get();
+    }
+    return state;
+  }
+  void reset() {
+    state = false;
+  }
 
  private:
   eeros::hal::Input<bool>* buttonBlue;
-  };
+  bool state;
+};
   
 }
 }

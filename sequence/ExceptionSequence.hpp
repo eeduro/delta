@@ -70,7 +70,7 @@ class BlueButtonExceptionSequence : public Sequence {
   Move move;
 };
 
-class EmergencyExceptionSequence : public Sequence{
+class EmergencyExceptionSequence : public Sequence {
  public:
   EmergencyExceptionSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp) 
       : Sequence(name, caller, true),

@@ -43,4 +43,7 @@ int MouseSequence::action() {
   return(0);
 }
 
+void MouseSequence::resetConditions() {
+  blueButtonCondition.reset();
+}
 

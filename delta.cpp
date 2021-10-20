@@ -42,6 +42,13 @@ int main(int argc, char **argv) {
   
   signal(SIGINT, signalHandler);
   
+  Calibration calibration{};
+  calibration.loadDefaults();
+  if (!calibration.load()) {
+    log.warn() << "could not load calibration";
+    return 0;
+  }
+
   // Create the control system
   DeltaControlSystem controlSys;
   
@@ -49,12 +56,6 @@ int main(int argc, char **argv) {
   DeltaSafetyProperties safetyProp(controlSys);
   SafetySystem safetySys(safetyProp, dt);
   controlSys.timedomain.registerSafetyEvent(safetySys, safetyProp.doEmergency);
-  
-  Calibration calibration{};
-  calibration.loadDefaults();
-  if (!calibration.load()) {
-    log.warn() << "could not load calibration";
-  }
   
   auto& seq = Sequencer::instance();
   MainSequence mainSequence("Main", seq, controlSys, safetySys, safetyProp, calibration);
