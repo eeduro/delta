@@ -24,7 +24,7 @@ int DetectSequence::action() {
   // switch to constant force
   eeros::math::Vector<4> limit{ 100, 100, 100, 100 };
   controlSys.accLimitation.setLimit({ -100, -100, 0, -100 }, limit);
-  controlSys.forceSetPoint.setValue({0, 0, -0.7, 0});
+  controlSys.forceSetPoint.setValue({0, 0, -1.5, 0});
   p[2] = calibration.position[position].level30 - 0.002;
   move(p);
   wait(0.5);	// wait for final position to be reached
