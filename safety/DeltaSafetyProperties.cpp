@@ -16,7 +16,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys)
       parkingDone("Parking done"),
       homingDone("Homing done"),
       doSystemReady("Do system ready"),
-      doAutoMoving("Do auto moving"),
+      doMoving("Do moving"),
       doMouseControl("Do mouse control"),
       stopMoving("Stop moving"),
       
@@ -31,7 +31,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys)
       slSystemReady("System ready"),
       slParking("Parking"),
       slParked("Parked"),
-      slAutoMoving("Auto moving"),
+      slMoving("Moving"),
       slMouseControl("Mouse control") {
       
   HAL& hal = HAL::instance();
@@ -54,7 +54,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys)
   addLevel(slSystemReady);
   addLevel(slParking);
   addLevel(slParked);
-  addLevel(slAutoMoving);
+  addLevel(slMoving);
   addLevel(slMouseControl);
   
   slControlStarting.addEvent(controlStartingDone, slSystemOn, kPrivateEvent);
@@ -62,12 +62,12 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys)
   slPoweringUp.addEvent(doHoming, slHoming, kPublicEvent);
   slHoming.addEvent(homingDone, slHomed, kPublicEvent);
   slHomed.addEvent(doSystemReady, slSystemReady, kPublicEvent);
-  slSystemReady.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);
+  slSystemReady.addEvent(doMoving, slMoving, kPublicEvent);
   slSystemReady.addEvent(doParking, slParking, kPublicEvent);
-  slAutoMoving.addEvent(doMouseControl, slMouseControl, kPublicEvent);
-  slMouseControl.addEvent(doAutoMoving, slAutoMoving, kPublicEvent);	
+  slMoving.addEvent(doMouseControl, slMouseControl, kPublicEvent);
+  slMouseControl.addEvent(doMoving, slMoving, kPublicEvent);	
   slEmergency.addEvent(doControlStart, slControlStarting, kPublicEvent);
-  slAutoMoving.addEvent(stopMoving, slSystemReady, kPublicEvent);
+  slMoving.addEvent(stopMoving, slSystemReady, kPublicEvent);
   slMouseControl.addEvent(stopMoving, slSystemReady, kPublicEvent);
   slParking.addEvent(parkingDone, slParked, kPublicEvent);
   slParked.addEvent(doControlStop, slControlStopping, kPublicEvent);
@@ -86,7 +86,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys)
   slSystemReady.setInputActions({check(emergencyStop,false,doEmergency)});
   slParking.setInputActions({check(emergencyStop,false,doEmergency)});
   slParked.setInputActions({check(emergencyStop,false,doEmergency)});
-  slAutoMoving.setInputActions({check(emergencyStop,false,doEmergency)});
+  slMoving.setInputActions({check(emergencyStop,false,doEmergency)});
   slMouseControl.setInputActions({check(emergencyStop,false,doEmergency)});
 
   slOff.setOutputActions({set(greenLed,false), set(errorLed, false)});
@@ -100,7 +100,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys)
   slSystemReady.setOutputActions({set(greenLed,true), set(errorLed, false)});
   slParking.setOutputActions({set(greenLed,false), set(errorLed, false)});
   slParked.setOutputActions({set(greenLed,false), set(errorLed, false)});
-  slAutoMoving.setOutputActions({set(greenLed,true), set(errorLed, false)});
+  slMoving.setOutputActions({set(greenLed,true), set(errorLed, false)});
   slMouseControl.setOutputActions({set(greenLed,true), set(errorLed, false)});
 
   slOff.setLevelAction([&](SafetyContext*privateContext){

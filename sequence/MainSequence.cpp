@@ -8,7 +8,7 @@ MainSequence::MainSequence(std::string name, Sequencer& seq, DeltaControlSystem&
       safetySys(ss),
       controlSys(cs),
       homingSeq("Homing sequence", this, cs, ss, sp),
-      circleSeq("Circle sequence", this, cs, ss, sp),
+      testingSeq("Testing sequence", this, cs, ss, sp),
       parkSeq("Park sequence", this, cs, ss, sp),
       mouseSeq("Mouse sequence", this, cs, ss, sp),
       wait("Wait in main", this),
@@ -45,7 +45,7 @@ int MainSequence::action() {
       
       if(buttonGreen->get()) {
         blueButtonCounter = 0;
-        safetySys.triggerEvent(safetyProp.doAutoMoving);     // go to auto moving
+        safetySys.triggerEvent(safetyProp.doMoving);     // go to moving
       }
       auto blue = buttonBlue->get();
       if(blue && blue != bluePrev) {
@@ -57,9 +57,9 @@ int MainSequence::action() {
       }
       bluePrev = blue;
     }
-    else if(safetySys.getCurrentLevel() == safetyProp.slAutoMoving) {
-      circleSeq.resetMousePos();
-      circleSeq();
+    else if(safetySys.getCurrentLevel() == safetyProp.slMoving) {
+      testingSeq.resetMousePos();
+      testingSeq();
     }
     else if(safetySys.getCurrentLevel() == safetyProp.slMouseControl) {
       mouseSeq();

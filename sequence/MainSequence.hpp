@@ -9,7 +9,7 @@
 
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
-#include "CircleSequence.hpp"
+#include "TestingSequence.hpp"
 #include "HomingSequence.hpp"
 #include "ParkSequence.hpp"
 #include "MouseSequence.hpp"
@@ -28,7 +28,7 @@ class MainSequence : public Sequence {
   
  private:
   HomingSequence homingSeq;
-  CircleSequence circleSeq;
+  TestingSequence testingSeq;
   ParkSequence parkSeq;
   MouseSequence mouseSeq;
   Wait wait;

@@ -1,20 +1,18 @@
 #pragma once
 
 #include <array>
-
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
 #include <eeros/sequencer/Monitor.hpp>
 #include <eeros/sequencer/Wait.hpp>
-
 #include <eeros/sequencer/Sequence.hpp>
 #include <eeros/safety/SafetySystem.hpp>
-
 #include "../control/DeltaControlSystem.hpp"
 #include "../safety/DeltaSafetyProperties.hpp"
 #include "ExceptionSequence.hpp"
 #include "conditions/BlueButtonCondition.hpp"
 #include "conditions/MoveMouseCondition.hpp"
+#include "UART.hpp"
 
 
 using namespace eeros::sequencer;
@@ -23,9 +21,9 @@ using namespace eeros::safety;
 namespace eeduro {
 namespace delta {
   
-class CircleSequence : public Sequence {
+class TestingSequence : public Sequence {
  public:
-  CircleSequence(std::string name, Sequence* caller, DeltaControlSystem& controlSys, SafetySystem& safetySys, DeltaSafetyProperties& properties);
+    TestingSequence (std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp);
   int action();
   void resetMousePos();
   
@@ -38,10 +36,10 @@ class CircleSequence : public Sequence {
   MouseExceptionSequence mouseExceptionSequence;
   MoveMouseCondition moveMouseCondition;
   Monitor moveMouseMonitor;
-
-  DeltaControlSystem& controlSys;
-  DeltaSafetyProperties& safetyProp;
-  SafetySystem& safetySys;
+  UART uart;
+  DeltaControlSystem& cs;
+  DeltaSafetyProperties& sp;
+  SafetySystem& ss;
 };
 
 }

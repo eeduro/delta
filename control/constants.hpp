@@ -29,7 +29,7 @@ constexpr double q012InitVoltage = 3; //[V]
 
 constexpr double tcpReady_x = 0;
 constexpr double tcpReady_y = 0;
-constexpr double tcpReady_z = -0.02;
+constexpr double tcpReady_z = 0;
 
 constexpr double q012homingOffset = 0.45;
 

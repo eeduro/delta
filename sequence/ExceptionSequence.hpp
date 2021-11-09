@@ -37,7 +37,7 @@ class MouseTimeOutExceptionSequence : public Sequence {
       : Sequence(name, caller, true), safetySys(ss), safetyProp(sp) { }
   
   int action(){
-    safetySys.triggerEvent(safetyProp.doAutoMoving);
+    safetySys.triggerEvent(safetyProp.doMoving);
     return(0);
   }
   
@@ -60,7 +60,7 @@ class BlueButtonExceptionSequence : public Sequence {
     controlSys.torqueLimitation.setLimit(-torqueLimit, torqueLimit);
     controlSys.pathPlanner.setStart(controlSys.directKin.getOut().getSignal().getValue());
     controlSys.setPathPlannerInput();
-    move({0, 0, tcpReady_z});
+    move({0, 0, tcpReady_z+0.0001});
     safetySys.triggerEvent(safetyProp.stopMoving);
     return(0);
   }

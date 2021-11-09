@@ -36,7 +36,7 @@ class DeltaSafetyProperties : public SafetyProperties {
   SafetyLevel slSystemReady;
   SafetyLevel slParking;
   SafetyLevel slParked;
-  SafetyLevel slAutoMoving;
+  SafetyLevel slMoving;
   SafetyLevel slMouseControl;
 
   /*
@@ -53,7 +53,7 @@ class DeltaSafetyProperties : public SafetyProperties {
   SafetyEvent doParking;
   SafetyEvent parkingDone;
   SafetyEvent doSystemReady;
-  SafetyEvent doAutoMoving;
+  SafetyEvent doMoving;
   SafetyEvent doMouseControl;
   SafetyEvent stopMoving;
 
