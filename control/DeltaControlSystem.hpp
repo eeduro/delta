@@ -44,8 +44,6 @@ class DeltaControlSystem {
   /*
    * Methods for the sequencer
    */
-  void setMouseInput();
-  void setCircleInput();
   void setPathPlannerInput();
 
   /*
@@ -56,12 +54,8 @@ class DeltaControlSystem {
   Kinematic kinematic;
   Jacobian jacobian;
 
-  MouseInput mouse;
-  ReduceVector redVect;
   PathPlannerConstAcc<AxisVector> pathPlanner;
-  CirclePlaner circlePlanner;
-
-  Switch<3,AxisVector> posSwitch;
+  Switch<2,AxisVector> posSwitch;
 
   PeripheralInput<double> enc1;
   PeripheralInput<double> enc2;

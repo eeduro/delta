@@ -11,8 +11,6 @@
 #include "../safety/DeltaSafetyProperties.hpp"
 #include "TestingSequence.hpp"
 #include "HomingSequence.hpp"
-#include "ParkSequence.hpp"
-#include "MouseSequence.hpp"
 #include "ExceptionSequence.hpp"
 
 using namespace eeros::sequencer;
@@ -29,8 +27,6 @@ class MainSequence : public Sequence {
  private:
   HomingSequence homingSeq;
   TestingSequence testingSeq;
-  ParkSequence parkSeq;
-  MouseSequence mouseSeq;
   Wait wait;
   
   EmergencyExceptionSequence emergencyExceptionSeq;
@@ -39,6 +35,7 @@ class MainSequence : public Sequence {
   
   eeros::hal::Input<bool>* buttonGreen;
   eeros::hal::Input<bool>* buttonBlue;
+  eeros::hal::Output<bool>* ledGreen;
   eeros::hal::Output<bool>* ledBlue;
   DeltaControlSystem& controlSys;
   SafetySystem& safetySys;

@@ -1,9 +1,7 @@
 #include "DeltaControlSystem.hpp"
 
 DeltaControlSystem::DeltaControlSystem() : 
-  mouse("/dev/input/event1"),
-  pathPlanner({0.2,0.2,0.2}, {5,5,5}, {5,5,5}, dt),
-  circlePlanner(circleRadius, 3.1415 / 2),
+  pathPlanner({0.1,0.1,0.1}, {5,5,5}, {5,5,5}, dt),
   kM(kM1524, kM1524, kM1524),
   RA(RA1524, RA1524, RA1524),
   posSwitch(0),
@@ -38,8 +36,6 @@ DeltaControlSystem::DeltaControlSystem() :
    * label the blocks
    */
   pathPlanner.setName("Pathplanner");
-  mouse.setName("Mouse input");
-  redVect.setName("Reduce vector");
   posSwitch.setName("Position Switch");
   velSwitch.setName("Velocity Switch");
   accSwitch.setName("Acceleration Switch");
@@ -92,9 +88,6 @@ DeltaControlSystem::DeltaControlSystem() :
   pathPlanner.getPosOut().getSignal().setName("xDes");
   pathPlanner.getVelOut().getSignal().setName("dxDes");		// dx/dt -> Speed
   pathPlanner.getAccOut().getSignal().setName("ddxDes");		// ddx/dt² -> Acceleration
-
-  mouse.getOut().getSignal().setName("mousePosition");
-  redVect.getOut().getSignal().setName("mousePosition");
 
   posSwitch.getOut().getSignal().setName("xDes");
   velSwitch.getOut().getSignal().setName("dxDes");
@@ -151,10 +144,7 @@ DeltaControlSystem::DeltaControlSystem() :
   muxEnc.getIn(1).connect(enc2.getOut());
   muxEnc.getIn(2).connect(enc3.getOut());
 
-  redVect.getIn().connect(mouse.getOut());
   posSwitch.getIn(0).connect(pathPlanner.getPosOut());
-  posSwitch.getIn(1).connect(redVect.getOut());
-  posSwitch.getIn(2).connect(circlePlanner.getOut());
   
   velSwitch.getIn(0).connect(pathPlanner.getVelOut());
   velSwitch.getIn(1).connect(velSetPoint.getOut());
@@ -204,17 +194,14 @@ DeltaControlSystem::DeltaControlSystem() :
   mot2.getIn().connect(demuxMot.getOut(1));
   mot3.getIn().connect(demuxMot.getOut(2));
 
-  posSwitch.combine(velSwitch);
-  posSwitch.combine(accSwitch);
+//   posSwitch.combine(velSwitch);
+//   posSwitch.combine(accSwitch);
 
 
   /*
    * add all blocks to the timedomain
    */
-  timedomain.addBlock(mouse);
-  timedomain.addBlock(redVect);
   timedomain.addBlock(pathPlanner);
-  timedomain.addBlock(circlePlanner);
   timedomain.addBlock(posSwitch);
   
   timedomain.addBlock(enc1);
@@ -268,19 +255,6 @@ void DeltaControlSystem::start() {
 void DeltaControlSystem::stop() {
   log.info() << "Stop control system";
   timedomain.stop();
-}
-
-void DeltaControlSystem::setMouseInput() {
-//	mouse.setInitPos(directKin.getOut().getSignal().getValue());
-//  pathPlanner.setInitPos(directKin.getOut().getSignal().getValue());   // disable pathplanner by setting the desired position to the current position
-  posSwitch.switchToInput(1);                                          // set input to mouseinput, also switches the velSwitch and accSwitch
-  voltageSwitch.switchToInput(0);
-}
-
-void DeltaControlSystem::setCircleInput() {
-  circlePlanner.setInitPos(directKin.getOut().getSignal().getValue());
-//  pathPlanner.setInitPos(directKin.getOut().getSignal().getValue());   // disable pathplanner by setting the desired position to the current position
-  posSwitch.switchToInput(2);                                          // set input to mouseinput, also switches the velSwitch and accSwitch
 }
 
 void DeltaControlSystem::setPathPlannerInput() {

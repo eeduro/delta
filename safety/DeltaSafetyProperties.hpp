@@ -34,10 +34,7 @@ class DeltaSafetyProperties : public SafetyProperties {
   SafetyLevel slHoming;
   SafetyLevel slHomed;
   SafetyLevel slSystemReady;
-  SafetyLevel slParking;
-  SafetyLevel slParked;
-  SafetyLevel slMoving;
-  SafetyLevel slMouseControl;
+  SafetyLevel slTesting;
 
   /*
    * Define all possible events
@@ -50,26 +47,14 @@ class DeltaSafetyProperties : public SafetyProperties {
   SafetyEvent doPoweringUp;
   SafetyEvent doHoming;
   SafetyEvent homingDone;
-  SafetyEvent doParking;
-  SafetyEvent parkingDone;
   SafetyEvent doSystemReady;
-  SafetyEvent doMoving;
-  SafetyEvent doMouseControl;
+  SafetyEvent doTesting;
   SafetyEvent stopMoving;
 
  private:
-  DeltaControlSystem& controlSys;
-  
-  /*
-   * critical outputs
-   */
-  hal::Output<bool>* greenLed;
-  hal::Output<bool>* errorLed;
-  
-  /* 
-   * critical inputs
-   */
-  hal::Input<bool>* emergencyStop;
+  DeltaControlSystem& cs;
+  // critical inputs
+  hal::Input<bool>* buttonRed;
 };
 
 }

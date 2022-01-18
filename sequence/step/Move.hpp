@@ -14,15 +14,18 @@ namespace delta {
   
 class Move : public Step {
  public:
-  Move(std::string name, Sequence* caller, DeltaControlSystem& cs) : Step(name, caller), controlSys(cs) {
+  Move(std::string name, Sequence* caller, DeltaControlSystem& cs) : Step(name, caller), cs(cs) {
     this->position = {0,0,0};
   }
   int operator() (AxisVector position) {this->position = position; return start();}
-  int action() {controlSys.pathPlanner.move(position); return 0;}
-  bool checkExitCondition() {return controlSys.pathPlanner.endReached();}
+  int action() {
+    cs.pathPlanner.move(position); 
+    return 0;
+  }
+  bool checkExitCondition() {return cs.pathPlanner.endReached();}
   
  private:
-  DeltaControlSystem &controlSys;
+  DeltaControlSystem &cs;
   AxisVector position;
 };
 

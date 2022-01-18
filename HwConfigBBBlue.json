@@ -12,9 +12,6 @@
       },
       "channel320": {
         "signalId": "ledGreen"
-      },
-      "channel1": {
-        "signalId": "emag"
       }
     },
     "subdevice1": {

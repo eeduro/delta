@@ -34,29 +34,24 @@ int main(int argc, char **argv) {
   Logger log = Logger::getLogger();
   
   log.info() << "Start Delta application";
-  
   log.info() << "Initializing hardware";
   HAL& hal = HAL::instance();
   hal.readConfigFromFile(&argc, argv);
   
   signal(SIGINT, signalHandler);
   
-  // Create the control system
-  DeltaControlSystem controlSys;
-  
-  // Create and initialize a safety system
-  DeltaSafetyProperties safetyProp(controlSys);
-  SafetySystem safetySys(safetyProp, dt);
-  controlSys.timedomain.registerSafetyEvent(safetySys, safetyProp.doEmergency);
+  DeltaControlSystem cs;
+  DeltaSafetyProperties sp(cs);
+  SafetySystem ss(sp, dt);
+  cs.timedomain.registerSafetyEvent(ss, sp.doEmergency);
   
   auto& seq = Sequencer::instance();
-  MainSequence mainSequence("Main sequence", seq, controlSys, safetySys, safetyProp);
+  MainSequence mainSequence("Main sequence", seq, cs, ss, sp);
   mainSequence();
   
   auto &executor = Executor::instance();
-  executor.setMainTask(safetySys);
+  executor.setMainTask(ss);
   executor.run();
-  
   seq.wait();
   
   log.info() << "Delta application finished";
