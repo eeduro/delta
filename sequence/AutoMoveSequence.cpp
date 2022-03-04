@@ -30,7 +30,7 @@ int AutoMoveSequence::action() {
 //     moveMouseCondition.reset();
     wait(5);
     if (res == 0) shuffSeq();
-    wait(5);
+    wait(10);
   }
   return(0);
 }
