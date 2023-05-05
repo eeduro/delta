@@ -2,7 +2,7 @@
 
 DeltaControlSystem::DeltaControlSystem() 
     : mouse("/dev/input/event1"),
-      pathPlanner({0.2, 0.2, 0.2, 5}, {10, 10, 10, 50}, {10, 10, 10, 50}, dt),
+      pathPlanner({0.2, 0.2, 0.2, 10}, {10, 10, 10, 100}, {10, 10, 10, 100}, dt),
       kM(kM1524, kM1524, kM1524, kM0816),
       RA(RA1524, RA1524, RA1524, RA0816),
       posSwitch(0),
@@ -28,7 +28,7 @@ DeltaControlSystem::DeltaControlSystem()
       accSetPoint({0,0,0,0}),
       forceSetPoint({0,0,0,0}),
 
-      speedLimitation({0,0,0,0}),
+      speedLimitation({1000,1000,1000,1000}),
       accLimitation({0,0,0,0}),
       forceLimitation({0,0,0,0}),
       torqueLimitation({0,0,0,0}),

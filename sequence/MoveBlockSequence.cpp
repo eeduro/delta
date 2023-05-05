@@ -6,6 +6,7 @@ MoveBlockSequence::MoveBlockSequence(std::string name, Sequence* caller, DeltaCo
     : Sequence(name, caller, true),
       controlSys(cs),
       move("Move", this, cs),
+      touch("Touch", this, cs),
       grab("Grab", this, cs),
       calibration(cal),
       release("Release", this, cs) { }
@@ -31,7 +32,7 @@ int MoveBlockSequence::action() {
   move(p);
   
   p[2] = calibration.position[from].zblockmax[block];
-  move(p);
+  touch(p);
   
   grab();
 

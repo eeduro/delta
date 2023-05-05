@@ -1,6 +1,6 @@
 #pragma once
 
-#include <eeros/control/Block1i1o.hpp>
+#include <eeros/control/Blockio.hpp>
 #include "constants.hpp"
 #include "types.hpp"
 
@@ -9,7 +9,7 @@ using namespace eeros::control;
 namespace eeduro {
 namespace delta {
   
-class MouseScale : public Block1i1o<AxisVector> {
+class MouseScale : public Blockio<1,1,AxisVector> {
  public:
   MouseScale() {}
 

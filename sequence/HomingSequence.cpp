@@ -31,7 +31,7 @@ int HomingSequence::action() {
   controlSys.setPathPlannerInput();
   wait(0.1);
   controlSys.voltageSwitch.switchToInput(0);	// choose controller setpoint
-  move({0, 0, tcpReady_z, 0});	
+  move({0, 0, tcpReady_z, 0});
   safetySys.triggerEvent(safetyProp.homingDone);
   return(0);
 }

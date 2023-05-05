@@ -9,6 +9,7 @@
 #include "../control/DeltaControlSystem.hpp"
 #include "../Calibration.hpp"
 #include "step/Move.hpp"
+#include "step/Touch.hpp"
 
 using namespace eeros::sequencer;
 using namespace eeros::safety;
@@ -26,6 +27,7 @@ class DetectSequence : public Sequence {
   DeltaControlSystem& controlSys;
   Calibration& calibration;
   Move move;
+  Touch touch;
   Wait wait;
   int position;
 };

@@ -1,6 +1,6 @@
 #pragma once
 
-#include <eeros/control/Block1i1o.hpp>
+#include <eeros/control/Blockio.hpp>
 #include <eeros/math/Matrix.hpp>
 
 #include "types.hpp"
@@ -14,7 +14,7 @@ using namespace eeduro::delta;
 namespace eeduro {
 namespace delta {
   
-class DirectKinematic : public Block1i1o<AxisVector> {
+class DirectKinematic : public Blockio<1,1,AxisVector> {
  public:
   DirectKinematic(Kinematic& kin);
 
