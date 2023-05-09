@@ -1,6 +1,6 @@
 #pragma once
 
-#include <eeros/control/Block1i1o.hpp>
+#include <eeros/control/Blockio.hpp>
 #include <eeros/math/Matrix.hpp>
 
 #include "types.hpp"
@@ -14,7 +14,7 @@ using namespace eeduro::delta;
 namespace eeduro {
 namespace delta {
   
-class ReduceVector : public Block1i1o<Vector4, AxisVector> {
+class ReduceVector : public Blockio<1,1,Vector4, AxisVector> {
  public:
   ReduceVector() { }
   virtual void run() { 

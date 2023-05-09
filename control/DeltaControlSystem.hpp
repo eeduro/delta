@@ -52,15 +52,11 @@ class DeltaControlSystem {
    */
   AxisVector kM;
   AxisVector RA;
-  Kinematic kinematic;
-  Jacobian jacobian;
 
   MouseInput mouse;
   ReduceVector redVect;
   PathPlannerConstAcc<AxisVector> pathPlanner;
   CirclePlaner circlePlanner;
-
-  Switch<3,AxisVector> posSwitch;
 
   PeripheralInput<double> enc1;
   PeripheralInput<double> enc2;
@@ -70,39 +66,37 @@ class DeltaControlSystem {
   PeripheralOutput<double> mot2;
   PeripheralOutput<double> mot3;
 
+  Constant<AxisVector> voltageSetPoint;
+  Constant<AxisVector> velSetPoint;
+  Constant<AxisVector> accSetPoint;
+
+  Switch<3,AxisVector> posSwitch;
+  Switch<3, AxisVector> velSwitch;
+  Switch<3, AxisVector> accSwitch;
+  Switch<2, AxisVector> voltageSwitch;
+
   Mux<3, double, AxisVector> muxEnc;
   DeMux<3, double, AxisVector> demuxMot;
 
-  control::D<AxisVector> posDiff;
-
-  Sum<2, AxisVector> posSum;
-  Gain<AxisVector> posController;
-
-  Sum<3, AxisVector> speedSum;
-  Saturation<AxisVector> speedLimitation;
-  Gain<AxisVector> speedController;
-
-  Sum<2,AxisVector> accSum;
-
+  DirectKinematic directKin;
+  Kinematic kinematic;
+  Jacobian jacobian;
   Inertia inertia;
   Jacobi jacobi;
+  control::D<AxisVector> posDiff;
+  Gain<AxisVector> posController;
+  Gain<AxisVector> speedController;
 
+  Sum<2, AxisVector> posSum;
+  Sum<3, AxisVector> speedSum;
+  Sum<2,AxisVector> accSum;
+
+  Saturation<AxisVector> speedLimitation;
   Saturation<AxisVector> forceLimitation;
   Saturation<AxisVector> torqueLimitation;
 
   MotorModel motorModel;
 
-  Switch<2, AxisVector> voltageSwitch;
-  Constant<AxisVector> voltageSetPoint;
-
-  DirectKinematic directKin;
-  
-  Constant<AxisVector> accSetPoint;
-  Constant<AxisVector> velSetPoint;
-  
-  Switch<3, AxisVector> accSwitch;
-  Switch<3, AxisVector> velSwitch;
-  
   TimeDomain timedomain;
   Logger log;
 };

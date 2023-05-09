@@ -31,7 +31,7 @@ void Inertia::run() {
     }
   }
   
-  forceOut.getSignal().setValue(0);
+  forceOut.getSignal().setValue({0,0,0});
   forceOut.getSignal().setTimestamp(accelerationIn.getSignal().getTimestamp());
 }
 

@@ -24,6 +24,10 @@ DeltaControlSystem::DeltaControlSystem()
       velSetPoint({0,0,0,}),
       accSetPoint({0,0,0}),
 
+      speedLimitation({0,0,0}),
+      forceLimitation({0,0,0}),
+      torqueLimitation({0,0,0}),
+
       enc1("enc1"),
       enc2("enc2"),
       enc3("enc3"),

@@ -1,7 +1,7 @@
 #pragma once
 
 #include <eeros/core/System.hpp>
-#include <eeros/control/Block1o.hpp>
+#include <eeros/control/Blockio.hpp>
 #include "types.hpp"
 
 using namespace eeros;
@@ -10,7 +10,7 @@ using namespace eeros::control;
 namespace eeduro {
 namespace delta {
   
-class CirclePlaner : public Block1o<AxisVector> {
+class CirclePlaner : public Blockio<0,1,AxisVector> {
  public:
   CirclePlaner(double radius, double speed);
   
