@@ -7,14 +7,14 @@ using namespace eeduro::delta;
 MouseSequence::MouseSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp) 
     : Sequence(name, caller, true),
       controlSys(cs),
-      safetySys(ss),
       safetyProp(sp),
+      safetySys(ss),
       wait("Wait", this),
       grab("grab", this, cs),
       release("release", this, cs),
       mouseTimeoutSequence("Mouse timeOut exception", this, ss, sp),
-      blueButtonCondition(),
       blueButtonExceptionSequence("Blue button exception in mouse", this, cs, ss, sp),
+      blueButtonCondition(),
       blueButtonMonitor("Blue button monitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSequence) {
     setTimeoutTime(5.0);
     setTimeoutExceptionSequence(mouseTimeoutSequence);

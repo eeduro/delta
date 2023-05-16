@@ -2,25 +2,8 @@
 
 using namespace eeduro::delta;
 
-DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys) 
-    : controlSys(controlSys),
-
-      doEmergency("Do emergency"),
-      doControlStart("Do control start"),
-      doControlStop("Do control stop"),
-      controlStoppingDone("Control stop done"),
-      controlStartingDone("Control start done"),
-      doPoweringUp("Do power up"),
-      doHoming("Do homing"),
-      doParking("Do parking"),
-      parkingDone("Parking done"),
-      homingDone("Homing done"),
-      doSystemReady("Do system ready"),
-      doAutoMoving("Do auto moving"),
-      doMouseControl("Do mouse control"),
-      stopMoving("Stop moving"),
-      
-      slOff("Off"),
+DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys)
+    : slOff("Off"),
       slEmergency("Emergency"),
       slControlStopping("Stop control system"),
       slControlStarting("Start control system"),
@@ -32,7 +15,24 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& controlSys)
       slParking("Parking"),
       slParked("Parked"),
       slAutoMoving("Auto moving"),
-      slMouseControl("Mouse control") {
+      slMouseControl("Mouse control"),
+
+      doEmergency("Do emergency"),
+      doControlStart("Do control start"),
+      doControlStop("Do control stop"),
+      controlStoppingDone("Control stop done"),
+      controlStartingDone("Control start done"),
+      doPoweringUp("Do power up"),
+      doHoming("Do homing"),
+      homingDone("Homing done"),
+      doParking("Do parking"),
+      parkingDone("Parking done"),
+      doSystemReady("Do system ready"),
+      doAutoMoving("Do auto moving"),
+      doMouseControl("Do mouse control"),
+      stopMoving("Stop moving"),
+
+      controlSys(controlSys) {
       
   HAL& hal = HAL::instance();
 

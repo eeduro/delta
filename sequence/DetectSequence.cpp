@@ -7,7 +7,6 @@ DetectSequence::DetectSequence(std::string name, Sequence* caller, DeltaControlS
   controlSys(cs),
   calibration(cal),
   move("Move", this, cs),
-  touch("Touch", this, cs),
   wait("Wait", this) { }
 
 int DetectSequence::operator()(int pos) {
@@ -27,14 +26,14 @@ int DetectSequence::action() {
   controlSys.accLimitation.setLimit({ -100, -100, 0, -100 }, limit);
   controlSys.forceSetPoint.setValue({0, 0, -1.5, 0});
   p[2] = calibration.position[position].level30 - 0.002;
-  touch(p);
+  move(p);
   wait(0.5);	// wait for final position to be reached
   
   double z = controlSys.directKin.getOut().getSignal().getValue()[2];
   p[2] = last_z;
   controlSys.accLimitation.setLimit(-limit, limit);
   controlSys.forceSetPoint.setValue({0, 0, 0, 0});
-  touch(p);
+  move(p);
 
   int block = calibration.getBlock(position, z);
   log.warn() << "[DETECT] pos " << position << ": z = " << z << " -> block = " << block;

@@ -9,8 +9,8 @@ HomingSequence::HomingSequence(std::string name, Sequence* caller, DeltaControlS
       controlSys(cs),
       safetySys(ss),
       safetyProp(sp),
-      wait("Wait", this),
-      move("Move", this, cs) { }
+      move("Move", this, cs),
+      wait("Wait", this) { }
 
 int HomingSequence::action() {
   AxisVector torqueLimit{ q012gearTorqueLimit, q012gearTorqueLimit, q012gearTorqueLimit, q3gearTorqueLimit };
@@ -32,6 +32,7 @@ int HomingSequence::action() {
   wait(0.1);
   controlSys.voltageSwitch.switchToInput(0);	// choose controller setpoint
   move({0, 0, tcpReady_z, 0});
+
   safetySys.triggerEvent(safetyProp.homingDone);
   return(0);
 }

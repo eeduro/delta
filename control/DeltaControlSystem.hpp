@@ -73,8 +73,8 @@ class DeltaControlSystem {
   Constant<bool> emagVal;
 
   Switch<2,AxisVector> posSwitch;
-  Switch<2, AxisVector> accSwitch;
   Switch<2, AxisVector> velSwitch;
+  Switch<2, AxisVector> accSwitch;
   Switch<2, AxisVector> voltageSwitch;
 
   Mux<4, double, AxisVector> muxEnc;
@@ -86,6 +86,7 @@ class DeltaControlSystem {
   Inertia inertia;
   Jacobi jacobi;
   control::D<AxisVector> posDiff;
+  control::D<AxisVector> posDiff2;
   Gain<AxisVector> posController;
   Gain<AxisVector> speedController;
 

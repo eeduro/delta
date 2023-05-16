@@ -1,13 +1,9 @@
 #pragma once
 
-#include <array>
-
 #include <eeros/sequencer/Sequence.hpp>
-
 #include "../control/DeltaControlSystem.hpp"
 #include "../Calibration.hpp"
 #include "step/Move.hpp"
-#include "step/Touch.hpp"
 #include "step/Grab.hpp"
 #include "step/Release.hpp"
 
@@ -27,7 +23,6 @@ class MoveBlockSequence : public Sequence {
   DeltaControlSystem& controlSys;
   Calibration& calibration;
   Move move;
-  Touch touch;
   Grab grab;
   Release release;
   int from;

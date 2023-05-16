@@ -16,15 +16,11 @@ class Move : public Step {
   }
   int operator() (AxisVector position) {this->position = position; return start();}
   int action() {controlSys.pathPlanner.move(position); return 0;}
-  bool checkExitCondition() {
-    Vector4 diff = controlSys.directKin.getOut().getSignal().getValue() - position;
-    return abs(diff[0]) < limit && abs(diff[1]) < limit && abs(diff[2]) < limit && abs(diff[3]) < 10*limit;
-  }
-  
+  bool checkExitCondition() {return controlSys.pathPlanner.endReached();}
+
  private:
   DeltaControlSystem &controlSys;
   AxisVector position;
-  const double limit = 0.0002;
 };
 
 }

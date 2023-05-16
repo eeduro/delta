@@ -8,15 +8,15 @@ AutoMoveSequence::AutoMoveSequence(std::string name, Sequence* caller, DeltaCont
   sortSeq("Sort", this, cs, cal),
   shuffSeq("Shuffle", this, cs, cal),
   wait("Wait", this),
-  moveMouseCondition(cs),
   mouseExceptionSeq("Mouse exception in AutoMove", this,  ss, sp),
+  moveMouseCondition(cs),
   moveMouseMonitor("Mouse move monitor", this, moveMouseCondition, SequenceProp::abort, &mouseExceptionSeq),
+  blueButtonExceptionSeq("Blue button exception in AutoMove", this, cs, ss, sp),
+  blueButtonCondition(),
+  blueButtonMonitor("Blue button monitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSeq),
   controlSys(cs),
   safetySys(ss),
-  safetyProp(sp),
-  blueButtonCondition(),
-  blueButtonExceptionSeq("Blue button exception in AutoMove", this, cs, ss, sp),
-  blueButtonMonitor("Blue button monitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSeq) { 
+  safetyProp(sp) {
     addMonitor(&moveMouseMonitor);
     addMonitor(&blueButtonMonitor);
   }

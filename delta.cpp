@@ -65,19 +65,6 @@ int main(int argc, char **argv) {
   
   auto &executor = Executor::instance();
   executor.setMainTask(safetySys);
-
-
-  eeros::task::Lambda l1 ([&] () { });
-  eeros::task::Periodic perLog("periodic log", 1, l1);
-  perLog.monitors.push_back([&](PeriodicCounter &pc, Logger &log){
-//    log.info() << controlSys.pathPlanner.getPosOut().getSignal();
-    log.info() << controlSys.pathPlanner.getPosOut().getSignal().getValue() << ", " << controlSys.directKin.getOut().getSignal().getValue();
-  });
-
-  // and further down the code
-  executor.add(perLog);
-
-
   executor.run();
 
   seq.wait();
