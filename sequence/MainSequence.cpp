@@ -4,17 +4,17 @@ using namespace eeduro::delta;
 
 MainSequence::MainSequence(std::string name, Sequencer& seq, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp)
     : Sequence(name, seq),
-      controlSys(cs),
-      safetySys(ss),
-      safetyProp(sp),
       homingSeq("Homing", this, cs, ss, sp),
       circleSeq("Circle", this, cs, ss, sp),
       parkSeq("Park", this, cs, ss, sp),
       mouseSeq("Mouse", this, cs, ss, sp),
       wait("Wait", this),
-      emergencyCondition(ss, sp),
       emergencyExceptionSeq("Emergency exception", this, cs, ss, sp), 
-      emergencyMonitor("Emergency level monitor", this, emergencyCondition, eeros::sequencer::SequenceProp::restart, &emergencyExceptionSeq) {
+      emergencyCondition(ss, sp),
+      emergencyMonitor("Emergency level monitor", this, emergencyCondition, eeros::sequencer::SequenceProp::restart, &emergencyExceptionSeq),
+      controlSys(cs),
+      safetySys(ss),
+      safetyProp(sp) {
     HAL& hal = HAL::instance();
     buttonGreen = hal.getLogicInput("buttonGreen", false);
     buttonBlue = hal.getLogicInput("buttonBlue", false);

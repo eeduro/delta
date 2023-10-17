@@ -4,17 +4,17 @@ using namespace eeduro::delta;
 
 CircleSequence::CircleSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp)
     : Sequence(name, caller, true),
-      controlSys(cs),
-      safetySys(ss),
-      safetyProp(sp),
       wait("Wait", this),
       move("Move", this, cs),
-      moveMouseCondition(cs),
-      mouseExceptionSequence("Mouse exception", this,  ss, sp),
-      moveMouseMonitor("Mouse move monitor", this, moveMouseCondition, SequenceProp::abort, &mouseExceptionSequence),
-      blueButtonCondition(),
       blueButtonExceptionSequence("Blue button exception in circle", this, cs, ss, sp),
-      blueButtonMonitor("Blue button monitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSequence) { 
+      blueButtonCondition(),
+      blueButtonMonitor("Blue button monitor", this, blueButtonCondition, SequenceProp::abort, &blueButtonExceptionSequence),
+      mouseExceptionSequence("Mouse exception", this,  ss, sp),
+      moveMouseCondition(cs),
+      moveMouseMonitor("Mouse move monitor", this, moveMouseCondition, SequenceProp::abort, &mouseExceptionSequence),
+      controlSys(cs),
+      safetyProp(sp),
+      safetySys(ss) {
     addMonitor(&blueButtonMonitor);
     addMonitor(&moveMouseMonitor);
   }

@@ -5,8 +5,8 @@ using namespace eeduro::delta;
 ParkSequence::ParkSequence(std::string name, Sequence* caller, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp)
     : Sequence(name, caller, true),
       controlSys(cs),
-      safetyProp(sp),
       safetySys(ss),
+      safetyProp(sp),
       move("Move",this, cs) { }
 
 int ParkSequence::action() {	

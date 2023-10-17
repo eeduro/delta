@@ -1,40 +1,35 @@
 #include "DeltaControlSystem.hpp"
 
 DeltaControlSystem::DeltaControlSystem() 
-    : mouse("/dev/input/event1"),
+    : kM(kM1524, kM1524, kM1524),
+      RA(RA1524, RA1524, RA1524),
+      mouse("/dev/input/event1"),
       pathPlanner({0.2,0.2,0.2}, {5,5,5}, {5,5,5}, dt),
       circlePlanner(circleRadius, 3.1415 / 2),
-      kM(kM1524, kM1524, kM1524),
-      RA(RA1524, RA1524, RA1524),
-      posSwitch(0),
-      velSwitch(0),
-      accSwitch(0),
-
-      jacobian(kinematic.get_offset()),
-      posController(kp),
-      speedController(kd),
-
-      inertia(jacobian),
-      jacobi(jacobian),
-      motorModel(kM, RA),
-      voltageSwitch(1),
-      directKin(kinematic),
-
-      voltageSetPoint({0,0,0}),
-      velSetPoint({0,0,0,}),
-      accSetPoint({0,0,0}),
-
-      speedLimitation({0,0,0}),
-      forceLimitation({0,0,0}),
-      torqueLimitation({0,0,0}),
-
       enc1("enc1"),
       enc2("enc2"),
       enc3("enc3"),
-
       mot1("motor1"),
       mot2("motor2"),
       mot3("motor3"),
+      voltageSetPoint({0,0,0}),
+      velSetPoint({0,0,0,}),
+      accSetPoint({0,0,0}),
+      posSwitch(0),
+      velSwitch(0),
+      accSwitch(0),
+      voltageSwitch(1),
+      directKin(kinematic),
+      jacobian(kinematic.get_offset()),
+      inertia(jacobian),
+      jacobi(jacobian),
+      posController(kp),
+      speedController(kd),
+      speedLimitation({0,0,0}),
+      forceLimitation({0,0,0}),
+      torqueLimitation({0,0,0}),
+      motorModel(kM, RA),
+
       timedomain("Main time domain", dt, true),
       log(Logger::getLogger()) {
     
@@ -59,7 +54,8 @@ DeltaControlSystem::DeltaControlSystem()
 
   posSum.setName("Position difference");
   posController.setName("Position controller");
-  posDiff.setName("Actual position derivation");
+  posDiff.setName("Actual cartesian position derivation");
+  posDiff2.setName("Actual position derivation");
 
   speedSum.setName("Speed difference");
   speedLimitation.setName("Speed limitation");
@@ -118,6 +114,7 @@ DeltaControlSystem::DeltaControlSystem()
   posSum.getOut().getSignal().setName("xDiff");
   posController.getOut().getSignal().setName("dxDes");
   posDiff.getOut().getSignal().setName("dxAct");
+  posDiff2.getOut().getSignal().setName("dxAct");
 
   speedSum.getOut().getSignal().setName("dxDiff");
   speedLimitation.getOut().getSignal().setName("dxDiff");
@@ -172,6 +169,7 @@ DeltaControlSystem::DeltaControlSystem()
   posSum.getIn(1).connect(directKin.getOut());
   posController.getIn().connect(posSum.getOut());
   posDiff.getIn().connect(directKin.getOut());
+  posDiff2.getIn().connect(muxEnc.getOut());
 
   speedSum.getIn(0).connect(velSwitch.getOut());
   speedSum.getIn(1).connect(posController.getOut());
@@ -195,7 +193,7 @@ DeltaControlSystem::DeltaControlSystem()
   torqueLimitation.getIn().connect(jacobi.getOut());
 
   motorModel.getTorqueIn().connect(torqueLimitation.getOut());
-  motorModel.getSpeedIn().connect(posDiff.getOut());
+  motorModel.getSpeedIn().connect(posDiff2.getOut());
 
   voltageSwitch.getIn(0).connect(motorModel.getOut());
   voltageSwitch.getIn(1).connect(voltageSetPoint.getOut());
@@ -231,7 +229,8 @@ DeltaControlSystem::DeltaControlSystem()
   timedomain.addBlock(posSum);
   timedomain.addBlock(posDiff);
   timedomain.addBlock(posController);
-  
+  timedomain.addBlock(posDiff2);
+
   timedomain.addBlock(velSetPoint);
   timedomain.addBlock(velSwitch);
 

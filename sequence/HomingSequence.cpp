@@ -7,8 +7,8 @@ HomingSequence::HomingSequence(std::string name, Sequence* caller, DeltaControlS
       controlSys(cs),
       safetySys(ss),
       safetyProp(sp),
-      wait("Wait", this),
-      move("Move", this, cs) { }
+      move("Move", this, cs),
+      wait("Wait", this) { }
 
 int HomingSequence::action() {
   controlSys.voltageSetPoint.setValue({q012InitVoltage, q012InitVoltage, q012InitVoltage});	// choose fixed voltage

@@ -84,6 +84,7 @@ class DeltaControlSystem {
   Inertia inertia;
   Jacobi jacobi;
   control::D<AxisVector> posDiff;
+  control::D<AxisVector> posDiff2;
   Gain<AxisVector> posController;
   Gain<AxisVector> speedController;
 
