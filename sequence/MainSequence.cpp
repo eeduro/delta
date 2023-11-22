@@ -4,14 +4,14 @@ using namespace eeduro::delta;
 
 MainSequence::MainSequence(std::string name, Sequencer& seq, DeltaControlSystem& cs, SafetySystem& ss, DeltaSafetyProperties& sp)
     : Sequence(name, seq),
-      safetyProp(sp),
-      safetySys(ss),
-      controlSys(cs),
+      cs(cs),
+      ss(ss),
+      sp(sp),
       homingSeq("Homing sequence", this, cs, ss, sp),
       testingSeq("Testing sequence", this, cs, ss, sp),
       wait("Wait in main", this),
+      emergencyExceptionSeq("Emergency exception sequence", this, cs),
       emergencyCondition(ss, sp),
-      emergencyExceptionSeq("Emergency exception sequence", this, cs), 
       emergencyMonitor("Emergency level monitor", this, emergencyCondition, eeros::sequencer::SequenceProp::restart, &emergencyExceptionSeq) {
     HAL& hal = HAL::instance();
     buttonGreen = hal.getLogicInput("buttonGreen", false);
@@ -28,35 +28,35 @@ int MainSequence::action() {
   
   while(Sequencer::running) {
     bool broadSide;
-    if(safetySys.getCurrentLevel() == safetyProp.slSystemOn) {
-      safetySys.triggerEvent(safetyProp.doPoweringUp);
+    if(ss.getCurrentLevel() == sp.slSystemOn) {
+      ss.triggerEvent(sp.doPoweringUp);
     }
-    if(safetySys.getCurrentLevel() == safetyProp.slEmergency) {
+    if(ss.getCurrentLevel() == sp.slEmergency) {
       if(buttonBlue->get())
-        safetySys.triggerEvent(safetyProp.doControlStart);
+        ss.triggerEvent(sp.doControlStart);
     }
-    if(safetySys.getCurrentLevel() == safetyProp.slPoweringUp) {
-      safetySys.triggerEvent(safetyProp.doHoming);
+    if(ss.getCurrentLevel() == sp.slPoweringUp) {
+      ss.triggerEvent(sp.doHoming);
     }
-    if(safetySys.getCurrentLevel() == safetyProp.slHoming) {
+    if(ss.getCurrentLevel() == sp.slHoming) {
       homingSeq();
     }
-    if(safetySys.getCurrentLevel() == safetyProp.slHomed) {
-      safetySys.triggerEvent(safetyProp.doSystemReady);
+    if(ss.getCurrentLevel() == sp.slHomed) {
+      ss.triggerEvent(sp.doSystemReady);
     }
-    if(safetySys.getCurrentLevel() == safetyProp.slSystemReady) {
+    if(ss.getCurrentLevel() == sp.slSystemReady) {
       ledGreen->set(true);
       ledBlue->set(true);
       if(buttonGreen->get()) {
-        broadSide = true;
-        safetySys.triggerEvent(safetyProp.doTesting);     // go to testing
+        broadSide = false;
+        ss.triggerEvent(sp.doTesting);     // go to testing
       }
       if(buttonBlue->get()) {
-        broadSide = false;
-        safetySys.triggerEvent(safetyProp.doTesting);     // go to testing
+        broadSide = true;
+        ss.triggerEvent(sp.doTesting);     // go to testing
       }
     }
-    else if(safetySys.getCurrentLevel() == safetyProp.slTesting) {
+    else if(ss.getCurrentLevel() == sp.slTesting) {
       ledGreen->set(false);
       ledBlue->set(false);
       testingSeq(broadSide);

@@ -34,44 +34,53 @@ TestingSequence::TestingSequence(std::string name, Sequence* caller, DeltaContro
       move("Move in testing sequence", this, cs),
       check("Check", this, cs) { 
   ledRed = HAL::instance().getLogicOutput("ledRed", false);
+  ledGreen = HAL::instance().getLogicOutput("ledGreen", false);
 }
 
 int TestingSequence::operator() (bool broadSide) {this->broadSide = broadSide; return start();}
 
 int TestingSequence::action() {
-  char ch;
   cs.pathPlanner.setStart(cs.directKin.getOut().getSignal().getValue());
-  cs.setPathPlannerInput();
+  ledGreen->set(true);
   ledRed->set(true);
+  if (broadSide) wait(0.3); else wait(0.1);
+  ledGreen->set(false);
 
   if (broadSide) {
-    AxisVector pos = {0, 0, tcpReady_z}; // zero position is at U18/U15
-    pos[0] = 3 * 0.014 + 0.002; // MIO
+    AxisVector pos = {tcpReady_x, tcpReady_y, tcpReady_z - 0.006}; // zero position is at U18/U15
+    pos[0] = tcpReady_x + 3 * 0.014 + 0.002; // MIO
     for (int k = 1; k >= -3; k--) {
       pos[1] = k * 0.0074;
       check(pos);
     }
-    for (int i = 2; i >= -2; i--) {
-      pos[0] = i * 0.014;
+    for (int i = 2; i >= -2; i--) { // flink GPIO
+      pos[0] = tcpReady_x + i * 0.014;
       for (int k = 3; k >= -3; k--) {
         pos[1] = k * 0.0074;
+        if (i == -2 && k == 3) pos[1] += 0.001; // kinematic does is not precise at outer range
+        if (i == -2 && k == 2) pos[1] += 0.0009;
+        if (i == -1 && k == 3) pos[1] += 0.0007;
+        if (i == 0 && k == 3) pos[1] += 0.0005;
         check(pos);
       }
     }
-    move({0, 0, tcpReady_z});
   } else {
-    AxisVector pos = {0, 0, tcpReady_z}; // zero position is at G18/F20
+    AxisVector pos = {tcpReady_x, tcpReady_y, tcpReady_z - 0.006}; // zero position is at G18/F20
     for (int i = 4; i >= -3; i--) {
-      pos[0] = i * 0.014;
+      pos[0] = tcpReady_x + i * 0.014;
+      if (i == 4) pos[0] += 0.0006;
+      if (i <= -1) pos[0] -= 0.0006;
       for (int k = 2; k >= -2; k--) {
         pos[1] = k * 0.0074;
+        if (i == -3 && k >= 1) pos[1] += 0.001;
+        if (i == -2 && k == 2) pos[1] += 0.001;
         check(pos);
       }
     }
-    move({0, 0, tcpReady_z});    
   }
   
   ledRed->set(false);
+  move({tcpReady_x, tcpReady_y, tcpReady_z});
   ss.triggerEvent(sp.stopMoving);
   return(0);
 }

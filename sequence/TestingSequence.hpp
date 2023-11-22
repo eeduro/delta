@@ -37,13 +37,14 @@ class TestingSequence : public Sequence {
   void resetMousePos();
   
  private:
+  DeltaControlSystem& cs;
+  SafetySystem& ss;
+  DeltaSafetyProperties& sp;
   Wait wait;
   Move move;
   Check check;
-  DeltaControlSystem& cs;
-  DeltaSafetyProperties& sp;
-  SafetySystem& ss;
   eeros::hal::Output<bool>* ledRed;
+  eeros::hal::Output<bool>* ledGreen;
   bool broadSide;
 };
 

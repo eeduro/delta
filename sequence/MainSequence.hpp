@@ -25,6 +25,9 @@ class MainSequence : public Sequence {
   int action();
   
  private:
+  DeltaControlSystem& cs;
+  SafetySystem& ss;
+  DeltaSafetyProperties& sp;
   HomingSequence homingSeq;
   TestingSequence testingSeq;
   Wait wait;
@@ -37,9 +40,6 @@ class MainSequence : public Sequence {
   eeros::hal::Input<bool>* buttonBlue;
   eeros::hal::Output<bool>* ledGreen;
   eeros::hal::Output<bool>* ledBlue;
-  DeltaControlSystem& controlSys;
-  SafetySystem& safetySys;
-  DeltaSafetyProperties& safetyProp;
   uint8_t blueButtonCounter = 0;
 };
 

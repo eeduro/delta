@@ -3,7 +3,16 @@
 using namespace eeduro::delta;
 
 DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& cs) 
-    : cs(cs),
+    : slOff("Off"),
+      slEmergency("Emergency"),
+      slControlStopping("Stop control system"),
+      slControlStarting("Start control system"),
+      slSystemOn("System on"),
+      slPoweringUp("Powering up"),
+      slHoming("Homing"),
+      slHomed("Homed"),
+      slSystemReady("System ready"),
+      slTesting("Testing"),
 
       doEmergency("Do emergency"),
       doControlStart("Do control start"),
@@ -17,16 +26,7 @@ DeltaSafetyProperties::DeltaSafetyProperties(DeltaControlSystem& cs)
       doTesting("Do testing"),
       stopMoving("Stop moving"),
       
-      slOff("Off"),
-      slEmergency("Emergency"),
-      slControlStopping("Stop control system"),
-      slControlStarting("Start control system"),
-      slSystemOn("System on"),
-      slPoweringUp("Powering up"),
-      slHoming("Homing"),
-      slHomed("Homed"),
-      slSystemReady("System ready"),
-      slTesting("Testing") {
+      cs(cs) {
       
   HAL& hal = HAL::instance();
   buttonRed = hal.getLogicInput("buttonRed", false);
