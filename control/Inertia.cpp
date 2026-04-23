@@ -30,7 +30,7 @@ void Inertia::run() {
       Vector3 F = M * a;
       double tau = jred * qdd; // magnet axis
 
-      forceOut.getSignal().setValue(Vector4(F[0], F[1], F[2], tau));
+      forceOut.getSignal().setValue(Vector4({F[0], F[1], F[2], tau}));
       forceOut.getSignal().setTimestamp(accelerationIn.getSignal().getTimestamp());
       
       return;

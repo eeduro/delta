@@ -1,8 +1,8 @@
 #include "DeltaControlSystem.hpp"
 
 DeltaControlSystem::DeltaControlSystem()
-    : kM(kM1524, kM1524, kM1524, kM0816),
-      RA(RA1524, RA1524, RA1524, RA0816),
+    : kM({kM1524, kM1524, kM1524, kM0816}),
+      RA({RA1524, RA1524, RA1524, RA0816}),
       mouse("/dev/input/event1"),
       pathPlanner({0.2, 0.2, 0.2, 10}, {10, 10, 10, 100}, {10, 10, 10, 100}, dt),
       enc1("enc1"),
@@ -14,9 +14,9 @@ DeltaControlSystem::DeltaControlSystem()
       mot3("motor3"),
       mot4("motor4"),
       voltageSetPoint({0.0,0.0,0.0,0.0}),
-      velSetPoint({0,0,0,0}),
-      accSetPoint({0,0,0,0}),
-      forceSetPoint({0,0,0,0}),
+      velSetPoint({0.0,0.0,0.0,0.0}),
+      accSetPoint({0.0,0.0,0.0,0.0}),
+      forceSetPoint({0.0,0.0,0.0,0.0}),
       emagVal(false),
       posSwitch(0),
       velSwitch(0),
