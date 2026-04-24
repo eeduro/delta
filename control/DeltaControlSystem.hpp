@@ -75,8 +75,8 @@ class DeltaControlSystem {
   Switch<3, AxisVector> accSwitch;
   Switch<2, AxisVector> voltageSwitch;
 
-  Mux<3, double, AxisVector> muxEnc;
-  DeMux<3, double, AxisVector> demuxMot;
+  Mux<3, double> muxEnc;
+  DeMux<3, double> demuxMot;
 
   DirectKinematic directKin;
   Kinematic kinematic;

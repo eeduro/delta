@@ -12,8 +12,8 @@ void CirclePlaner::run() {
   c[1] = R * sin(v * (t - start));
   c[2] = tcpReady_z;
   
-  out.getSignal().setValue(c);
-  out.getSignal().setTimestamp(t);
+  this->getOut().getSignal().setValue(c);
+  this->getOut().getSignal().setTimestamp(t);
 }
 
 void CirclePlaner::setInitPos(double x, double y, double z) {
@@ -21,6 +21,6 @@ void CirclePlaner::setInitPos(double x, double y, double z) {
 }
 
 void CirclePlaner::setInitPos(AxisVector pos) {
-  out.getSignal().setValue(pos);
+  this->getOut().getSignal().setValue(pos);
   start = System::getTime();
 }
