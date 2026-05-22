@@ -67,7 +67,7 @@ int CalibrateSequence::action() {
     calibration.position[i].level30 = (calibration.position[i].zblockmin[3] + calibration.position[i].zblockmax[0]) / 2;
   }
   
-  if (calibration.save("/home/ost/bin/delta-sort.conf")) {
+  if (calibration.save("/etc/EEROS/HwConfigs/delta-ntb/cal.conf")) {
     log.info() << "calibration saved";
     for (int i = 0; i < 4; i++) {
       log.info() << "p" << i << "l12 = " << calibration.position[i].level12;

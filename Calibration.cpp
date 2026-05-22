@@ -1,8 +1,15 @@
 #include "Calibration.hpp"
+#include <cstdlib>
 
 using namespace eeduro::delta;
 
-Calibration::Calibration() : Calibration("/home/ost/bin/delta-sort.conf") { }
+static const char* getPathFromEnv() {
+    const char* path = std::getenv("DELTA_CALIBRATION_FILE_PATH");
+    if(path == nullptr) return "/etc/EEROS/HwConfigs/delta-ntb/delta-sort.conf";
+    else return path;
+}
+
+Calibration::Calibration() : Calibration(getPathFromEnv()) { }
 
 Calibration::Calibration(const char *path) : FileConfig(path) {
   add("p0x", position[0].x);			// x ccordinate of position 0 

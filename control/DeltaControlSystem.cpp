@@ -1,4 +1,5 @@
 #include "DeltaControlSystem.hpp"
+#include "MagnetControl.hpp"
 
 DeltaControlSystem::DeltaControlSystem()
     : kM({kM1524, kM1524, kM1524, kM0816}),
@@ -18,6 +19,7 @@ DeltaControlSystem::DeltaControlSystem()
       accSetPoint({0.0,0.0,0.0,0.0}),
       forceSetPoint({0.0,0.0,0.0,0.0}),
       emagVal(false),
+      magCtrl(),
       posSwitch(0),
       velSwitch(0),
       accSwitch(0),
@@ -34,6 +36,7 @@ DeltaControlSystem::DeltaControlSystem()
       torqueLimitation({0,0,0,0}),
       motorModel(kM, RA),
       emag("emag"),
+      emag2("emag2"),
       
       timedomain("Main time domain", dt, true),
       log(Logger::getLogger()) {
@@ -223,7 +226,9 @@ DeltaControlSystem::DeltaControlSystem()
   mot3.getIn().connect(demuxMot.getOut(2));
   mot4.getIn().connect(demuxMot.getOut(3));
   
-  emag.getIn().connect(emagVal.getOut());
+  magCtrl.getIn().connect(emagVal.getOut());
+  emag.getIn().connect(magCtrl.getOutA());
+  emag2.getIn().connect(magCtrl.getOutB());
   
   posSwitch.combine(velSwitch);
   posSwitch.combine(accSwitch);
@@ -281,7 +286,9 @@ DeltaControlSystem::DeltaControlSystem()
   timedomain.addBlock(mot4);
 
   timedomain.addBlock(emagVal);
+  timedomain.addBlock(magCtrl);
   timedomain.addBlock(emag);
+  timedomain.addBlock(emag2);
   
   /*
    * add timedomain to the executor

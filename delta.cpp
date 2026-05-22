@@ -1,3 +1,4 @@
+#include <cstdlib>
 #include <iostream>
 #include <ostream>
 #include <fstream>
@@ -40,7 +41,10 @@ int main(int argc, char **argv) {
   
   log.info() << "Initializing hardware";
   HAL& hal = HAL::instance();
-  hal.readConfigFromFile(&argc, argv);
+
+  const char* path = std::getenv("DELTA_HAL_CONFIG_FILE_PATH");
+  if(path == nullptr) hal.readConfigFromFile(&argc, argv);
+  else hal.readConfigFromFile(path);
   
   signal(SIGINT, signalHandler);
   

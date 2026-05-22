@@ -13,8 +13,10 @@ namespace delta {
 class Release : public Step {
  public:
   Release(std::string name, Sequence* caller, DeltaControlSystem& cs) : Step(name, caller), controlSys(cs) { }
-  int action() {controlSys.emagVal.setValue(false); usleep(10000); return(0);}  // wait for the magnet to run dry
-  
+  int action() {controlSys.emagVal.setValue(false); usleep(50000); return(0);}  // wait for the magnet to run dry
+  bool checkExitCondition() override {
+      return !controlSys.magCtrl.isMagnetBusy();
+  }
  private:
   DeltaControlSystem &controlSys;
 };

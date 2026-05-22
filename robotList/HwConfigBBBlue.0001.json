@@ -15,6 +15,9 @@
       },
       "channel1": {
         "signalId": "emag"
+      },
+      "channel0": {
+        "signalId": "emag2"
       }
     },
     "subdevice1": {

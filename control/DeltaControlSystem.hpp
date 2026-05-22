@@ -17,6 +17,7 @@
 #include <eeros/control/PathPlannerConstAcc.hpp>
 #include <eeros/control/Saturation.hpp>
 
+#include "MagnetControl.hpp"
 #include "types.hpp"
 #include "MouseScale.hpp"
 #include "Kinematic.hpp"
@@ -26,6 +27,7 @@
 #include "Inertia.hpp"
 #include "MotorModel.hpp"
 #include "constants.hpp"
+#include "OptionalPeripheralOutput.hpp"
 
 using namespace eeros::control;
 using namespace eeros::logger;
@@ -71,6 +73,7 @@ class DeltaControlSystem {
   Constant<AxisVector> accSetPoint;
   Constant<AxisVector> forceSetPoint;
   Constant<bool> emagVal;
+  MagnetControl magCtrl;
 
   Switch<2,AxisVector> posSwitch;
   Switch<2, AxisVector> velSwitch;
@@ -103,7 +106,8 @@ class DeltaControlSystem {
   MotorModel motorModel;
 
   PeripheralOutput<bool> emag;
-  
+  OptionalPeripheralOutput<bool> emag2;
+
   TimeDomain timedomain;
   Logger log;
 };
