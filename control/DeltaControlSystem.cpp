@@ -4,7 +4,7 @@
 DeltaControlSystem::DeltaControlSystem()
     : kM({kM1524, kM1524, kM1524, kM0816}),
       RA({RA1524, RA1524, RA1524, RA0816}),
-      mouse("/dev/input/event1"),
+      mouse("/dev/input/event0"),
       pathPlanner({0.2, 0.2, 0.2, 10}, {10, 10, 10, 100}, {10, 10, 10, 100}, dt),
       enc1("enc1"),
       enc2("enc2"),
